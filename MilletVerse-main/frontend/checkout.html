@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Secure Harvest Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white relative">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-8 wave-bottom-white relative">
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <a href="cart.html" class="flex items-center text-white/70 hover:text-white transition gap-3 font-black text-xs uppercase tracking-widest">
+                    <i class="fa-solid fa-arrow-left"></i> BACK TO BASKET
+                </a>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-black text-3xl text-white tracking-[0.2em]">MILLETVERSE</span>
+                </a>
+                <div class="flex items-center gap-4 text-white">
+                    <i class="fa-solid fa-shield-halved text-xl bg-white/10 p-3 rounded-2xl border border-white/10 backdrop-blur-md"></i>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-6 pb-12 relative z-10">
+            <h1 class="font-heading text-5xl font-black mb-2 drop-shadow-md">Finalize Harvest</h1>
+            <p class="text-accent font-black uppercase tracking-[0.3em] text-[10px]">VERIFYING EARTH-TO-SOUL ORIGINS</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-[1200px] mx-auto px-5 lg:px-10 py-20 flex flex-col lg:flex-row gap-16 relative">
+         <i class="fa-solid fa-leaf text-primary/5 text-[400px] absolute -left-20 top-40 -z-10 -rotate-12"></i>
+
+        <!-- Left: Forms -->
+        <div class="w-full lg:w-2/3 space-y-12">
+            
+            <!-- Shipping Details (Earthy Card) -->
+            <div class="bg-white p-12 rounded-[3rem] shadow-2xl border border-gray-50 relative overflow-hidden">
+                <i class="fa-solid fa-truck-fast text-accent/5 text-[150px] absolute -top-10 -right-10 pointer-events-none"></i>
+                <h3 class="font-heading font-black text-3xl mb-10 flex items-center gap-6 text-textDark">
+                    <span class="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center text-lg font-black shadow-xl">1</span>
+                    Shipment Destination
+                </h3>
+                
+                <form class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">FIRST NAME</label>
+                            <input type="text" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" placeholder="Sage" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">LAST NAME</label>
+                            <input type="text" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" placeholder="Harvest" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">EMAIL FOR SHIPMENT PROTOCOL</label>
+                        <input type="email" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" placeholder="sage@earth.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">STREET ADDRESS (EARTH ID)</label>
+                        <input type="text" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" placeholder="123 Soil Lane" required>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">CITY</label>
+                            <input type="text" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">STATE / REGION</label>
+                            <select class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold cursor-pointer appearance-none">
+                                <option>California</option>
+                                <option>New York</option>
+                                <option>Texas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">POSTAL CODE</label>
+                            <input type="text" class="w-full bg-primaryLight border border-gray-50 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white focus:outline-none font-bold placeholder-primary/20" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Payment Layer (Dark Earthy) -->
+            <div class="bg-primaryDark text-white p-12 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
+                <i class="fa-solid fa-leaf text-white/5 text-[200px] absolute -bottom-20 -left-20 pointer-events-none rotate-45"></i>
+                <h3 class="font-heading font-black text-3xl mb-12 flex items-center gap-6 relative z-10">
+                    <span class="w-12 h-12 rounded-2xl bg-accent text-primaryDark flex items-center justify-center text-lg font-black shadow-xl">2</span>
+                    Payment Extraction
+                </h3>
+                
+                <div class="space-y-8 relative z-10">
+                    <label class="flex items-center gap-6 p-8 border-2 border-accent/20 rounded-3xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all group">
+                        <input type="radio" name="payment" class="w-6 h-6 accent-accent" checked>
+                        <div class="flex-1">
+                            <h4 class="font-black text-xl mb-1">Harvest Card</h4>
+                            <p class="text-xs text-white/40 font-black uppercase tracking-widest">Visa, Mastercard, Amex • SECURE PROCESSING</p>
+                        </div>
+                        <div class="flex gap-3 text-3xl opacity-50 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-brands fa-cc-visa"></i>
+                            <i class="fa-brands fa-cc-mastercard"></i>
+                        </div>
+                    </label>
+
+                    <div class="p-8 bg-white/5 rounded-[2.5rem] border border-white/5 space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">KEY NUMBERS (CARD NUMBER)</label>
+                            <input type="text" placeholder="0000 0000 0000 0000" class="w-full bg-white/10 border border-white/10 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white/20 focus:outline-none font-black text-white placeholder-white/20">
+                        </div>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">CYCLE END (EXPIRY)</label>
+                                <input type="text" placeholder="MM/YY" class="w-full bg-white/10 border border-white/10 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white/20 focus:outline-none font-black text-white placeholder-white/20">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black tracking-widest uppercase text-accent mb-3">SECURITY SOIL (CVC)</label>
+                                <input type="text" placeholder="123" class="w-full bg-white/10 border border-white/10 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-accent/20 focus:bg-white/20 focus:outline-none font-black text-white placeholder-white/20">
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="flex items-center gap-6 p-8 border border-white/10 rounded-3xl cursor-pointer hover:bg-white/5 transition-all opacity-60">
+                        <input type="radio" name="payment" class="w-6 h-6 accent-accent">
+                        <div class="flex-1">
+                            <h4 class="font-black text-xl mb-1 tracking-tight">Ancient Wallet (PayPal)</h4>
+                            <p class="text-xs text-white/30 font-black uppercase tracking-widest">REDIRECT TO GLOBAL SECURE GATEWAY</p>
+                        </div>
+                        <i class="fa-brands fa-paypal text-3xl opacity-50"></i>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Summary (Sticky Earthy Box) -->
+        <div class="w-full lg:w-1/3">
+            <div class="bg-primaryLight p-10 rounded-[3.5rem] shadow-2xl border border-primary/10 sticky top-24 relative overflow-hidden">
+                <i class="fa-solid fa-seedling text-primary/5 text-[200px] absolute -right-20 -top-20"></i>
+                <h3 class="font-heading font-black text-3xl mb-10 border-b-4 border-white pb-6 text-textDark">Seed Receipt</h3>
+                
+                <div id="checkout-items" class="space-y-8 mb-10 max-h-80 overflow-y-auto pr-2 custom-scrollbar relative z-10">
+                    <!-- Items injected here via JS -->
+                </div>
+
+                <div class="space-y-5 text-sm mb-12 pt-8 border-t-2 border-white relative z-10">
+                    <div class="flex justify-between text-gray-400 font-black uppercase tracking-widest text-[10px]">
+                        <span>Initial Value</span>
+                        <span id="check-subtotal" class="font-black text-textDark text-lg">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400 font-black uppercase tracking-widest text-[10px]">
+                        <span>Logistics Cost</span>
+                        <span class="font-black text-textDark text-lg">₹420</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400 font-black uppercase tracking-widest text-[10px]">
+                        <span>Soil Tax (5%)</span>
+                        <span id="check-tax" class="font-black text-textDark text-lg">₹0.00</span>
+                    </div>
+                    <div class="pt-8 border-t-4 border-primary/10 flex justify-between items-center mt-8">
+                        <span class="font-heading font-black text-xl uppercase tracking-widest block">Harvest Total</span>
+                        <span id="check-total" class="font-heading font-black text-4xl text-primary drop-shadow-sm">₹0.00</span>
+                    </div>
+                </div>
+
+                <button class="w-full bg-primaryDark hover:bg-primary text-white font-black py-6 text-sm flex items-center justify-center gap-4 rounded-[2rem] shadow-[0_25px_50px_rgba(59,30,23,0.3)] transition-all hover:scale-[1.05] active:scale-95 uppercase tracking-[0.3em] relative z-10" onclick="placeOrder()">
+                    PLANT THIS ORDER <i class="fa-solid fa-check text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Success Modal Overlay (Earthy Overhaul) -->
+    <div id="success-modal" class="fixed inset-0 bg-primaryDark/90 backdrop-blur-xl z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700">
+        <div class="bg-white rounded-[4rem] p-16 max-w-lg w-full text-center transform scale-90 transition-all duration-700 relative shadow-[0_60px_120px_rgba(0,0,0,0.5)] border border-white/20">
+            <i class="fa-solid fa-leaf text-accent/10 text-[300px] absolute -top-40 -left-40 rotate-45 pointer-events-none"></i>
+            
+            <div class="w-32 h-32 bg-accent/20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-2xl animate-bounce">
+                <i class="fa-solid fa-check text-6xl text-accent"></i>
+            </div>
+            <h2 class="font-heading text-5xl font-black mb-6 text-textDark leading-tight">Harvest Locked In!</h2>
+            <p class="text-gray-400 text-lg mb-12 leading-relaxed font-bold uppercase tracking-widest">Seeds are being sorted for dispatch. Check your secure communication channel (Email) for tracking specifics.</p>
+            <button class="bg-primaryDark hover:bg-primary text-white font-black py-6 px-12 rounded-[2rem] shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase tracking-[0.3em] flex items-center justify-center gap-4 mx-auto" onclick="window.location.href='dashboard.html'">
+                VISIT THE KEEPER'S DASHBOARD <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        requireAuth('checkout.html');
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('milletCart')) || [];
+            const container = document.getElementById('checkout-items');
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-[10px] font-black uppercase text-gray-300 tracking-widest text-center py-10">THE BASKET HAS NO SEEDS.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            cart.forEach(item => {
+                subtotal += item.price * item.qty;
+                container.innerHTML += `
+                    <div class="flex gap-6 items-center bg-white/50 p-4 rounded-3xl border border-white group hover:bg-white transition-all duration-500">
+                        <img src="${item.img}" class="w-16 h-16 rounded-2xl bg-white object-cover shadow-lg border border-primaryLight group-hover:scale-110 transition-transform">
+                        <div class="flex-1">
+                            <h5 class="text-sm font-black text-textDark uppercase tracking-tight">${item.title}</h5>
+                            <p class="text-[10px] font-black text-accent uppercase tracking-widest">Qty: ${item.qty}</p>
+                        </div>
+                        <div class="text-lg font-black text-primaryDark">₹${(item.price * item.qty).toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            const tax = subtotal * 0.05;
+            const total = subtotal + 420 + tax;
+
+            document.getElementById('check-subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('check-tax').innerText = `₹${tax.toFixed(2)}`;
+            document.getElementById('check-total').innerText = `₹${total.toFixed(2)}`;
+        });
+
+        function placeOrder() {
+            let orders = JSON.parse(localStorage.getItem('milletOrders')) || [];
+            let cart = JSON.parse(localStorage.getItem('milletCart')) || [];
+            
+            if (cart.length > 0) {
+                orders.push({
+                    id: 'SOIL-' + Math.floor(Math.random() * 90000 + 10000),
+                    date: new Date().toLocaleDateString(),
+                    items: cart,
+                    status: 'Nurturing Order'
+                });
+                localStorage.setItem('milletOrders', JSON.stringify(orders));
+                localStorage.setItem('milletCart', JSON.stringify([]));
+                updateCartCount();
+
+                const modal = document.getElementById('success-modal');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.children[0].classList.remove('scale-90');
+                modal.children[0].classList.add('scale-100');
+            } else {
+                alert("THE BASKET IS EMPTY. NO SEEDS TO PLANT.");
+            }
+        }
+    </script>
+</body>
+</html>

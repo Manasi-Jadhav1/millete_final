@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Harvest Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-primaryLight flex flex-col h-screen">
+
+    <nav class="bg-primaryDark text-white py-6 px-10 flex items-center justify-between shrink-0 shadow-2xl z-50">
+        <a href="index.html" class="flex flex-col items-center group">
+            <span class="font-heading font-black text-3xl tracking-widest">MILLETVERSE</span>
+            <span class="text-[8px] font-black tracking-[0.5em] text-accent/50 uppercase">Harvest Keeper</span>
+        </a>
+        <div class="flex items-center gap-5 cursor-pointer relative group">
+            <div class="text-right hidden sm:block">
+                <p id="header-name" class="text-xs uppercase tracking-widest text-white mb-0.5">Seed Seeker</p>
+                <p id="role-text" class="text-[8px] text-accent uppercase tracking-[0.2em]">Verified</p>
+            </div>
+            <div class="w-14 h-14 rounded-2xl bg-accent text-primaryDark flex items-center justify-center shadow-xl border-4 border-primaryDark overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1594824436951-7f12bc44ce7e?w=100&h=100&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute right-0 top-full mt-4 w-64 bg-white rounded-[2rem] shadow-2xl border border-gray-50 py-4 hidden group-hover:block z-50">
+                <button onclick="milletLogout()" class="w-full text-left flex items-center gap-4 px-6 py-4 text-sm font-black text-red-500 hover:bg-red-50 uppercase">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex overflow-hidden">
+        <aside class="w-80 bg-white border-r border-gray-100 flex flex-col hidden lg:flex shrink-0">
+            <div class="p-10 border-b border-gray-50"><h3 class="font-black text-gray-300 text-[10px] tracking-[0.4em] uppercase">HARVEST MENU</h3></div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-3" id="sidebar-menu"></div>
+        </aside>
+
+        <div class="flex-1 overflow-y-auto p-12 lg:p-16 relative" id="main-content-area">
+            <!-- Dynamic Content -->
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            if (!session) { window.location.href = 'login.html'; return; }
+            
+            document.getElementById('header-name').innerText = `${session.firstName} ${session.lastName}`;
+            document.getElementById('role-text').innerText = session.role.toUpperCase();
+
+            renderSidebar(session.role);
+            loadContent(session.role);
+        });
+
+        function renderSidebar(role) {
+            const menu = document.getElementById('sidebar-menu');
+            let links = [];
+            
+            if (role === 'consumer' || role === 'user') {
+                links = [
+                    { id: 'orders', icon: 'fa-box-open', text: 'My Orders' },
+                    { id: 'cart', icon: 'fa-shopping-cart', text: 'My Cart' },
+                    { id: 'profile', icon: 'fa-user-circle', text: 'Profile Rituals' }
+                ];
+            } else if (role === 'seller' || role === 'startup' || role === 'farmer') {
+                links = [
+                    { id: 'inventory', icon: 'fa-boxes-stacked', text: 'Grain Inventory' },
+                    { id: 'sales', icon: 'fa-sack-dollar', text: 'Farmer Sales' },
+                    { id: 'add-product', icon: 'fa-plus-circle', text: 'List New Harvest' },
+                    { id: 'add-recipe', icon: 'fa-mortar-pestle', text: 'List New Recipe' }
+                ];
+            } else if (role === 'admin') {
+                links = [
+                    { id: 'admin-stats', icon: 'fa-chart-pie', text: 'Global Yields' },
+                    { id: 'admin-users', icon: 'fa-users', text: 'Keeper Registry' }
+                ];
+            }
+
+            menu.innerHTML = links.map(l => `
+                <button onclick="loadSection('${l.id}')" class="w-full flex items-center gap-4 px-6 py-5 text-gray-400 hover:bg-primaryLight hover:text-primary rounded-3xl font-black text-xs uppercase tracking-widest transition-all">
+                    <i class="fa-solid ${l.icon}"></i> ${l.text}
+                </button>
+            `).join('');
+        }
+
+        async function loadSection(section) {
+            const container = document.getElementById('main-content-area');
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            
+            if (section === 'orders') {
+                container.innerHTML = `<h2 class="text-4xl font-black mb-12">Your Harvest History</h2><div id="orders-list" class="space-y-6">Loading...</div>`;
+                const res = await fetch('http://localhost:5000/api/orders/my-orders', { headers: { 'Authorization': `Bearer ${session.token}` } });
+                const data = await res.json();
+                const list = document.getElementById('orders-list');
+                list.innerHTML = data.success && data.data.length ? data.data.map(o => `
+                    <div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-50 flex justify-between items-center group hover:shadow-xl transition-all">
+                        <div>
+                            <p class="text-[10px] font-black text-accent uppercase tracking-widest mb-2">Order #${o.id} • ${new Date(o.order_date).toLocaleDateString()}</p>
+                            <h4 class="text-2xl font-black">${o.product_name || 'Ancient Grain'} (${o.quantity} units)</h4>
+                            <span class="inline-block mt-4 px-4 py-2 bg-primary text-white text-[10px] font-black rounded-xl uppercase tracking-widest">${o.order_status}</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-4xl font-black text-primaryDark">₹${o.total_price}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mt-2 tracking-widest">Status: ${o.payment_status}</p>
+                        </div>
+                    </div>
+                `).join('') : '<div class="text-center py-20 text-gray-300 uppercase font-black">No seeds planted yet.</div>';
+            } else if (section === 'cart') {
+                container.innerHTML = `<h2 class="text-4xl font-black mb-12">Your Seeds Bag (Cart)</h2><div id="cart-list" class="space-y-6">Loading...</div>`;
+                
+                let cloudItems = [];
+                let cloudTotal = 0;
+                
+                try {
+                    const res = await fetch('http://localhost:5000/api/cart', { headers: { 'Authorization': `Bearer ${session.token}` } });
+                    const data = await res.json();
+                    if (data.success) {
+                        cloudItems = data.data.items;
+                        cloudTotal = data.data.total;
+                    }
+                } catch (e) { console.error("Cloud cart fetch failed", e); }
+
+                const localCart = JSON.parse(localStorage.getItem('milletCart') || '[]');
+                const list = document.getElementById('cart-list');
+                
+                // Merge items for display
+                const allItems = [...cloudItems];
+                localCart.forEach(localItem => {
+                    // Avoid duplicates if already in cloudItems
+                    if (!allItems.find(ci => ci.product_id === localItem.id || ci.name === localItem.title)) {
+                        allItems.push({
+                            product_id: localItem.id,
+                            name: localItem.title,
+                            price: localItem.price,
+                            quantity: localItem.qty,
+                            image_url: localItem.img,
+                            subtotal: localItem.price * localItem.qty,
+                            millet_type: 'Local Choice',
+                            is_local: true
+                        });
+                    }
+                });
+
+                if (allItems.length) {
+                    const total = allItems.reduce((acc, item) => acc + (item.subtotal || (item.price * item.quantity)), 0);
+                    list.innerHTML = allItems.map(item => `
+                        <div class="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-50 flex justify-between items-center group hover:shadow-xl transition-all">
+                            <div class="flex items-center gap-6">
+                                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-gray-50">
+                                    <img src="${item.image_url}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200';">
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-black">${item.name}</h4>
+                                    <p class="text-accent font-black uppercase text-[10px] tracking-widest">${item.millet_type || 'Grains'} • ₹${item.price} per unit</p>
+                                    <p class="mt-2 font-bold text-sm">Quantity: ${item.quantity}</p>
+                                    ${item.is_local ? '<span class="text-[8px] bg-gray-100 px-2 py-0.5 rounded text-gray-400 font-black uppercase tracking-widest mt-1 inline-block">Local Storage Only</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-black text-primaryDark">₹${(item.subtotal || item.price * item.quantity).toFixed(2)}</p>
+                                <button onclick="removeCartItem(${item.product_id}, '${item.name.replace(/'/g, "\\'")}')" class="text-red-500 font-black uppercase text-[10px] tracking-widest mt-4 hover:underline">Remove</button>
+                            </div>
+                        </div>
+                    `).join('') + `
+                        <div class="mt-12 p-10 bg-primaryDark text-white rounded-[3rem] flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-accent mb-2">Total Harvest Investment</p>
+                                <p class="text-4xl font-black">₹${total.toFixed(2)}</p>
+                            </div>
+                            <button onclick="window.location.href='cart.html'" class="bg-accent text-primaryDark font-black px-10 py-5 rounded-2xl uppercase tracking-widest hover:bg-white transition-all">Go to Full Basket</button>
+                        </div>
+                    `;
+                } else {
+                    list.innerHTML = '<div class="text-center py-20 text-gray-300 uppercase font-black">Your bag is empty of seeds.</div>';
+                }
+            } else if (section === 'inventory') {
+                container.innerHTML = `<h2 class="text-4xl font-black mb-12">Grain Inventory</h2><div id="inv-list" class="grid grid-cols-1 md:grid-cols-2 gap-10">Loading...</div>`;
+                const res = await fetch(`http://localhost:5000/api/products/seller/${session.id}`);
+                const data = await res.json();
+                const list = document.getElementById('inv-list');
+                list.innerHTML = data.success && data.data.length ? data.data.map(p => `
+                    <div class="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-50 flex gap-8 group hover:shadow-xl transition-all">
+                        <div class="aspect-square w-24 h-24 rounded-[2rem] overflow-hidden bg-gray-50">
+                            <img src="${p.image_url}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-black text-xl">${p.name}</h4>
+                            <p class="text-accent font-black tracking-widest text-xs mt-1 uppercase">${p.millet_type}</p>
+                            <div class="flex justify-between items-end mt-4">
+                                <p class="text-2xl font-black">₹${p.price}</p>
+                                <p class="text-[10px] text-gray-400 font-black uppercase">Stock: ${p.stock_quantity}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('') : '<div class="col-span-full text-center py-20 text-gray-300 uppercase font-black">No harvests listed.</div>';
+            } else if (section === 'add-product') {
+                container.innerHTML = `
+                    <h2 class="text-4xl font-black mb-12">List New Harvest</h2>
+                    <form onsubmit="handleAddProduct(event)" class="bg-white p-12 rounded-[3.5rem] shadow-xl space-y-8 max-w-3xl border border-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <input id="p-name" placeholder="Grain/Product Name" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                            <input id="p-price" type="number" placeholder="Price (₹)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                            <select id="p-type" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent">
+                                <option value="ragi">Ragi</option><option value="jowar">Jowar</option><option value="bajra">Bajra</option>
+                                <option value="foxtail">Foxtail</option><option value="mixed">Mixed</option>
+                            </select>
+                            <input id="p-stock" type="number" placeholder="Stock Quantity" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                        </div>
+                        <textarea id="p-desc" placeholder="Harvest Description & Benefits" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent h-32" required></textarea>
+                        <textarea id="p-ing" placeholder="Ingredients (if processed)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>Whole Millet Grains</textarea>
+                        <input id="p-img" placeholder="Image URL (Unsplash/CDN)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                        <button type="submit" class="bg-primaryDark text-white font-black px-12 py-5 rounded-2xl uppercase tracking-widest shadow-2xl hover:bg-primary transition-all hover:scale-105">Post Harvest to Market</button>
+                    </form>
+                `;
+            } else if (section === 'add-recipe') {
+                container.innerHTML = `
+                    <h2 class="text-4xl font-black mb-12">Share Ancient Recipe</h2>
+                    <form onsubmit="handleAddRecipe(event)" class="bg-white p-12 rounded-[3.5rem] shadow-xl space-y-8 max-w-3xl border border-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <input id="r-title" placeholder="Recipe Title" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                            <select id="r-category" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent">
+                                <option value="recipe">General Recipe</option>
+                                <option value="tutorial">Cooking Tutorial</option>
+                                <option value="health_benefit">Health Highlight</option>
+                            </select>
+                            <input id="r-sub" placeholder="Sub-category (e.g. Breakfast)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                            <input id="r-img" placeholder="Image URL" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                        </div>
+                        <textarea id="r-desc" placeholder="Short Description" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent h-24" required></textarea>
+                        <textarea id="r-content" placeholder="Full Recipe / Content (Markdown supported)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent h-64" required></textarea>
+                        <button type="submit" class="bg-primaryDark text-white font-black px-12 py-5 rounded-2xl uppercase tracking-widest shadow-2xl hover:bg-primary transition-all hover:scale-105">Publish Wisdom</button>
+                    </form>
+                `;
+            } else if (section === 'sales') {
+                container.innerHTML = `<h2 class="text-4xl font-black mb-12">Farmer Sales Pulse</h2><div id="sales-list" class="space-y-6">Loading...</div>`;
+                const res = await fetch('http://localhost:5000/api/orders/seller/orders', { headers: { 'Authorization': `Bearer ${session.token}` } });
+                const data = await res.json();
+                const list = document.getElementById('sales-list');
+                list.innerHTML = data.success && data.data.length ? data.data.map(o => `
+                    <div class="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-50 flex justify-between items-center group">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 bg-primaryLight rounded-xl flex items-center justify-center text-primary"><i class="fa-solid fa-seedling"></i></div>
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Order #${o.id} • ${o.user_name || 'Seeker'}</p>
+                                <h4 class="text-xl font-bold">${o.product_name} x ${o.quantity}</h4>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-10">
+                            <div class="text-right">
+                                <p class="text-2xl font-black">₹${o.total_price}</p>
+                                <span class="text-[8px] font-black uppercase text-accent">${o.order_status}</span>
+                            </div>
+                            <button onclick="updateStatus(${o.id}, 'shipped')" class="bg-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-widest hover:bg-primaryDark transition-all">Mark Shipped</button>
+                        </div>
+                    </div>
+                `).join('') : '<div class="text-center py-20 text-gray-300 uppercase font-black">No sales pulses detected.</div>';
+            }
+        }
+
+        async function handleAddProduct(e) {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            const body = {
+                name: document.getElementById('p-name').value,
+                description: document.getElementById('p-desc').value,
+                price: parseFloat(document.getElementById('p-price').value),
+                millet_type: document.getElementById('p-type').value,
+                image_url: document.getElementById('p-img').value,
+                stock_quantity: parseInt(document.getElementById('p-stock').value),
+                ingredients: document.getElementById('p-ing').value
+            };
+            const res = await fetch('http://localhost:5000/api/products', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${session.token}` 
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (data.success) { 
+                showToast('Harvest posted successfully!', 'success'); 
+                e.target.reset();
+                loadSection('inventory'); 
+            }
+            else { showToast(data.message, 'error'); }
+        }
+
+        async function updateStatus(id, status) {
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            const res = await fetch(`http://localhost:5000/api/orders/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.token}` },
+                body: JSON.stringify({ status })
+            });
+            const data = await res.json();
+            if (data.success) { showToast('Order status updated!'); loadSection('sales'); }
+        }
+
+        async function handleAddRecipe(e) {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            const body = {
+                title: document.getElementById('r-title').value,
+                category: document.getElementById('r-category').value,
+                subcategory: document.getElementById('r-sub').value,
+                image_url: document.getElementById('r-img').value,
+                description: document.getElementById('r-desc').value,
+                content: document.getElementById('r-content').value,
+                author_id: session.id
+            };
+            const res = await fetch('http://localhost:5000/api/learning', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.token}` },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (data.success) { 
+                showToast('Wisdom shared successfully!', 'success'); 
+                e.target.reset();
+            } else { 
+                showToast(data.message, 'error'); 
+            }
+        }
+
+        async function removeCartItem(productId, title) {
+            const session = JSON.parse(localStorage.getItem('milletSession'));
+            let removed = false;
+
+            // Try removing from cloud
+            try {
+                const res = await fetch(`http://localhost:5000/api/cart/remove/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${session.token}` }
+                });
+                const data = await res.json();
+                if (data.success) removed = true;
+            } catch (e) { console.error("Cloud removal failed", e); }
+
+            // Also try removing from local
+            let localCart = JSON.parse(localStorage.getItem('milletCart') || '[]');
+            const initialLen = localCart.length;
+            localCart = localCart.filter(item => item.id !== productId && item.title !== title);
+            if (localCart.length < initialLen) {
+                localStorage.setItem('milletCart', JSON.stringify(localCart));
+                removed = true;
+            }
+
+            if (removed) {
+                showToast('Item removed from seeds bag');
+                loadSection('cart');
+                if (window.updateCartCount) updateCartCount();
+            }
+        }
+
+        function loadContent(role) {
+            if (role === 'consumer' || role === 'user') loadSection('orders');
+            else if (role === 'admin') loadSection('admin-stats');
+            else loadSection('inventory');
+        }
+    </script>
+</body>
+</html>

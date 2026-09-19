@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Nature's Earthy Finest</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Earthy Palette -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white">
+
+    <!-- Header & Hero Section (Earthy Theme) -->
+    <div class="bg-primary bg-drops wave-bottom-white relative pb-16">
+        
+        <!-- Navbar -->
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                
+                <!-- Social Links (Left) -->
+                <div class="hidden md:flex items-center gap-3 text-white/90">
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"><i class="fa-brands fa-twitter text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
+                </div>
+
+                <!-- Logo (Center) -->
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-extrabold text-4xl text-white tracking-widest" style="font-family: 'Outfit', cursive;">MilletVerse</span>
+                </a>
+
+                <!-- Actions (Right) -->
+                <div id="nav-auth-area" class="flex items-center gap-4 text-white">
+                    <div class="relative bg-white text-primary rounded-full flex items-center px-4 py-2 gap-2 shadow-lg cursor-pointer hover:shadow-xl transition" onclick="window.location.href='cart.html'">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span id="cart-count" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Nav Links -->
+            <div class="max-w-[1200px] mx-auto px-5 mt-6 hidden md:flex items-center justify-center gap-10 font-medium text-white text-sm tracking-widest uppercase">
+                <a href="index.html" class="hover:text-accent transition-colors border-b-2 border-accent">Home</a>
+                <a href="products.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Products</a>
+                <a href="recipes.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Recipes</a>
+                <a href="health.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Health Guide</a>
+                <a href="learn.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Learn</a>
+                <a href="about.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">About</a>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <main class="max-w-[1200px] mx-auto px-5 lg:px-10 pt-20 pb-20 relative">
+            <!-- Stickers -->
+            <i class="fa-solid fa-seedling sticker text-accent text-4xl top-10 left-20"></i>
+            <i class="fa-solid fa-wheat-awn sticker text-accent text-3xl bottom-10 right-20" style="animation-delay: 1s;"></i>
+            <i class="fa-solid fa-leaf sticker text-accent/50 text-2xl top-1/2 left-10" style="animation-delay: 2s;"></i>
+
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <!-- Left Text -->
+                <div class="w-full md:w-1/2 text-white z-20">
+                    <p class="font-medium text-lg mb-2 text-accent">Discover Ancient Grains</p>
+                    <h1 class="font-heading text-6xl lg:text-7xl font-extrabold leading-tight mb-8 drop-shadow-md">
+                        Millet<br>Marketplace
+                    </h1>
+                    <p class="text-white/80 mb-10 text-lg max-w-md">100% Organic, Stone-Ground, and Planet-Friendly. Reconnect with the soil through our premium millet collection.</p>
+                    <div class="flex gap-4">
+                        <button class="btn-primary text-primary font-bold shadow-xl" onclick="window.location.href='products.html'">
+                            Shop Now <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button class="btn-outline border-white text-white hover:bg-white hover:text-primary" onclick="window.location.href='learn.html'">
+                            Our Story
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Image (Larger) -->
+                <div class="w-full md:w-1/2 relative flex justify-center mt-12 md:mt-0 z-20 float-up">
+                    <div class="relative w-[450px] h-[450px] md:w-[550px] md:h-[550px]">
+                         <!-- Background circle -->
+                        <div class="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>
+                        <img src="assets/millet_hero.png" alt="Millet Grain" class="w-full h-full object-cover rounded-full shadow-2xl border-[12px] border-white/20">
+                        
+                        <!-- Floating Seedling Sticker -->
+                        <div class="absolute -top-10 -right-10 bg-white p-6 rounded-3xl shadow-2xl transform rotate-12 flex flex-col items-center">
+                            <span class="text-xs font-bold text-gray-400 uppercase">100% Organic</span>
+                            <i class="fa-solid fa-seedling text-4xl text-primary mt-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Benefits & Awareness Section -->
+    <section class="max-w-[1200px] mx-auto px-5 pt-8 pb-4 fade-in-section relative">
+        <div class="bg-[#fcfaf8] rounded-[3rem] p-10 md:p-16 border border-primary/5 shadow-sm relative overflow-hidden">
+            <!-- Background Decor -->
+            <i class="fa-solid fa-seedling text-accent/5 text-[200px] absolute -top-10 -right-10 z-0 rotate-12 pointer-events-none"></i>
+            <i class="fa-solid fa-leaf text-primary/5 text-[150px] absolute -bottom-10 -left-10 z-0 -rotate-12 pointer-events-none"></i>
+            
+            <div class="relative z-10">
+                <div class="text-center mb-16">
+                    <p class="text-accent font-bold text-sm tracking-widest uppercase mb-2">Health & Impact</p>
+                    <h2 class="font-heading text-4xl font-extrabold text-textDark mb-4">Why Choose Millets?</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the incredible benefits of millet-based products and how MilletVerse is spreading awareness for a healthier, sustainable future.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Benefit 1 -->
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-primary">
+                        <div class="w-14 h-14 bg-primaryLight rounded-2xl flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-3 text-textDark">Nutritional Powerhouse</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Packed with protein, dietary fiber, and essential minerals like iron and calcium. A perfect addition to a balanced diet.</p>
+                    </div>
+
+                    <!-- Benefit 2 -->
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-accent">
+                        <div class="w-14 h-14 bg-[#fdf5ed] rounded-2xl flex items-center justify-center mb-6 text-accent text-2xl">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-3 text-textDark">Eco-Friendly & Sustainable</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Millets require significantly less water than rice or wheat, making them inherently climate-resilient and planet-friendly.</p>
+                    </div>
+
+                    <!-- Benefit 3 -->
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-b-4 border-primary">
+                        <div class="w-14 h-14 bg-primaryLight rounded-2xl flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa-solid fa-wheat-awn-circle-exclamation"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-3 text-textDark">Gluten-Free & Low GI</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Naturally gluten-free with a low glycemic index, aiding in better digestion and maintaining stable blood sugar levels.</p>
+                    </div>
+
+                    <!-- Platform Initiative -->
+                    <div class="bg-primary text-white p-8 rounded-[2rem] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+                        <i class="fa-solid fa-bullhorn absolute -bottom-4 -right-4 text-white/10 text-6xl group-hover:scale-110 transition-transform"></i>
+                        <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-6 text-white text-2xl backdrop-blur-sm">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-3">Our Awareness Initiatives</h3>
+                        <p class="text-sm text-white/80 leading-relaxed">Through educational resources, interactive health guides, and farm-to-table transparency, we empower you to make informed dietary choices.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Selection Section -->
+    <section class="max-w-[1200px] mx-auto px-5 py-24 text-center fade-in-section relative">
+        <!-- Background Sticker -->
+        <i class="fa-solid fa-leaf text-gray-50 text-[300px] absolute top-10 left-10 -z-10 rotate-45"></i>
+
+        <p class="text-primary font-bold text-sm tracking-widest uppercase mb-2">The Earth's Best</p>
+        <h2 class="font-heading text-4xl font-extrabold text-textDark mb-16">Explore Our Products</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-5xl mx-auto">
+            <!-- Item 1 -->
+            <div class="flex flex-col items-center group cursor-pointer" onclick="window.location.href='products.html'">
+                <div class="aspect-square w-64 bg-primaryLight rounded-[2rem] flex items-center justify-center relative mb-8 group-hover:bg-accent/20 transition-all duration-500 transform group-hover:-translate-y-2 overflow-hidden">
+                    <img src="assets/ragi_biscuits.png" class="w-full h-full object-cover shadow-lg group-hover:scale-110 transition-transform duration-500" alt="Finger Millet (Ragi) Biscuits" onerror="this.src='assets/ragi_biscuits.png';">
+                    <i class="fa-solid fa-leaf text-primary/10 text-6xl absolute -bottom-4 -right-4"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Finger Millet (Ragi) Chocolate Biscuits</h3>
+                <p class="text-gray-500 text-sm px-6">Deliciously crunchy biscuits made with stone-ground Ragi and premium dark chocolate chips.</p>
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="flex flex-col items-center group cursor-pointer" onclick="window.location.href='products.html'">
+                <div class="aspect-square w-64 bg-[#fdf5ed] rounded-[2rem] flex items-center justify-center relative mb-8 group-hover:bg-accent/20 transition-all duration-500 transform group-hover:-translate-y-2 overflow-hidden">
+                    <img src="assets/bajra_puffs.png" class="w-full h-full object-cover shadow-lg group-hover:scale-110 transition-transform duration-500" alt="Pearl Millet (Bajra) Puffs" onerror="this.src='assets/bajra_puffs.png';">
+                    <i class="fa-solid fa-wheat-awn text-primary/10 text-6xl absolute -top-4 -left-4"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Pearl Millet (Bajra) Herb Puffs</h3>
+                <p class="text-gray-500 text-sm px-6">Air-popped Bajra puffs seasoned with a blend of Himalayan salt and organic herbs.</p>
+                <div class="w-16 h-1 mt-6 bg-accent rounded"></div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="flex flex-col items-center group cursor-pointer" onclick="window.location.href='products.html'">
+                <div class="aspect-square w-64 bg-[#f4ebe1] rounded-[2rem] flex items-center justify-center relative mb-8 group-hover:bg-accent/20 transition-all duration-500 transform group-hover:-translate-y-2 overflow-hidden">
+                    <img src="assets/millet_bars.png" class="w-full h-full object-cover shadow-lg group-hover:scale-110 transition-transform duration-500" alt="Kodo & Little Millet Energy Bars" onerror="this.src='assets/millet_bars.png';">
+                    <i class="fa-solid fa-seedling text-primary/10 text-6xl absolute -bottom-4 -left-4"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Kodo & Little Millet Energy Bars</h3>
+                <p class="text-gray-500 text-sm px-6">On-the-go energy bars packed with Kodo and Little millets, crunchy nuts, and raw honey.</p>
+            </div>
+        </div>
+
+        <!-- Farmer Harvest Direct Callout -->
+        <div class="mt-20 max-w-5xl mx-auto bg-gradient-to-r from-emerald-900 to-primaryDark text-white p-8 lg:p-12 rounded-[3rem] shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 border border-emerald-500/30 relative overflow-hidden">
+            <i class="fa-solid fa-tractor text-emerald-500/10 text-[200px] absolute -right-10 -bottom-10 pointer-events-none"></i>
+            <div class="space-y-2 max-w-xl z-10">
+                <span class="bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full inline-block">
+                    🌾 Direct Producer Network
+                </span>
+                <h3 class="font-heading font-black text-3xl text-white">Direct Farm Harvest Marketplace</h3>
+                <p class="text-white/80 text-sm leading-relaxed font-medium">Buy pure grains directly from verified local farmers with direct UPI QR Code Scanner payments. Farmers keep 100% of their harvest pricing.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 z-10 shrink-0">
+                <a href="products.html" class="bg-emerald-500 hover:bg-emerald-400 text-primaryDark font-black text-xs uppercase tracking-widest px-6 py-4 rounded-2xl shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wheat-awn"></i> Buy Direct Harvest
+                </a>
+                <a href="dashboard.html" class="bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-widest px-6 py-4 rounded-2xl transition-all border border-white/20 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus-circle"></i> Farmer List Harvest
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mid-Banner (Beige Wave) -->
+    <div class="bg-primaryLight wave-top-lightbeige wave-bottom-lightbeige py-20 fade-in-section relative">
+        <i class="fa-solid fa-wheat-awn text-accent/10 text-[200px] absolute right-0 bottom-0 pointer-events-none"></i>
+        
+        <div class="max-w-[1200px] mx-auto px-5 flex flex-col md:flex-row items-center gap-16">
+            <!-- Left Info -->
+            <div class="w-full md:w-1/2 space-y-10">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-primary relative">
+                     <i class="fa-solid fa-seedling text-accent text-2xl absolute -top-4 -right-4 bg-white p-2 rounded-full shadow-md"></i>
+                     <h4 class="font-heading font-extrabold text-2xl mb-2 text-textDark">Committed to Health</h4>
+                     <p class="text-sm text-gray-600 leading-relaxed">We ensure every batch of millet is tested for nutrient density and chemical purity. Our grains are stone-ground to preserve essential fibers.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-accent relative">
+                     <i class="fa-solid fa-leaf text-primary text-2xl absolute -top-4 -right-4 bg-white p-2 rounded-full shadow-md"></i>
+                     <h4 class="font-heading font-extrabold text-2xl mb-2 text-textDark">Sustainable Sourcing</h4>
+                     <p class="text-sm text-gray-600 leading-relaxed">By choosing MilletVerse, you support dryland farmers who use 70% less water than rice or wheat cultivation.</p>
+                </div>
+            </div>
+
+            <!-- Center Image (Larger) -->
+            <div class="w-full md:w-1/2 flex justify-center relative">
+                 <div class="relative w-80 h-[450px]">
+                    <div class="absolute inset-0 bg-primary/10 rounded-[3rem] -rotate-3"></div>
+                    <img src="assets/millet_cooking.png" class="w-full h-full object-cover rounded-[3rem] border-4 border-white shadow-2xl relative z-10" alt="Millet Cooking">
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deal of the day section -->
+    <section class="max-w-[1200px] mx-auto px-5 py-24 fade-in-section relative">
+        <div class="text-center mb-16">
+            <p class="text-primary font-bold text-sm tracking-widest uppercase mb-1">Seasonal Harvest Offer</p>
+            <h2 class="font-heading text-4xl font-extrabold">The Golden Bowl Deal</h2>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center gap-16 bg-white rounded-[3rem] p-10 shadow-2xl max-w-5xl mx-auto border border-gray-100 relative overflow-hidden">
+            <!-- Background Sticker -->
+            <i class="fa-solid fa-leaf text-primary/5 text-[400px] absolute -right-20 -top-20"></i>
+
+            <!-- Product Image (Large) -->
+            <div class="w-full md:w-1/2 relative flex justify-center">
+                <div class="aspect-square w-96 bg-primaryLight rounded-[3rem] flex items-center justify-center overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&h=800&fit=crop" class="w-full h-full object-cover shadow-2xl transform -rotate-3" alt="Deal Product">
+                </div>
+                <!-- Sticker on image -->
+                <div class="absolute top-0 right-0 bg-accent text-white font-bold px-6 py-3 rounded-2xl shadow-lg transform rotate-12">
+                     HOT DEAL
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="w-full md:w-1/2 relative z-10">
+                <div class="flex gap-2 mb-4 text-xs font-bold text-accent uppercase tracking-widest">
+                    <span>Healthy</span> • <span>Nutritious</span>
+                </div>
+                <h3 class="font-heading text-4xl font-extrabold mb-4">Finger Millet (Ragi) & Sorghum (Jowar) Breakfast Mix</h3>
+                <div class="text-primary font-heading text-3xl font-bold mb-6">&#8377;899 <span class="text-gray-300 text-xl font-medium line-through ml-3">&#8377;999</span></div>
+                
+                <p class="text-gray-500 text-sm mb-8 leading-relaxed">
+                    A premium blend of Finger Millet (Ragi) and Sorghum (Jowar) flakes, optimized for a high-protein morning meal. Naturally rich in iron and calcium.
+                </p>
+
+                <div class="space-y-4 mb-10">
+                    <div class="flex items-center gap-4 text-sm font-bold text-textDark">
+                        <i class="fa-solid fa-circle-check text-primary text-lg"></i> Rich in Iron & Calcium
+                    </div>
+                    <div class="flex items-center gap-4 text-sm font-bold text-textDark">
+                        <i class="fa-solid fa-circle-check text-primary text-lg"></i> 100% Whole Grain
+                    </div>
+                    <div class="flex items-center gap-4 text-sm font-bold text-textDark">
+                        <i class="fa-solid fa-circle-check text-primary text-lg"></i> No Added Preservatives
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button class="btn-solid py-4 px-10 text-lg" onclick="addToCart('Spiced Bajra Dal Kit', 899, 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=100&q=80', 3)">
+                        <i class="fa-solid fa-cart-shopping"></i> Add To Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Harvests Section -->
+    <section class="max-w-[1200px] mx-auto px-5 py-24 fade-in-section relative">
+        <div class="text-center mb-16">
+            <p class="text-accent font-bold text-sm tracking-widest uppercase mb-2">From Our Community</p>
+            <h2 class="font-heading text-4xl font-extrabold text-textDark mb-4">Recently Added Harvests</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto">Discover fresh grains and products added by our network of farmers and startups.</p>
+        </div>
+        
+        <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Dynamically populated from script.js -->
+        </div>
+        
+        <div class="text-center mt-16">
+            <button class="bg-primary text-white font-bold px-10 py-4 rounded-2xl shadow-xl hover:bg-primaryDark transition transform hover:scale-105" onclick="window.location.href='products.html'">
+                View Full Marketplace <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer Area (Brown/Beige) -->
+    <div class="bg-primaryLight wave-top-lightbeige pt-20 pb-10">
+        <div class="max-w-[1200px] mx-auto px-5 mb-20 text-center">
+             <!-- Stickers -->
+            <i class="fa-solid fa-leaf text-accent/20 text-5xl mb-6"></i>
+            <h3 class="font-heading text-3xl font-extrabold mb-6">Join the Millet Revolution</h3>
+            <p class="text-gray-500 text-sm mb-10 max-w-lg mx-auto">Get monthly recipes and exclusive farm-to-table updates delivered to your inbox.</p>
+            <div class="relative max-w-md mx-auto">
+                <input type="email" placeholder="Email address..." class="w-full bg-white border-none rounded-2xl py-5 px-8 pr-32 shadow-xl focus:ring-2 focus:ring-primary outline-none">
+                <button class="absolute right-2 top-2 bottom-2 bg-primary text-white font-bold px-8 rounded-xl hover:bg-primaryDark transition shadow-lg">Join</button>
+            </div>
+        </div>
+
+        <div class="max-w-[1200px] mx-auto px-10 border-t border-primary/5 pt-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <span class="font-heading font-extrabold text-4xl text-primary tracking-widest mb-6 inline-block">MilletVerse</span>
+                    <p class="text-sm text-gray-500 max-w-sm leading-relaxed mb-6">Preserving ancient grains for a sustainable future. Our harvest is your health.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center hover:bg-primaryDark transition shadow-md"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center hover:bg-primaryDark transition shadow-md"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 font-heading text-lg">Platform</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="products.html" class="hover:text-primary transition-colors">Our Products</a></li>
+                        <li><a href="learn.html" class="hover:text-primary transition-colors">Know Millets</a></li>
+                        <li><a href="health.html" class="hover:text-primary transition-colors">Health Goals</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 font-heading text-lg">My Account</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="dashboard.html" class="hover:text-primary transition-colors">Dashboard</a></li>
+                        <li><a href="cart.html" class="hover:text-primary transition-colors">Shopping Cart</a></li>
+                        <li><a href="login.html" class="hover:text-primary transition-colors">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-primary/5 mt-16 pt-8 text-xs text-gray-400 font-bold uppercase tracking-widest">
+                <p>&copy; 2026 MilletVerse. Earthy & Organic.</p>
+                <div class="flex gap-6 mt-6 md:mt-0">
+                    <a href="#" class="hover:text-primary">Privacy Policy</a>
+                    <a href="#" class="hover:text-primary">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

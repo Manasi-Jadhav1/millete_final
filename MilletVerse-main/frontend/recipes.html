@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Earthy Recipes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white relative">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-10 wave-bottom-white relative">
+        <!-- Stickers -->
+        <i class="fa-solid fa-leaf sticker text-accent/30 text-5xl top-10 left-10"></i>
+        <i class="fa-solid fa-wheat-awn sticker text-accent/30 text-4xl bottom-0 right-10" style="animation-delay: 2s;"></i>
+
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <div class="hidden md:flex items-center gap-3 text-white/90">
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-instagram text-sm"></i></a>
+                </div>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-extrabold text-4xl text-white tracking-widest" style="font-family: 'Outfit', cursive;">MilletVerse</span>
+                </a>
+                <div id="nav-auth-area" class="flex items-center gap-4 text-white">
+                    <div class="relative bg-white text-primary rounded-full flex items-center px-4 py-2 gap-2 shadow-lg cursor-pointer" onclick="window.location.href='cart.html'">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span id="cart-count" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-[1200px] mx-auto px-5 mt-6 hidden md:flex items-center justify-center gap-10 font-medium text-white text-sm tracking-widest uppercase">
+                <a href="index.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Home</a>
+                <a href="products.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Products</a>
+                <a href="recipes.html" class="text-accent border-b-2 border-accent">Recipes</a>
+                <a href="health.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Health Guide</a>
+                <a href="learn.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Learn</a>
+                <a href="about.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">About</a>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-10 pb-16 relative z-10 fade-in-section">
+            <p class="font-bold text-sm tracking-widest uppercase mb-2 text-accent">Earth to Table</p>
+            <h1 class="font-heading text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-md">Ancient Grain Recipes</h1>
+            <p class="text-white/80 max-w-lg mx-auto">Reclaim your kitchen with wholesome, nutrient-dense recipes that celebrate the earthy flavors of millets.</p>
+        </div>
+    </div>
+
+    <!-- Main List -->
+    <main class="max-w-[1200px] mx-auto px-5 lg:px-10 py-16 relative">
+        <!-- Floating Stickers in Background -->
+        <i class="fa-solid fa-seedling text-gray-100 text-[300px] absolute -right-20 top-20 -z-10 rotate-12"></i>
+
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 fade-in-section border-b border-gray-100 pb-8">
+            <div>
+                <h2 class="font-heading text-4xl font-extrabold text-textDark">Seasonal Highlights</h2>
+                <p class="text-textGray mt-2">Curated by our chefs for the current harvest.</p>
+            </div>
+            <div class="flex gap-3 text-sm font-bold mt-6 md:mt-0">
+                <button class="bg-primary text-white px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition">All Recipes</button>
+                <button class="bg-white border border-gray-100 text-gray-400 px-6 py-3 rounded-xl hover:bg-primaryLight hover:text-primary transition shadow-sm">Snacks</button>
+                <button class="bg-white border border-gray-100 text-gray-400 px-6 py-3 rounded-xl hover:bg-primaryLight hover:text-primary transition shadow-sm">Main Course</button>
+            </div>
+        </div>
+
+        <div id="recipes-container" class="space-y-24">
+            <!-- Dynamic and Static Recipes will be here -->
+            
+            <!-- Recipe 1 (Larger Card) -->
+            <div class="flex flex-col lg:flex-row gap-12 fade-in-section bg-primaryLight/50 rounded-[3rem] p-8 lg:p-0 overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-[0_40px_80px_rgba(0,0,0,0.05)] transition-all duration-700">
+                <div class="lg:w-2/5 relative overflow-hidden rounded-[2.5rem] lg:rounded-none lg:rounded-l-[3rem]">
+                    <img src="assets/recipe_foxtail_bowl.png" alt="Foxtail Millet Harvest Bowl" class="w-full h-full object-cover lg:absolute lg:inset-0 group-hover:scale-110 transition duration-1000">
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl text-sm font-black text-primary shadow-xl flex items-center gap-3">
+                        <i class="fa-solid fa-clock"></i> 20 MINS
+                    </div>
+                </div>
+                <!-- Card Info -->
+                <div class="lg:w-3/5 flex flex-col justify-center lg:py-16 lg:pr-16 relative">
+                    <!-- Giant Sticker Overlay -->
+                    <div class="absolute right-10 top-10 font-heading font-black text-[12rem] text-primary/5 select-none z-0">01</div>
+                    <i class="fa-solid fa-leaf text-accent/10 text-9xl absolute -bottom-10 -right-10 pointer-events-none"></i>
+                    
+                    <div class="relative z-10 px-4 md:px-0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-xs uppercase font-black text-accent tracking-[0.3em] block mb-3">EARTHY LUNCH • BEGINNER</span>
+                                <h3 class="font-heading text-4xl lg:text-5xl font-black text-textDark mb-6 group-hover:text-primary transition-colors leading-tight">Foxtail Millet<br>Harvest Bowl</h3>
+                            </div>
+                            <button onclick="saveRecipe(this)" class="w-14 h-14 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-300 hover:text-red-500 hover:border-red-500 bg-white shadow-xl transition-all hover:scale-110"><i class="fa-solid fa-bookmark text-xl"></i></button>
+                        </div>
+                        
+                        <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xl">
+                            A nutrient-packed bowl featuring tender foxtail millet, roasted root vegetables, and a creamy tahini-miso drizzle. Perfect for a sustained energy release.
+                        </p>
+    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-primary/10 pt-10">
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-mortar-pestle text-primary"></i> Pantry Items</h5>
+                                <ul class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> 1 cup Foxtail Millet</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Roasted Sweet Potato</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Tahini & Lemon juice</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-fire-burner text-primary"></i> The Method</h5>
+                                <ol class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2">01. Steam millet until tender</li>
+                                    <li class="flex items-center gap-2">02. Toss with earthy spices</li>
+                                    <li class="flex items-center gap-2">03. Top with fresh greens</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button onclick="openRecipeModal('foxtail-bowl')" class="mt-12 text-sm font-black text-primary flex items-center gap-4 hover:gap-6 transition-all uppercase tracking-[0.2em] group">
+                            Start Cooking Recipe <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-2 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 2 (Larger Card) -->
+            <div class="flex flex-col lg:flex-row-reverse gap-12 fade-in-section bg-[#fdf5ed]/70 rounded-[3rem] p-8 lg:p-0 overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-[0_40px_80px_rgba(0,0,0,0.05)] transition-all duration-700">
+                <div class="lg:w-2/5 relative overflow-hidden rounded-[2.5rem] lg:rounded-none lg:rounded-r-[3rem]">
+                    <img src="assets/recipe_sorghum_pilaf.png" alt="Golden Sorghum Autumn Pilaf" class="w-full h-full object-cover lg:absolute lg:inset-0 group-hover:scale-110 transition duration-1000">
+                    <div class="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl text-sm font-black text-primary shadow-xl flex items-center gap-3">
+                        <i class="fa-solid fa-clock"></i> 35 MINS
+                    </div>
+                </div>
+                <!-- Card Info -->
+                <div class="lg:w-3/5 flex flex-col justify-center lg:py-16 lg:pl-16 relative">
+                    <div class="absolute left-10 top-10 font-heading font-black text-[12rem] text-primary/5 select-none z-0">02</div>
+                    <i class="fa-solid fa-wheat-awn text-accent/10 text-9xl absolute -bottom-10 -left-10 pointer-events-none"></i>
+                    
+                    <div class="relative z-10 px-4 md:px-0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-xs uppercase font-black text-accent tracking-[0.3em] block mb-3">WHOLESOME DINNER • MEDIUM</span>
+                                <h3 class="font-heading text-4xl lg:text-5xl font-black text-textDark mb-6 group-hover:text-primary transition-colors leading-tight">Golden Sorghum<br>Autumn Pilaf</h3>
+                            </div>
+                            <button onclick="saveRecipe(this)" class="w-14 h-14 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-300 hover:text-red-500 hover:border-red-500 bg-white shadow-xl transition-all hover:scale-110"><i class="fa-solid fa-bookmark text-xl"></i></button>
+                        </div>
+                        
+                        <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xl">
+                            A hearty pilaf made with whole Jowar kernels, toasted pine nuts, and caramelized onions. A celebration of soil-to-soul cooking.
+                        </p>
+    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-primary/10 pt-10">
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-seedling text-primary"></i> Main Crops</h5>
+                                <ul class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> 1 cup Whole Sorghum</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Toasted Pine Nuts</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Golden Raisins</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-kitchen-set text-primary"></i> The Flow</h5>
+                                <ol class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2">01. Pressure cook Sorghum</li>
+                                    <li class="flex items-center gap-2">02. Caramelize large onions</li>
+                                    <li class="flex items-center gap-2">03. Fold in nuts and spices</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button onclick="openRecipeModal('sorghum-pilaf')" class="mt-12 text-sm font-black text-primary flex items-center gap-4 hover:gap-6 transition-all uppercase tracking-[0.2em] group">
+                            Start Cooking Recipe <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-2 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+            <!-- Recipe 3 (Larger Card) -->
+            <div class="flex flex-col lg:flex-row gap-12 fade-in-section bg-[#f4ebe1]/70 rounded-[3rem] p-8 lg:p-0 overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-[0_40px_80px_rgba(0,0,0,0.05)] transition-all duration-700 mt-12">
+                <!-- Large Image Area -->
+                <div class="lg:w-2/5 relative overflow-hidden rounded-[2.5rem] lg:rounded-none lg:rounded-l-[3rem]">
+                    <img src="assets/recipe_ragi_pancakes.png" alt="Fluffy Ragi Power Pancakes" class="w-full h-full object-cover lg:absolute lg:inset-0 group-hover:scale-110 transition duration-1000">
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl text-sm font-black text-primary shadow-xl flex items-center gap-3">
+                        <i class="fa-solid fa-clock"></i> 20 MINS
+                    </div>
+                </div>
+                <!-- Card Info -->
+                <div class="lg:w-3/5 flex flex-col justify-center lg:py-16 lg:pr-16 relative">
+                    <div class="absolute right-10 bottom-10 font-heading font-black text-[12rem] text-primary/5 select-none z-0">03</div>
+                    <i class="fa-solid fa-leaf text-primary/5 text-9xl absolute -top-10 -right-10 pointer-events-none"></i>
+                    
+                    <div class="relative z-10 px-4 md:px-0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-xs uppercase font-black text-accent tracking-[0.3em] block mb-3">MORNING HARVEST • EASY</span>
+                                <h3 class="font-heading text-4xl lg:text-5xl font-black text-textDark mb-6 group-hover:text-primary transition-colors leading-tight">Fluffy Ragi<br>Power Pancakes</h3>
+                            </div>
+                            <button onclick="saveRecipe(this)" class="w-14 h-14 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-300 hover:text-red-500 hover:border-red-500 bg-white shadow-xl transition-all hover:scale-110"><i class="fa-solid fa-bookmark text-xl"></i></button>
+                        </div>
+                        
+                        <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xl">
+                            Start your day rooted in ancient energy. These calcium-rich finger millet pancakes are naturally gluten-free and pair perfectly with wild honey.
+                        </p>
+    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-primary/10 pt-10">
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-mortar-pestle text-primary"></i> Pantry Items</h5>
+                                <ul class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> 1 cup Ragi Flour</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Almond Milk</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Wild Forest Honey</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-fire-burner text-primary"></i> The Method</h5>
+                                <ol class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2">01. Whisk dry ingredients</li>
+                                    <li class="flex items-center gap-2">02. Fold in almond milk</li>
+                                    <li class="flex items-center gap-2">03. Cook until golden brown</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button onclick="openRecipeModal('ragi-pancakes')" class="mt-12 text-sm font-black text-primary flex items-center gap-4 hover:gap-6 transition-all uppercase tracking-[0.2em] group">
+                            Start Cooking Recipe <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-2 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 4 (Larger Card) -->
+            <div class="flex flex-col lg:flex-row-reverse gap-12 fade-in-section bg-[#eef7f2]/70 rounded-[3rem] p-8 lg:p-0 overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-[0_40px_80px_rgba(0,0,0,0.05)] transition-all duration-700 mt-12">
+                <div class="lg:w-2/5 relative overflow-hidden rounded-[2.5rem] lg:rounded-none lg:rounded-r-[3rem]">
+                    <img src="assets/recipe_pearl_salad.png" alt="Pearl Millet Summer Salad" class="w-full h-full object-cover lg:absolute lg:inset-0 group-hover:scale-110 transition duration-1000">
+                    <div class="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl text-sm font-black text-primary shadow-xl flex items-center gap-3">
+                        <i class="fa-solid fa-clock"></i> 15 MINS
+                    </div>
+                </div>
+                <!-- Card Info -->
+                <div class="lg:w-3/5 flex flex-col justify-center lg:py-16 lg:pl-16 relative">
+                    <div class="absolute left-10 top-10 font-heading font-black text-[12rem] text-primary/5 select-none z-0">04</div>
+                    <i class="fa-solid fa-seedling text-accent/10 text-9xl absolute -bottom-10 -left-10 pointer-events-none"></i>
+                    
+                    <div class="relative z-10 px-4 md:px-0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-xs uppercase font-black text-accent tracking-[0.3em] block mb-3">FRESH GREENS • QUICK</span>
+                                <h3 class="font-heading text-4xl lg:text-5xl font-black text-textDark mb-6 group-hover:text-primary transition-colors leading-tight">Pearl Millet<br>Summer Salad</h3>
+                            </div>
+                            <button onclick="saveRecipe(this)" class="w-14 h-14 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-300 hover:text-red-500 hover:border-red-500 bg-white shadow-xl transition-all hover:scale-110"><i class="fa-solid fa-bookmark text-xl"></i></button>
+                        </div>
+                        
+                        <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xl">
+                            A refreshing, protein-packed salad combining cooked Bajra (Pearl Millet) with crisp cucumber, cherry tomatoes, and a zesty mint-lemon dressing.
+                        </p>
+    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-primary/10 pt-10">
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-seedling text-primary"></i> Main Crops</h5>
+                                <ul class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Cooked Pearl Millet</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Cherry Tomatoes</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-accent"></i> Fresh Mint Leaves</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-sm">
+                                <h5 class="font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-3"><i class="fa-solid fa-kitchen-set text-primary"></i> The Flow</h5>
+                                <ol class="text-sm text-gray-500 space-y-2 font-medium">
+                                    <li class="flex items-center gap-2">01. Fluff cooked millet</li>
+                                    <li class="flex items-center gap-2">02. Dice fresh vegetables</li>
+                                    <li class="flex items-center gap-2">03. Toss with lemon dressing</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button onclick="openRecipeModal('pearl-salad')" class="mt-12 text-sm font-black text-primary flex items-center gap-4 hover:gap-6 transition-all uppercase tracking-[0.2em] group">
+                            Start Cooking Recipe <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-2 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="bg-primaryLight wave-top-lightbeige pt-20 mt-10 pb-16">
+        <div class="max-w-[1200px] mx-auto px-5 text-center">
+             <i class="fa-solid fa-leaf text-accent/20 text-6xl mb-6"></i>
+             <p class="text-xs text-gray-400 font-black uppercase tracking-[0.3em]">&copy; 2026 MilletVerse. Soil-to-Soul Cooking.</p>
+        </div>
+    </div>
+
+    <!-- Global Recipe Modal overlay -->
+    <div id="recipe-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 lg:p-10 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#fffdfb] w-full max-w-4xl h-full max-h-[90vh] rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col md:flex-row transform translate-y-8 transition-transform duration-300" id="recipe-modal-content">
+            <!-- Left Side Image -->
+            <div class="hidden md:block w-2/5 relative">
+                <img id="modal-img" src="" alt="Recipe Image" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-primaryDark/80 to-transparent flex flex-col justify-end p-8 text-white">
+                    <span id="modal-category" class="text-xs font-black uppercase tracking-[0.3em] text-accent mb-2">Category</span>
+                    <h2 id="modal-title-img" class="font-heading text-3xl font-black leading-tight">Recipe Title</h2>
+                </div>
+            </div>
+            <!-- Right Side Content -->
+            <div class="w-full md:w-3/5 p-8 lg:p-12 overflow-y-auto relative">
+                <button onclick="closeRecipeModal()" class="absolute top-6 right-6 w-10 h-10 bg-primaryLight rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors shadow-sm z-10">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h2 id="modal-title" class="font-heading text-3xl font-black text-textDark mb-4 md:hidden">Recipe Title</h2>
+                
+                <h3 class="font-black text-sm uppercase tracking-widest text-primary mb-4 border-b border-primary/10 pb-2"><i class="fa-solid fa-basket-shopping text-accent"></i> Full Ingredients</h3>
+                <ul id="modal-ingredients" class="space-y-3 text-gray-500 font-medium text-sm mb-8">
+                    <!-- Injected by JS -->
+                </ul>
+
+                <h3 class="font-black text-sm uppercase tracking-widest text-primary mb-4 border-b border-primary/10 pb-2"><i class="fa-solid fa-fire-burner text-accent"></i> Step-by-Step Instructions</h3>
+                <ol id="modal-steps" class="space-y-5 text-gray-500 font-medium text-sm mb-10 list-decimal pl-4 marker:text-primary marker:font-black">
+                    <!-- Injected by JS -->
+                </ol>
+
+                <div class="bg-primaryLight/50 p-6 rounded-2xl border border-primary/10 relative overflow-hidden">
+                    <i class="fa-solid fa-lightbulb text-accent/10 text-6xl absolute -bottom-2 -right-2"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest text-primary mb-2 flex items-center gap-2"><i class="fa-solid fa-leaf text-accent"></i> Earthy Tips</h4>
+                    <p id="modal-tips" class="text-sm text-gray-600 font-medium leading-relaxed relative z-10"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification (for Bookmarks) -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 translate-y-20 opacity-0 bg-primaryDark text-white px-8 py-4 rounded-2xl shadow-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 z-50 flex items-center gap-4 border border-white/10 hidden pointer-events-none">
+        <i class="fa-solid fa-circle-check text-accent text-lg"></i>
+        <span id="toast-msg">Item Saved</span>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        const recipesData = {
+            'foxtail-bowl': {
+                title: 'Foxtail Millet Harvest Bowl',
+                category: 'EARTHY LUNCH',
+                img: 'assets/recipe_foxtail_bowl.png',
+                ingredients: [
+                    '1 cup Foxtail Millet (Rinsed properly)',
+                    '2 cups Water or Vegetable Broth',
+                    '1 cup Diced Sweet Potatoes',
+                    '1 cup Fresh Spinach or Kale',
+                    '2 tbsp Tahini',
+                    '1 tbsp Miso Paste',
+                    '1 tbsp Lemon Juice',
+                    'Olive oil, salt, and pepper to taste'
+                ],
+                steps: [
+                    'Roast the sweet potatoes in the oven at 400Â°F (200Â°C) with olive oil, salt, and pepper until tender.',
+                    'Bring the water or broth to a boil. Add the rinsed foxtail millet, reduce heat, cover, and simmer for 15-20 minutes.',
+                    'In a small bowl, whisk together the tahini, miso paste, lemon juice, and a splash of warm water to make the dressing.',
+                    'Fluff the cooked millet with a fork. Assemble the bowl by starting with a base of greens, then the millet, and roasted potatoes.',
+                    'Drizzle generously with the tahini-miso sauce before serving.'
+                ],
+                tips: "Toasting the foxtail millet in a dry pan for 3 minutes before boiling enhances its nutty earthy flavor tremendously."
+            },
+            'sorghum-pilaf': {
+                title: 'Golden Sorghum Autumn Pilaf',
+                category: 'WHOLESOME DINNER',
+                img: 'assets/recipe_sorghum_pilaf.png',
+                ingredients: [
+                    '1 cup Whole Sorghum (Jowar) Kernels',
+                    '3 cups Vegetable Broth',
+                    '2 Large Onions, thinly sliced',
+                    '1/2 cup Toasted Pine Nuts or Almonds',
+                    '1/4 cup Golden Raisins',
+                    '1 tsp Ground Cumin',
+                    '1/2 tsp Turmeric',
+                    'Fresh parsley for garnish'
+                ],
+                steps: [
+                    'Soak the sorghum kernels overnight to reduce cooking time. Drain and rinse.',
+                    'In a pressure cooker, cook the soaked sorghum with the vegetable broth for about 45 minutes until tender but chewy.',
+                    'In a large skillet, caramelize the sliced onions slowly over medium-low heat until deep brown and sweet (about 20 mins).',
+                    'Stir the cumin and turmeric into the onions, letting the spices toast for 1 minute.',
+                    'Fold the cooked sorghum, pine nuts, and golden raisins into the skillet. Garnish with fresh parsley and serve warm.'
+                ],
+                tips: "If you don't have a pressure cooker, simmering on the stovetop works, but it may take 60-75 minutes. Always soak whole jowar!"
+            },
+            'ragi-pancakes': {
+                title: 'Fluffy Ragi Power Pancakes',
+                category: 'MORNING HARVEST',
+                img: 'assets/recipe_ragi_pancakes.png',
+                ingredients: [
+                    '1 cup Ragi (Finger Millet) Flour',
+                    '1/2 cup Oat Flour or Whole Wheat Flour',
+                    '1 tbsp Baking Powder',
+                    '1 cup Almond Milk',
+                    '1 Flax Egg (1 tbsp flax pomace + 3 tbsp water)',
+                    '1 tsp Vanilla Extract',
+                    'Wild Forest Honey and Fresh Berries for topping'
+                ],
+                steps: [
+                    'Prepare the flax egg and let it sit for 5 minutes until thickened.',
+                    'In a large bowl, whisk together the ragi flour, oat flour, and baking powder.',
+                    'In a separate bowl, mix the almond milk, vanilla extract, and thickened flax egg.',
+                    'Gently fold the wet ingredients into the dry ingredients until just combined. Do not overmix.',
+                    'Heat a non-stick pan over medium heat. Pour 1/4 cup of batter per pancake.',
+                    'Cook until bubbles form on the surface, flip, and cook the other side. Serve with honey and berries.'
+                ],
+                tips: "Ragi can be dense. Adding the 1/2 cup of oat or wheat flour helps create that recognizable fluffy pancake texture!"
+            },
+            'pearl-salad': {
+                title: 'Pearl Millet Summer Salad',
+                category: 'FRESH GREENS',
+                img: 'assets/recipe_pearl_salad.png',
+                ingredients: [
+                    '1 cup Pearl Millet (Bajra)',
+                    '2 cups Water',
+                    '1 cup Cherry Tomatoes, halved',
+                    '1 Cucumber, diced',
+                    '1/4 cup Red Onion, finely diced',
+                    'Fresh Mint and Coriander leaves',
+                    'Juice of 1 Lemon',
+                    '2 tbsp Olive Oil'
+                ],
+                steps: [
+                    'Toast the pearl millet in a dry pan for 2 minutes. Add water, cover, and simmer for 25 minutes or until water is absorbed.',
+                    'Remove from heat, let it sit covered for 5 minutes, then fluff with a fork and let it cool completely.',
+                    'In a large bowl, combine the cooled millet, tomatoes, cucumber, and red onion.',
+                    'In a small jar, shake together the olive oil, lemon juice, salt, and pepper.',
+                    'Pour the dressing over the salad and toss with freshly torn mint and coriander leaves. Serve chilled.'
+                ],
+                tips: "Letting the cooked millet cool completely before adding the vegetables is crucial, otherwise the vegetables will wilt and lose their crunch."
+            }
+        };
+
+        const rModal = document.getElementById('recipe-modal');
+        const rContent = document.getElementById('recipe-modal-content');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRecipes();
+        });
+
+        async function fetchRecipes() {
+            try {
+                const res = await fetch('http://localhost:5000/api/learning?category=recipe');
+                const data = await res.json();
+                if (data.success && data.data.length) {
+                    const container = document.getElementById('recipes-container');
+                    data.data.forEach((r, idx) => {
+                        const id = `dynamic-${r.id}`;
+                        // Add to recipesData for modal
+                        recipesData[id] = {
+                            title: r.title,
+                            category: r.subcategory.toUpperCase(),
+                            img: r.image_url,
+                            ingredients: r.description.split('\n'), // Simplified for now
+                            steps: r.content.split('\n'),
+                            tips: `Author: ${r.author_name || 'Millet Enthusiast'}`
+                        };
+
+                        const card = document.createElement('div');
+                        const isEven = idx % 2 === 0;
+                        card.className = `flex flex-col lg:flex-row${isEven ? '' : '-reverse'} gap-12 fade-in-section bg-primaryLight/50 rounded-[3rem] p-8 lg:p-0 overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-[0_40px_80px_rgba(0,0,0,0.05)] transition-all duration-700 mt-12`;
+                        
+                        card.innerHTML = `
+                            <div class="lg:w-2/5 relative overflow-hidden rounded-[2.5rem] lg:rounded-none lg:rounded-${isEven ? 'l' : 'r'}-[3rem]">
+                                <img src="${r.image_url}" alt="${r.title}" class="w-full h-full object-cover lg:absolute lg:inset-0 group-hover:scale-110 transition duration-1000" onerror="this.src='assets/millet_cooking.png'">
+                            </div>
+                            <div class="lg:w-3/5 flex flex-col justify-center lg:py-16 lg:px-16 relative">
+                                <div class="relative z-10 px-4 md:px-0">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div>
+                                            <span class="text-xs uppercase font-black text-accent tracking-[0.3em] block mb-3">${r.subcategory} • USER SHARED</span>
+                                            <h3 class="font-heading text-4xl lg:text-5xl font-black text-textDark mb-6 group-hover:text-primary transition-colors leading-tight">${r.title}</h3>
+                                        </div>
+                                        <button onclick="saveRecipe(this)" class="w-14 h-14 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-300 hover:text-red-500 hover:border-red-500 bg-white shadow-xl transition-all hover:scale-110"><i class="fa-solid fa-bookmark text-xl"></i></button>
+                                    </div>
+                                    <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xl">${r.description.substring(0, 150)}...</p>
+                                    <button onclick="openRecipeModal('${id}')" class="text-sm font-black text-primary flex items-center gap-4 hover:gap-6 transition-all uppercase tracking-[0.2em] group">
+                                        Read Full Story <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-2 transition-transform"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        container.prepend(card);
+                    });
+                }
+            } catch (e) {
+                console.error('Failed to fetch recipes', e);
+            }
+        }
+
+        function openRecipeModal(recipeId) {
+            const data = recipesData[recipeId];
+            if (!data) return;
+
+            document.getElementById('modal-img').src = data.img;
+            document.getElementById('modal-category').innerText = data.category;
+            document.getElementById('modal-title-img').innerText = data.title;
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-tips').innerText = data.tips;
+
+            const ingList = document.getElementById('modal-ingredients');
+            ingList.innerHTML = '';
+            data.ingredients.forEach(i => {
+                ingList.innerHTML += `<li class="flex items-start gap-2"><i class="fa-solid fa-seedling text-primary/40 mt-1"></i> ${i}</li>`;
+            });
+
+            const stepList = document.getElementById('modal-steps');
+            stepList.innerHTML = '';
+            data.steps.forEach(s => {
+                stepList.innerHTML += `<li>${s}</li>`;
+            });
+
+            rModal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                rModal.classList.remove('opacity-0');
+                rContent.classList.remove('translate-y-8');
+            }, 10);
+        }
+
+        function closeRecipeModal() {
+            rModal.classList.add('opacity-0');
+            rContent.classList.add('translate-y-8');
+            setTimeout(() => {
+                rModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Close when clicking outside modal logic
+        rModal.addEventListener('click', function(e) {
+            if (e.target === rModal) {
+                closeRecipeModal();
+            }
+        });
+
+        // Save (Bookmark) Functionality
+        let saveTimeout;
+        function saveRecipe(btn) {
+            // Change button visual state
+            btn.classList.toggle('text-red-500');
+            btn.classList.toggle('border-red-500');
+            btn.classList.toggle('text-gray-300');
+            
+            const isSaved = btn.classList.contains('text-red-500');
+            const icon = btn.querySelector('i');
+            
+            if (isSaved) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid'); // filled bookmark
+                showToast("Recipe added to your harvest bookmarks!");
+            } else {
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular'); // hollow bookmark
+                showToast("Recipe removed from bookmarks.");
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            
+            clearTimeout(saveTimeout);
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-20');
+            }, 10);
+
+            saveTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-20');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+
+    </script>
+</body>
+</html>

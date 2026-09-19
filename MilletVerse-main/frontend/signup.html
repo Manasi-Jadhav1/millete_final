@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Plant Your Seeds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-primaryLight text-textDark font-sans antialiased min-h-screen flex flex-col lg:flex-row relative overflow-x-hidden">
+
+    <script>
+        const _sess2 = JSON.parse(localStorage.getItem('milletSession') || 'null');
+        if (_sess2 && _sess2.email) window.location.href = 'index.html';
+    </script>
+
+    <!-- Decorative stickers in background -->
+    <i class="fa-solid fa-seedling sticker text-accent/10 text-[400px] absolute -top-20 -right-20 rotate-45"></i>
+    <i class="fa-solid fa-leaf sticker text-primary/5 text-[300px] absolute -bottom-20 -left-20 -rotate-12"></i>
+
+    <!-- Center Signup Section -->
+    <div class="w-full flex justify-center items-center py-4 px-6 lg:py-6 lg:px-10 relative z-10">
+        
+        <div class="w-full max-w-6xl bg-white rounded-[4rem] shadow-[0_60px_120px_rgba(44,24,16,0.15)] border border-gray-50 flex flex-col lg:flex-row overflow-hidden relative">
+             <i class="fa-solid fa-wheat-awn text-primary/5 text-[150px] absolute -bottom-10 -right-10 pointer-events-none"></i>
+
+            <!-- Left Info Panel (Deep Earthy) -->
+            <div class="lg:w-5/12 bg-primaryDark text-white p-8 lg:p-12 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute inset-0 bg-drops opacity-10"></div>
+                <i class="fa-solid fa-leaf text-white/5 text-[300px] absolute -top-20 -left-20 rotate-45 pointer-events-none"></i>
+                
+                <div class="relative z-10">
+                    <div class="font-heading font-black text-2xl lg:text-3xl tracking-[0.3em] mb-8 lg:mb-12 flex items-center gap-4">
+                        <i class="fa-solid fa-wheat-awn text-accent"></i>
+                        MILLETVERSE
+                    </div>
+                    <h2 class="font-heading text-4xl lg:text-5xl font-black mb-6 lg:mb-8 leading-tight">Create Your<br><span class="text-accent underline decoration-4 underline-offset-8">Account.</span></h2>
+                    <ul class="space-y-4 lg:space-y-5">
+                        <li class="flex items-center gap-5 text-lg font-bold">
+                            <div class="w-10 h-10 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/20">
+                                <i class="fa-solid fa-seedling text-accent"></i>
+                            </div>
+                            Curated Harvest Plans
+                        </li>
+                        <li class="flex items-center gap-5 text-lg font-bold">
+                             <div class="w-10 h-10 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/20">
+                                <i class="fa-solid fa-truck-fast text-accent"></i>
+                            </div>
+                            Soil-to-Door Tracking
+                        </li>
+                        <li class="flex items-center gap-5 text-lg font-bold">
+                             <div class="w-10 h-10 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/20">
+                                <i class="fa-solid fa-bolt text-accent"></i>
+                            </div>
+                            Exclusive Harvest Rituals
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="relative z-10 mt-10 pt-6 lg:mt-12 lg:pt-8 border-t border-white/10">
+                    <p class="text-white/50 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Already have an account?</p>
+                    <a href="login.html" class="inline-flex items-center gap-3 border-2 border-accent text-accent font-black py-3 px-8 rounded-xl hover:bg-accent hover:text-primaryDark transition-all hover:scale-105 uppercase tracking-widest text-[10px]">
+                        LOG IN <i class="fa-solid fa-door-open"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Form Panel (Beige Form) -->
+            <div class="w-full lg:w-7/12 p-8 lg:p-12 relative bg-[#fffdfb] overflow-y-auto">
+                
+                <!-- Back to home -->
+                <a href="index.html" class="absolute top-6 right-6 lg:top-8 lg:right-8 text-gray-400 hover:text-primary transition-all flex items-center gap-2 font-black text-[10px] bg-primaryLight px-4 py-2 rounded-xl border border-gray-100 shadow-sm uppercase tracking-widest">
+                    <i class="fa-solid fa-xmark text-base"></i> Close
+                </a>
+
+                <div class="max-w-md mx-auto pt-4 lg:pt-0">
+                    <h1 class="font-heading text-3xl lg:text-4xl font-black mb-1 text-textDark">Sign Up</h1>
+                    <p class="text-gray-400 text-xs lg:text-sm mb-4 font-bold">Create an account to get started.</p>
+                    <div id="signup-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs font-black uppercase tracking-widest px-4 py-2 rounded-xl mb-3 flex items-center gap-3">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="signup-error-msg"></span>
+                    </div>
+
+                    <form class="space-y-4 lg:space-y-5" id="signup-form" onsubmit="handleSignup(event)">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                            <div>
+                                <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">FIRST NAME</label>
+                                <input id="signup-firstname" type="text" class="w-full bg-primaryLight border border-gray-50 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:bg-white transition-all font-bold text-sm text-textDark placeholder-primary/20" placeholder="Avery" required>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">LAST NAME</label>
+                                <input id="signup-lastname" type="text" class="w-full bg-primaryLight border border-gray-50 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:bg-white transition-all font-bold text-sm text-textDark placeholder-primary/20" placeholder="Sol" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">EMAIL ADDRESS</label>
+                            <div class="relative">
+                                <i class="fa-regular fa-envelope absolute left-5 top-4 text-primary/30 text-sm"></i>
+                                <input id="signup-email" type="email" class="w-full bg-primaryLight border border-gray-50 rounded-xl pl-12 pr-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:bg-white transition-all font-bold text-sm text-textDark placeholder-primary/20" placeholder="you@millet.com" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">PASSWORD</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-lock absolute left-5 top-4 text-primary/30 text-sm"></i>
+                                <input id="signup-password" type="password" class="w-full bg-white/50 border border-gray-100 rounded-2xl pl-14 pr-14 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 text-textDark font-bold placeholder-gray-300" required placeholder="Create a secure password">
+                                <button type="button" onclick="togglePasswordVisibility('signup-password', this)" class="absolute right-5 top-4 text-primary/30 hover:text-accent transition-colors"><i class="fa-solid fa-eye text-sm"></i></button>
+                            </div>
+                            <p class="text-[9px] text-gray-400 mt-2 font-black flex items-center gap-1 tracking-widest"><i class="fa-solid fa-circle-info text-accent"></i> MIN 8 CHARACTERS</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">I AM A</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="relative cursor-pointer">
+                                    <input type="radio" name="role" value="consumer" class="peer hidden" checked>
+                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
+                                        <i class="fa-solid fa-basket-shopping mb-1"></i>
+                                        <span class="text-[10px] uppercase tracking-widest">Buyer</span>
+                                    </div>
+                                </label>
+                                <label class="relative cursor-pointer">
+                                    <input type="radio" name="role" value="startup" class="peer hidden">
+                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
+                                        <i class="fa-solid fa-rocket mb-1"></i>
+                                        <span class="text-[10px] uppercase tracking-widest text-center">Startup Seller</span>
+                                    </div>
+                                </label>
+                                <label class="relative cursor-pointer">
+                                    <input type="radio" name="role" value="farmer" class="peer hidden">
+                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
+                                        <i class="fa-solid fa-tractor mb-1"></i>
+                                        <span class="text-[10px] uppercase tracking-widest text-center">Farmer</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 pt-2 lg:pt-4">
+                            <div class="relative mt-1">
+                                <input type="checkbox" id="terms" class="peer hidden" required>
+                                <label for="terms" class="w-5 h-5 border-2 border-accent rounded bg-accent/10 flex items-center justify-center cursor-pointer peer-checked:bg-primary peer-checked:border-primary transition-all shadow-sm ring-2 ring-accent/20 ring-offset-1">
+                                    <i class="fa-solid fa-check text-white text-[10px] opacity-0 peer-checked:opacity-100"></i>
+                                </label>
+                            </div>
+                            <label for="terms" class="text-xs text-gray-400 font-medium leading-tight cursor-pointer">
+                                I pledge to honor the ancient grains, support sustainable farming, and accept the <a href="#" class="text-primary font-bold hover:text-accent transition-colors underline">Terms of Harvest</a>.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary text-white font-black uppercase tracking-widest py-4 rounded-xl shadow-xl hover:bg-primaryDark hover:-translate-y-1 transition-all flex justify-center items-center gap-3 text-sm border-b-4 border-primaryDark">
+                            CREATE ACCOUNT <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-12 text-center text-xs font-black uppercase tracking-widest text-gray-400 lg:hidden">
+                        Already have an account? <a href="login.html" class="text-accent hover:text-primary transition-colors border-b-2 border-accent/20">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        async function handleSignup(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('signup-firstname').value.trim();
+            const lastName  = document.getElementById('signup-lastname').value.trim();
+            const email     = document.getElementById('signup-email').value.trim();
+            const password  = document.getElementById('signup-password').value;
+            const roleEl    = document.querySelector('input[name="role"]:checked');
+            const role      = roleEl ? roleEl.value : 'consumer';
+
+            const result = await milletSignup(firstName, lastName, email, password, role);
+
+            if (!result.success) {
+                const errBox = document.getElementById('signup-error');
+                document.getElementById('signup-error-msg').textContent = result.message;
+                errBox.classList.remove('hidden');
+                return;
+            }
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

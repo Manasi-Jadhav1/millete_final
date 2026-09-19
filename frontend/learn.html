@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Knowledge Harvest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white relative">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-10 wave-bottom-white relative">
+        <!-- Stickers -->
+        <i class="fa-solid fa-seedling sticker text-accent/20 text-4xl top-10 left-10"></i>
+        <i class="fa-solid fa-leaf sticker text-accent/20 text-3xl bottom-0 right-10" style="animation-delay: 1.5s;"></i>
+
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <div class="hidden md:flex items-center gap-3 text-white/90">
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-instagram text-sm"></i></a>
+                </div>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-extrabold text-4xl text-white tracking-widest" style="font-family: 'Outfit', cursive;">MilletVerse</span>
+                </a>
+                <div id="nav-auth-area" class="flex items-center gap-4 text-white">
+                    <div class="relative bg-white text-primary rounded-full flex items-center px-4 py-2 gap-2 shadow-lg cursor-pointer hover:shadow-xl transition" onclick="window.location.href='cart.html'">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span id="cart-count" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-[1200px] mx-auto px-5 mt-6 hidden md:flex items-center justify-center gap-10 font-medium text-white text-sm tracking-widest uppercase">
+                <a href="index.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Home</a>
+                <a href="products.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Products</a>
+                <a href="recipes.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Recipes</a>
+                <a href="health.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Health Guide</a>
+                <a href="learn.html" class="text-accent border-b-2 border-accent">Learn</a>
+                <a href="about.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">About</a>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-10 pb-16 relative z-10 fade-in-section">
+            <p class="font-bold text-sm tracking-widest uppercase mb-2 text-accent">Rooted in Knowledge</p>
+            <h1 class="font-heading text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-md">Ancient Soul Grains</h1>
+            <p class="text-white/80 max-w-lg mx-auto">A deep dive into the history, biology, and life-sustaining power of the earth's oldest crops.</p>
+        </div>
+    </div>
+
+    <!-- Grain Types Section -->
+    <main class="max-w-[1200px] mx-auto px-5 lg:px-10 py-24 relative">
+        <!-- Floating Stickers -->
+        <i class="fa-solid fa-wheat-awn text-primary/5 text-[400px] absolute -left-20 top-40 -z-10 rotate-12"></i>
+
+        <h2 class="font-heading text-5xl font-black text-center mb-24 fade-in-section">The Grains of Life</h2>
+
+        <div class="space-y-32">
+            <!-- Grain 1 (Larger Card) -->
+            <div class="flex flex-col md:flex-row items-center gap-16 fade-in-section relative overflow-hidden p-8 rounded-[3rem] bg-primaryLight/30 border border-gray-50">
+                 <!-- Background Sticker -->
+                <i class="fa-solid fa-leaf text-accent/5 text-9xl absolute -bottom-10 -right-10 pointer-events-none"></i>
+
+                <div class="w-full md:w-1/2 flex justify-center relative">
+                    <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1000&h=1000&fit=crop" alt="Finger Millet" class="w-full h-[450px] object-cover rounded-[3rem] shadow-2xl transform -rotate-3 hover:rotate-0 transition-all duration-700">
+                    <div class="absolute -top-6 -left-6 bg-accent text-white p-6 rounded-3xl shadow-2xl font-black text-2xl transform -rotate-12">RAGI</div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="text-accent font-black tracking-[0.3em] uppercase text-xs mb-4">Finger Millet • calcium king</div>
+                    <h3 class="font-heading text-5xl font-black mb-8 text-textDark">Finger Millet</h3>
+                    <p class="text-gray-500 text-lg mb-10 leading-relaxed font-medium">
+                        Ragi is the foundation of many ancient diets. With its iron-rich profile and calcium density that outshines most dairy, it's the ultimate bone-building superfood.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 flex items-center gap-4">
+                            <i class="fa-solid fa-bone text-primary text-3xl"></i>
+                            <div>
+                                <h5 class="font-black text-sm uppercase">CALCIUM RICH</h5>
+                                <p class="text-xs text-gray-400 mt-1">344mg per 100g serving</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 flex items-center gap-4">
+                            <i class="fa-solid fa-baby text-primary text-3xl"></i>
+                            <div>
+                                <h5 class="font-black text-sm uppercase">IDEAL FOR KIDS</h5>
+                                <p class="text-xs text-gray-400 mt-1">Natural growth stimulant</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grain 2 (Larger Card) -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-16 fade-in-section relative overflow-hidden p-8 rounded-[3rem] bg-[#fdf5ed]/50 border border-gray-50">
+                <!-- Background Sticker -->
+                <i class="fa-solid fa-wheat-awn text-primary/5 text-9xl absolute -top-10 -left-10 pointer-events-none"></i>
+
+                <div class="w-full md:w-1/2 flex justify-center relative">
+                    <img src="https://images.unsplash.com/photo-1628102491629-778571d893a3?q=80&w=1000&h=1000&fit=crop" alt="Sorghum" class="w-full h-[450px] object-cover rounded-[3rem] shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-700">
+                    <div class="absolute -top-6 -right-6 bg-primary p-6 rounded-3xl shadow-2xl font-black text-2xl transform rotate-12 text-white">JOWAR</div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="text-[#d48c73] font-black tracking-[0.3em] uppercase text-xs mb-4">Sorghum • Gluten-Free Staple</div>
+                    <h3 class="font-heading text-5xl font-black mb-8 text-textDark">Sorghum Grains</h3>
+                    <p class="text-gray-500 text-lg mb-10 leading-relaxed font-medium">
+                        Resilient in drought and packed with iron and protein. Jowar is the earthy heart of dryland agriculture, offering a slow-burning energy source for celiac-friendly diets.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 flex items-center gap-4">
+                            <i class="fa-solid fa-vial-circle-check text-[#d48c73] text-3xl"></i>
+                            <div>
+                                <h5 class="font-black text-sm uppercase">LOW GI INDEX</h5>
+                                <p class="text-xs text-gray-400 mt-1">Sustained glucose levels</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 flex items-center gap-4">
+                            <i class="fa-solid fa-bolt text-[#d48c73] text-3xl"></i>
+                            <div>
+                                <h5 class="font-black text-sm uppercase">HIGH PROTEIN</h5>
+                                <p class="text-xs text-gray-400 mt-1">10g Protein / 100g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Infographic Section (Glowing Earthy Theme) -->
+    <section class="bg-primaryDark text-white py-32 fade-in-section relative overflow-hidden">
+        <div class="absolute inset-0 bg-drops opacity-10"></div>
+        <i class="fa-solid fa-leaf text-white/5 text-[500px] absolute -bottom-40 -right-40 -rotate-45 pointer-events-none"></i>
+        
+        <div class="max-w-[1200px] mx-auto px-5 lg:px-10 text-center relative z-10">
+            <h2 class="font-heading text-6xl font-black mb-6 text-accent">The Grain Comparison</h2>
+            <p class="text-gray-400 mb-20 max-w-2xl mx-auto text-lg">Millets aren't just an alternative; they are the superior choice for your body and the planet.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto items-end">
+                <!-- Rice -->
+                <div class="bg-white/5 p-10 rounded-[3rem] backdrop-blur-md border border-white/10 group hover:bg-white/10 transition-all duration-500">
+                    <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8 text-3xl font-black text-gray-400">R</div>
+                    <h3 class="font-heading font-black text-3xl mb-10">Polished Rice</h3>
+                    <ul class="space-y-6 text-base text-left text-gray-400 font-bold">
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Fiber Content</span> <span>0.2g</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Protein (g)</span> <span>6.8g</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Mineral Load</span> <span>Low</span></li>
+                        <li class="flex justify-between pt-4"><span>Blood Sugar Impact</span> <span class="text-red-900 bg-red-400/20 px-3 py-1 rounded-lg">VERY HIGH</span></li>
+                    </ul>
+                </div>
+
+                <!-- Wheat -->
+                <div class="bg-white/10 p-10 rounded-[3rem] backdrop-blur-md border border-white/10 transform md:-translate-y-8 group hover:bg-white/20 transition-all duration-500">
+                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8 text-3xl font-black text-gray-200">W</div>
+                    <h3 class="font-heading font-black text-3xl mb-10 text-white">Whole Wheat</h3>
+                    <ul class="space-y-6 text-base text-left text-gray-300 font-bold">
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Fiber Content</span> <span>1.2g</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Protein (g)</span> <span>11.8g</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Mineral Load</span> <span>Med</span></li>
+                        <li class="flex justify-between pt-4"><span>Blood Sugar Impact</span> <span class="text-orange-400 bg-orange-400/20 px-3 py-1 rounded-lg">MODERATE</span></li>
+                    </ul>
+                </div>
+
+                <!-- Millet (Highlight) -->
+                <div class="bg-accent p-12 rounded-[3.5rem] shadow-[0_40px_100px_rgba(212,163,115,0.3)] transform md:-translate-y-16 relative overflow-hidden group hover:scale-105 transition-all duration-700">
+                    <div class="absolute -right-20 -top-20 text-white/30 text-[15rem] rotate-12 pointer-events-none">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div class="w-24 h-24 bg-primaryDark text-white rounded-full flex items-center justify-center mx-auto mb-10 text-4xl font-black relative z-10 shadow-2xl">M</div>
+                    <h3 class="font-heading font-black text-[2.5rem] mb-12 text-primaryDark relative z-10 leading-none">Ancient Millet</h3>
+                    <ul class="space-y-6 text-lg text-left text-primaryDark relative z-10 font-bold">
+                        <li class="flex justify-between border-b border-primaryDark/20 pb-4"><span>Fiber Content</span> <span class="text-white font-black">6.7g</span></li>
+                        <li class="flex justify-between border-b border-primaryDark/20 pb-4"><span>Protein (g)</span> <span class="text-white font-black">12.3g</span></li>
+                        <li class="flex justify-between border-b border-primaryDark/20 pb-4"><span>Mineral Load</span> <span class="text-white font-black">SUPERIOR</span></li>
+                        <li class="flex justify-between pt-4"><span>Blood Sugar Impact</span> <span class="text-white bg-primaryDark px-4 py-1 rounded-xl shadow-lg">STABLE</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer base -->
+    <div class="bg-primaryLight wave-top-lightbeige pt-24 pb-16">
+        <div class="max-w-[1200px] mx-auto px-5 text-center">
+             <i class="fa-solid fa-seedling text-primary/10 text-8xl mb-8"></i>
+             <p class="text-xs text-gray-400 font-black uppercase tracking-[0.5em]">&copy; 2026 MilletVerse. Earthy Knowledge Harvest.</p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Harvest Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white relative">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-8 wave-bottom-white relative">
+        <i class="fa-solid fa-leaf sticker text-accent/20 text-4xl top-6 left-10"></i>
+        
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <a href="products.html" class="flex items-center text-white/70 hover:text-white transition gap-3 font-black text-xs uppercase tracking-widest">
+                    <i class="fa-solid fa-arrow-left"></i> BACK TO HARVEST
+                </a>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-black text-3xl text-white tracking-[0.2em]">MILLETVERSE</span>
+                </a>
+                <div class="flex items-center gap-4 text-white">
+                    <a href="dashboard.html" class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center shadow-xl backdrop-blur-md hover:bg-white hover:text-primaryDark transition-all hover:scale-105 border border-white/10"><i class="fa-solid fa-user"></i></a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-6 pb-12 relative z-10">
+            <h1 class="font-heading text-5xl font-black mb-2 drop-shadow-md">The Harvest Basket</h1>
+            <p class="text-accent font-black uppercase tracking-[0.3em] text-[10px]">RECONNECTING WITH THE EARTH</p>
+        </div>
+    </div>
+
+    <main class="max-w-[1200px] mx-auto px-5 lg:px-10 py-20 flex flex-col lg:flex-row gap-16 relative">
+        <i class="fa-solid fa-wheat-awn text-primary/5 text-[400px] absolute -right-20 top-40 -z-10 rotate-12"></i>
+
+        <div class="w-full lg:w-2/3 space-y-10">
+            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border border-gray-50 relative overflow-hidden">
+                <i class="fa-solid fa-leaf text-accent/5 text-[150px] absolute -top-10 -right-10 pointer-events-none"></i>
+                <h3 class="font-heading font-black text-3xl mb-10 border-b-4 border-primaryLight pb-6 text-textDark">Cart Items</h3>
+                <div id="cart-container" class="space-y-12"></div>
+            </div>
+
+            <div id="empty-cart-msg" class="hidden text-center py-16 bg-primaryLight/50 rounded-[4rem] border-4 border-dashed border-primaryLight relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1590779033306-02758f8b8a92?q=80&w=400&fit=crop" class="w-48 h-48 object-cover rounded-full mx-auto mb-6 shadow-2xl border-8 border-white transform -rotate-6">
+                <h2 class="font-heading text-4xl font-black text-textDark mb-4">Your Basket is Empty</h2>
+                <a href="products.html" class="bg-primary text-white font-black px-10 py-4 rounded-xl shadow-xl hover:bg-primaryDark transition-all inline-block uppercase tracking-widest text-xs">Browse Catalog</a>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/3 space-y-10">
+            <div class="bg-primaryDark p-10 rounded-[3rem] shadow-[0_40px_80px_rgba(44,24,16,0.3)] text-white sticky top-24 border border-white/5 relative overflow-hidden">
+                <h3 class="font-heading font-black text-3xl mb-10 border-b border-white/10 pb-6">Cart Total</h3>
+                <div class="space-y-6 text-sm mb-12">
+                    <div class="flex justify-between text-white/60 font-black uppercase tracking-widest text-[10px]">
+                        <span>Subtotal</span><span id="cart-subtotal" class="font-black text-white text-lg">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between text-white/60 font-black uppercase tracking-widest text-[10px]">
+                        <span>Logistics Fee</span><span class="font-black text-white text-lg">₹420</span>
+                    </div>
+                    <div class="flex justify-between text-white/60 font-black uppercase tracking-widest text-[10px]">
+                        <span>Soil Tax (5%)</span><span id="cart-tax" class="font-black text-white text-lg">₹0.00</span>
+                    </div>
+                    <div class="pt-8 border-t border-white/10 flex justify-between items-center mt-8">
+                        <span class="font-heading font-black text-xl uppercase tracking-widest">Final Value</span>
+                        <span id="cart-total" class="font-heading font-black text-4xl text-accent">₹0.00</span>
+                    </div>
+                </div>
+                <button class="w-full bg-accent hover:bg-white text-primaryDark font-black py-6 rounded-[2rem] shadow-2xl transition-all uppercase tracking-[0.3em]" onclick="handleCheckout()">
+                    PROCEED TO CHECKOUT
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        requireAuth('cart.html');
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+            updateCartCount();
+        });
+
+        async function renderCart() {
+            const user = JSON.parse(localStorage.getItem('milletSession'));
+            const container = document.getElementById('cart-container');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            let subtotal = 0;
+            let cartItems = [];
+
+            if (user && user.token) {
+                try {
+                    const response = await fetch('http://localhost:5000/api/cart', {
+                        headers: { 'Authorization': `Bearer ${user.token}` }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        cartItems = data.data.items.map(item => ({
+                            id: item.product_id,
+                            title: item.name,
+                            price: parseFloat(item.price),
+                            qty: item.quantity,
+                            img: item.image_url
+                        }));
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch cloud cart', e);
+                    cartItems = JSON.parse(localStorage.getItem('milletCart')) || [];
+                }
+            } else {
+                cartItems = JSON.parse(localStorage.getItem('milletCart')) || [];
+            }
+
+            if (cartItems.length === 0) {
+                container.parentElement.classList.add('hidden');
+                emptyMsg.classList.remove('hidden');
+                document.getElementById('cart-subtotal').innerText = '₹0.00';
+                document.getElementById('cart-tax').innerText = '₹0.00';
+                document.getElementById('cart-total').innerText = '₹420';
+                return;
+            }
+
+            container.innerHTML = '';
+            container.parentElement.classList.remove('hidden');
+            emptyMsg.classList.add('hidden');
+            
+            cartItems.forEach((item) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                const elem = document.createElement('div');
+                elem.className = 'flex flex-col sm:flex-row items-center gap-8 pb-10 border-b border-primaryLight group p-6 rounded-[2rem] transition-all relative overflow-hidden';
+                elem.innerHTML = `
+                    <div class="aspect-square w-32 bg-primaryLight rounded-[2rem] flex items-center justify-center shrink-0 border border-white relative overflow-hidden">
+                        <img src="${item.img}" class="w-full h-full object-cover shadow-2xl transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2574&fit=crop';">
+                    </div>
+                    <div class="flex-1 text-center sm:text-left">
+                        <h4 class="font-heading font-black text-2xl text-textDark mb-1 group-hover:text-primary transition-colors">${item.title}</h4>
+                        <p class="text-accent font-black tracking-widest text-sm">₹${item.price.toFixed(2)} / unit</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white border border-gray-100 p-2 rounded-2xl shadow-sm">
+                        <button class="w-10 h-10 rounded-xl bg-primaryLight text-primary flex items-center justify-center hover:bg-primary hover:text-white" onclick="updateQty(${item.id}, ${item.qty - 1})"><i class="fa-solid fa-minus text-xs"></i></button>
+                        <span class="font-black w-8 text-center text-lg">${item.qty}</span>
+                        <button class="w-10 h-10 rounded-xl bg-primaryLight text-primary flex items-center justify-center hover:bg-primary hover:text-white" onclick="updateQty(${item.id}, ${item.qty + 1})"><i class="fa-solid fa-plus text-xs"></i></button>
+                    </div>
+                    <div class="font-heading font-black text-3xl w-32 text-right text-primaryDark">₹${itemTotal.toFixed(2)}</div>
+                    <button class="w-12 h-12 rounded-2xl text-red-500 bg-red-500/10 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-lg" onclick="removeItem(${item.id})">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+                container.appendChild(elem);
+            });
+
+            const tax = subtotal * 0.05;
+            const total = subtotal + 420 + tax;
+            document.getElementById('cart-subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('cart-tax').innerText = `₹${tax.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `₹${total.toFixed(2)}`;
+        }
+
+        async function updateQty(productId, newQty) {
+            const user = JSON.parse(localStorage.getItem('milletSession'));
+            if (user && user.token) {
+                try {
+                    const response = await fetch('http://localhost:5000/api/cart/update', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+                        body: JSON.stringify({ product_id: productId, quantity: newQty })
+                    });
+                    const data = await response.json();
+                    if (!data.success) showToast(data.message, 'error');
+                } catch (e) { console.error(e); }
+            } else {
+                let cart = JSON.parse(localStorage.getItem('milletCart')) || [];
+                const idx = cart.findIndex(i => i.id === productId);
+                if (idx !== -1) {
+                    if (newQty <= 0) cart.splice(idx, 1);
+                    else cart[idx].qty = newQty;
+                    localStorage.setItem('milletCart', JSON.stringify(cart));
+                }
+            }
+            renderCart();
+            updateCartCount();
+        }
+
+        async function removeItem(productId) {
+            const user = JSON.parse(localStorage.getItem('milletSession'));
+            if (user && user.token) {
+                try {
+                    await fetch(`http://localhost:5000/api/cart/remove/${productId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${user.token}` }
+                    });
+                } catch (e) { console.error(e); }
+            } else {
+                let cart = JSON.parse(localStorage.getItem('milletCart')) || [];
+                cart = cart.filter(i => i.id !== productId);
+                localStorage.setItem('milletCart', JSON.stringify(cart));
+            }
+            renderCart();
+            updateCartCount();
+        }
+
+        async function handleCheckout() {
+            const user = JSON.parse(localStorage.getItem('milletSession'));
+            if (!user || !user.token) { window.location.href = 'login.html'; return; }
+            try {
+                const response = await fetch('http://localhost:5000/api/orders/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+                    body: JSON.stringify({ delivery_address: user.address || 'Soil-Side Residency' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Orders placed successfully!', 'success');
+                    setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+                } else { showToast(data.message, 'error'); }
+            } catch (e) { showToast('Earth connection lost.', 'error'); }
+        }
+    </script>
+</body>
+</html>

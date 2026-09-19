@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior:smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse — Farmer Dashboard</title>
+    <meta name="description" content="MilletVerse Farmer Dashboard — manage your harvest, scanner, and orders.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary:'#5b2d22', primaryLight:'#faf7f2', primaryDark:'#3d1e17',
+                        accent:'#d4a373', textDark:'#2c1810'
+                    },
+                    fontFamily: { sans:['Inter','sans-serif'], heading:['Outfit','sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary:#5b2d22; --accent:#d4a373; --dark:#3d1e17; }
+        body { background:#faf7f2; }
+        .sidebar { background:#3d1e17; width:265px; min-height:100vh; position:fixed; top:0; left:0; display:flex; flex-direction:column; z-index:100; }
+        .nav-btn { display:flex; align-items:center; gap:12px; padding:13px 18px; border-radius:12px; font-size:0.62rem; font-weight:900; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5); cursor:pointer; transition:all 0.2s; border:none; background:none; width:100%; text-align:left; }
+        .nav-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
+        .nav-btn.active { background:var(--accent); color:var(--dark) !important; }
+        .card { background:#fff; border-radius:20px; border:1px solid #f0ebe3; box-shadow:0 4px 20px rgba(44,24,16,0.05); }
+        .field-label { font-size:0.6rem; font-weight:900; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:7px; display:block; }
+        .field-input { width:100%; background:#faf7f2; border:1.5px solid #e8ddd3; border-radius:11px; padding:11px 15px; font-size:0.85rem; font-weight:600; color:#2c1810; outline:none; transition:all 0.2s; box-sizing:border-box; }
+        .field-input:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(212,163,115,0.12); }
+        .btn-p { background:var(--primary); color:#fff; font-size:0.65rem; font-weight:900; text-transform:uppercase; letter-spacing:0.12em; padding:13px 26px; border-radius:12px; border:none; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:8px; }
+        .btn-p:hover { background:var(--dark); transform:translateY(-1px); }
+        .badge { display:inline-flex; align-items:center; font-size:0.55rem; font-weight:900; text-transform:uppercase; letter-spacing:0.08em; padding:4px 10px; border-radius:99px; }
+        .tab-btn { padding:8px 14px; border-radius:8px; font-size:0.6rem; font-weight:900; text-transform:uppercase; letter-spacing:0.08em; border:1.5px solid #e8ddd3; background:#fff; cursor:pointer; transition:all 0.15s; color:#8b736b; }
+        .tab-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+        .progress-track { height:8px; background:#f0ebe3; border-radius:99px; overflow:hidden; }
+        .progress-bar { height:100%; border-radius:99px; transition:width 0.7s ease; }
+        #toastbox { position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; display:flex; flex-direction:column; gap:8px; }
+        .toast-item { padding:13px 18px; border-radius:12px; font-size:0.75rem; font-weight:700; animation:slideIn 0.3s ease; }
+        @keyframes slideIn { from{transform:translateX(110%);opacity:0} to{transform:translateX(0);opacity:1} }
+        .st-pending   { background:#fff8e6; color:#b45309; }
+        .st-confirmed { background:#eff6ff; color:#1d4ed8; }
+        .st-shipped   { background:#f5f3ff; color:#6d28d9; }
+        .st-delivered { background:#ecfdf5; color:#065f46; }
+        .st-cancelled { background:#fef2f2; color:#991b1b; }
+        .upload-zone { border:2px dashed #e8ddd3; border-radius:14px; padding:32px 20px; text-align:center; cursor:pointer; transition:all 0.2s; }
+        .upload-zone:hover, .upload-zone.drag { border-color:var(--accent); background:#fffbf7; }
+        @media(max-width:1024px) { .sidebar{display:none;} .main-wrap{margin-left:0!important;} }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+<div id="toastbox"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div style="padding:26px 22px 18px;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <a href="index.html" class="flex flex-col">
+            <span style="font-family:'Outfit',sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:0.15em;color:#fff;">MILLETVERSE</span>
+            <span id="dashboard-title" style="font-size:0.48rem;font-weight:900;letter-spacing:0.4em;color:var(--accent);text-transform:uppercase;margin-top:3px;">Farmer Dashboard</span>
+        </a>
+    </div>
+    <div style="padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;">
+        <div style="width:42px;height:42px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i id="role-icon" class="fa-solid fa-tractor" style="color:var(--dark);font-size:1rem;"></i>
+        </div>
+        <div>
+            <p id="sidebar-name" style="font-size:0.72rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.07em;">Farmer</p>
+            <p id="role-subtitle" style="font-size:0.52rem;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:#6ee7b7;margin-top:2px;">Verified Producer</p>
+        </div>
+    </div>
+    <nav style="flex:1;padding:14px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;">
+        <p style="font-size:0.48rem;font-weight:900;letter-spacing:0.4em;color:rgba(255,255,255,0.28);text-transform:uppercase;padding:8px 4px 10px;">Harvest Menu</p>
+        <button class="nav-btn active" id="nav-add-product" onclick="show('add-product')"><i class="fa-solid fa-plus-circle" style="width:16px;text-align:center;"></i> Add Product</button>
+        <button class="nav-btn"        id="nav-my-products" onclick="show('my-products')"><i class="fa-solid fa-seedling"    style="width:16px;text-align:center;"></i> My Products</button>
+        <button class="nav-btn"        id="nav-scanner"     onclick="show('scanner')">    <i class="fa-solid fa-qrcode"      style="width:16px;text-align:center;"></i> Payment Scanner</button>
+        <button class="nav-btn"        id="nav-orders"      onclick="show('orders')">     <i class="fa-solid fa-box-open"    style="width:16px;text-align:center;"></i> Customer Orders</button>
+        <button class="nav-btn"        id="nav-analytics"   onclick="show('analytics')">  <i class="fa-solid fa-chart-line"  style="width:16px;text-align:center;"></i> Analytics</button>
+        <div style="flex:1;min-height:20px;"></div>
+        <button onclick="milletLogout()" class="nav-btn" style="color:rgba(255,100,100,0.65);"><i class="fa-solid fa-right-from-bracket" style="width:16px;text-align:center;"></i> Logout</button>
+    </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-wrap" style="margin-left:265px;min-height:100vh;">
+    <!-- Mobile bar -->
+    <div style="background:#3d1e17;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;" class="lg:hidden">
+        <span style="font-family:'Outfit',sans-serif;font-weight:900;font-size:1rem;color:#fff;letter-spacing:0.12em;">MILLETVERSE</span>
+        <div style="display:flex;gap:5px;overflow-x:auto;">
+            <button class="tab-btn" onclick="show('add-product')" style="font-size:0.55rem;">+ Add</button>
+            <button class="tab-btn" onclick="show('my-products')" style="font-size:0.55rem;">Products</button>
+            <button class="tab-btn" onclick="show('scanner')"     style="font-size:0.55rem;">Scanner</button>
+            <button class="tab-btn" onclick="show('orders')"      style="font-size:0.55rem;">Orders</button>
+            <button class="tab-btn" onclick="show('analytics')"   style="font-size:0.55rem;">Analytics</button>
+        </div>
+    </div>
+    <div style="padding:36px 40px;" id="content-area"></div>
+</div>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+const API = 'http://localhost:5000/api';
+let farmer = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    farmer = JSON.parse(localStorage.getItem('milletSession'));
+    if (!farmer || !['farmer','startup','seller'].includes(farmer.role)) {
+        window.location.href = 'login.html'; return;
+    }
+    
+    // Dynamic Role Branding
+    if (farmer.role === 'startup') {
+        document.title = 'MilletVerse — Startup Seller Dashboard';
+        document.getElementById('dashboard-title').textContent = 'Startup Seller';
+        document.getElementById('role-subtitle').textContent = 'Verified Startup';
+        document.getElementById('role-icon').className = 'fa-solid fa-rocket';
+    }
+    
+    document.getElementById('sidebar-name').textContent = `${farmer.firstName||'User'} ${farmer.lastName||''}`.trim();
+    show('add-product');
+});
+
+function toast(msg, type='success') {
+    const box = document.getElementById('toastbox');
+    const el  = document.createElement('div');
+    const s   = { success:'background:#ecfdf5;color:#065f46;border:1px solid #6ee7b7', error:'background:#fef2f2;color:#991b1b;border:1px solid #fca5a5', info:'background:#eff6ff;color:#1e40af;border:1px solid #93c5fd' };
+    el.className = 'toast-item'; el.style.cssText = s[type]||s.success; el.innerHTML = msg;
+    box.appendChild(el); setTimeout(() => el.remove(), 4000);
+}
+
+// ─── Data Helpers ───────────────────────────────────
+function myProducts()  {
+    const all = JSON.parse(localStorage.getItem('milletProducts')||'[]');
+    return all.filter(p => p.farmer_email === farmer.email || String(p.farmer_id) === String(farmer.id));
+}
+function allOrders() { return JSON.parse(localStorage.getItem('milletOrders')||'[]'); }
+function myOrders() {
+    return allOrders().filter(o =>
+        o.farmer_email === farmer.email || String(o.farmer_id)===String(farmer.id) ||
+        (o.items||[]).some(i => i.farmer_email===farmer.email || String(i.farmer_id)===String(farmer.id))
+    );
+}
+function getScanner()  { return localStorage.getItem(`farmer_scanner_${farmer.email}`) || localStorage.getItem('farmer_scanner_default') || ''; }
+function saveScanner(v){ localStorage.setItem(`farmer_scanner_${farmer.email}`, v); localStorage.setItem('farmer_scanner_default', v); }
+function hdrs()        { return { 'Authorization':`Bearer ${farmer?.token}`, 'Content-Type':'application/json' }; }
+
+// ─── Routing ────────────────────────────────────────
+function show(section) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`nav-${section}`)?.classList.add('active');
+    ({ 'add-product':renderAddProduct, 'my-products':renderMyProducts, 'scanner':renderScanner, 'orders':renderOrders, 'analytics':renderAnalytics })[section]?.();
+}
+
+// ════════════════════════════════════════════════════
+// 1.  ADD PRODUCT
+// ════════════════════════════════════════════════════
+function renderAddProduct() {
+    document.getElementById('content-area').innerHTML = `
+    <div style="margin-bottom:32px;">
+        <h1 style="font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;color:#2c1810;line-height:1.1;">List New Harvest</h1>
+        <p style="font-size:0.78rem;font-weight:700;color:#8b736b;margin-top:6px;text-transform:uppercase;letter-spacing:0.12em;">Add your millet product to the MilletVerse marketplace</p>
+    </div>
+    <div class="card" style="padding:40px;max-width:760px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+            <div style="grid-column:1/-1;">
+                <label class="field-label">Product Name *</label>
+                <input id="p-name" class="field-input" placeholder="e.g. Organic Pearl Millet Flour">
+            </div>
+            <div>
+                <label class="field-label">Millet Type *</label>
+                <select id="p-type" class="field-input">
+                    <option value="">Select type...</option>
+                    <option>Pearl Millet (Bajra)</option><option>Finger Millet (Ragi)</option>
+                    <option>Foxtail Millet (Kangni)</option><option>Sorghum (Jowar)</option>
+                    <option>Little Millet (Kutki)</option><option>Kodo Millet</option>
+                    <option>Barnyard Millet</option><option>Mixed Millet Blend</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Category</label>
+                <select id="p-cat" class="field-input">
+                    <option>Grain</option><option>Flour</option><option>Flakes</option>
+                    <option>Ready to Cook</option><option>Organic</option><option>Value Added</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Price per unit (₹) *</label>
+                <input id="p-price" class="field-input" type="number" min="1" placeholder="e.g. 120">
+            </div>
+            <div>
+                <label class="field-label">Stock Quantity *</label>
+                <input id="p-stock" class="field-input" type="number" min="1" placeholder="e.g. 50">
+            </div>
+            <div style="grid-column:1/-1;">
+                <label class="field-label">Unit Size</label>
+                <input id="p-unit" class="field-input" placeholder="e.g. 500g, 1kg, per piece">
+            </div>
+            <div style="grid-column:1/-1;">
+                <label class="field-label">Description</label>
+                <textarea id="p-desc" class="field-input" rows="3" style="resize:vertical;" placeholder="Describe your harvest — origin, freshness, nutrition..."></textarea>
+            </div>
+            <div style="grid-column:1/-1;">
+                <label class="field-label">Product Image URL (optional)</label>
+                <input id="p-img" class="field-input" placeholder="https://... leave blank for default">
+            </div>
+            <div style="grid-column:1/-1;">
+                <label class="field-label">Tags (comma separated)</label>
+                <input id="p-tags" class="field-input" placeholder="e.g. Organic, Gluten-Free, Sun-dried">
+            </div>
+            <div style="grid-column:1/-1;padding-top:8px;">
+                <button class="btn-p" onclick="submitProduct()" id="submit-btn" style="width:100%;justify-content:center;padding:16px;font-size:0.7rem;">
+                    <i class="fa-solid fa-seedling"></i> List This Harvest
+                </button>
+            </div>
+        </div>
+    </div>`;
+}
+
+async function submitProduct() {
+    const name  = document.getElementById('p-name').value.trim();
+    const type  = document.getElementById('p-type').value;
+    const price = parseFloat(document.getElementById('p-price').value);
+    const stock = parseInt(document.getElementById('p-stock').value);
+    if (!name||!type||!price||!stock) { toast('Fill all required (*) fields.','error'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Listing...'; btn.disabled = true;
+
+    const product = {
+        id: Date.now(), name,
+        millet_type:   document.getElementById('p-type').value,
+        category:      document.getElementById('p-cat').value,
+        price, stock_quantity: stock,
+        unit:          document.getElementById('p-unit').value.trim() || '1kg',
+        description:   document.getElementById('p-desc').value.trim(),
+        image_url:     document.getElementById('p-img').value.trim() || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400',
+        tags:          document.getElementById('p-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+        rating: 4.5,
+        farmer_name:   `${farmer.firstName||''} ${farmer.lastName||''}`.trim(),
+        farmer_email:  farmer.email,
+        farmer_id:     farmer.id,
+        farmer_scanner: getScanner(),
+        created_at:    new Date().toISOString(),
+        approved: true
+    };
+
+    try {
+        const r = await fetch(`${API}/products`,{method:'POST',headers:hdrs(),body:JSON.stringify(product)});
+        const d = await r.json(); if(d.success&&d.data?.id) product.id=d.data.id;
+    } catch(e) {}
+
+    const all = JSON.parse(localStorage.getItem('milletProducts')||'[]');
+    all.push(product);
+    localStorage.setItem('milletProducts', JSON.stringify(all));
+
+    toast(`<i class="fa-solid fa-check-circle mr-1"></i><strong>${name}</strong> listed!`);
+    btn.innerHTML = '<i class="fa-solid fa-seedling"></i> List This Harvest'; btn.disabled = false;
+    ['p-name','p-price','p-stock','p-desc','p-img','p-tags','p-unit'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    setTimeout(() => show('my-products'), 800);
+}
+
+// ════════════════════════════════════════════════════
+// 2.  MY PRODUCTS
+// ════════════════════════════════════════════════════
+function renderMyProducts() {
+    const products = myProducts();
+    document.getElementById('content-area').innerHTML = `
+    <div style="margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+            <h1 style="font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;color:#2c1810;line-height:1.1;">My Harvest Listings</h1>
+            <p style="font-size:0.78rem;font-weight:700;color:#8b736b;margin-top:6px;text-transform:uppercase;letter-spacing:0.12em;">${products.length} product${products.length!==1?'s':''} on marketplace</p>
+        </div>
+        <button class="btn-p" onclick="show('add-product')"><i class="fa-solid fa-plus"></i> Add New</button>
+    </div>
+    ${products.length===0 ? `
+        <div class="card" style="padding:60px;text-align:center;">
+            <i class="fa-solid fa-seedling" style="font-size:3rem;color:#d4a373;margin-bottom:14px;display:block;"></i>
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1.2rem;margin-bottom:8px;">No Products Yet</h3>
+            <p style="font-size:0.83rem;color:#8b736b;font-weight:600;">Start by listing your first harvest product.</p>
+            <button class="btn-p" onclick="show('add-product')" style="margin-top:22px;"><i class="fa-solid fa-plus-circle"></i> List First Harvest</button>
+        </div>` :
+    `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;">
+        ${products.map(p=>`
+        <div class="card" style="padding:18px;" id="prod-${p.id}">
+            <div style="display:flex;gap:14px;">
+                <img src="${p.image_url}" style="width:72px;height:72px;border-radius:12px;object-fit:cover;flex-shrink:0;background:#f0ebe3;"
+                    onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'">
+                <div style="flex:1;min-width:0;">
+                    <p style="font-weight:900;color:#2c1810;font-size:0.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+                    <p style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;margin-top:3px;">${p.millet_type||'Grain'}</p>
+                    <p style="font-size:1.25rem;font-weight:900;color:#5b2d22;margin-top:5px;">₹${p.price}</p>
+                    <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+                        <span class="badge" style="background:#ecfdf5;color:#065f46;">Stock: ${p.stock_quantity}</span>
+                        <span class="badge" style="background:#faf7f2;color:#8b736b;">${p.unit||'1kg'}</span>
+                        ${p.farmer_scanner ? `<span class="badge" style="background:#fff8e6;color:#b45309;"><i class="fa-solid fa-qrcode mr-1"></i>QR</span>` : ''}
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #f0ebe3;">
+                <button onclick="editStock('${p.id}',${p.stock_quantity})"
+                    style="flex:1;padding:8px;border-radius:8px;background:#eff6ff;color:#1d4ed8;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;border:1px solid #93c5fd;cursor:pointer;">
+                    <i class="fa-solid fa-pen mr-1"></i> Stock
+                </button>
+                <button onclick="deleteProduct('${p.id}')"
+                    style="flex:1;padding:8px;border-radius:8px;background:#fef2f2;color:#991b1b;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;border:1px solid #fca5a5;cursor:pointer;">
+                    <i class="fa-solid fa-trash mr-1"></i> Remove
+                </button>
+            </div>
+        </div>`).join('')}
+    </div>`}`;
+}
+
+function deleteProduct(id) {
+    if (!confirm('Remove this product from the marketplace?')) return;
+    const all = JSON.parse(localStorage.getItem('milletProducts')||'[]');
+    localStorage.setItem('milletProducts', JSON.stringify(all.filter(p => String(p.id)!==String(id))));
+    document.getElementById(`prod-${id}`)?.remove();
+    toast('Product removed.','info');
+}
+
+function editStock(id, current) {
+    const nq = prompt(`Update stock quantity (current: ${current}):`, current);
+    if (nq===null||isNaN(parseInt(nq))) return;
+    const all = JSON.parse(localStorage.getItem('milletProducts')||'[]');
+    const idx = all.findIndex(p=>String(p.id)===String(id));
+    if(idx>-1){ all[idx].stock_quantity=parseInt(nq); localStorage.setItem('milletProducts',JSON.stringify(all)); }
+    toast('Stock updated!'); show('my-products');
+}
+
+// ════════════════════════════════════════════════════
+// 3.  PAYMENT SCANNER
+// ════════════════════════════════════════════════════
+let scannerTab = 'url';
+let pendingB64 = '';
+
+function renderScanner() {
+    const existing = getScanner();
+    const isBase64 = existing.startsWith('data:image');
+    document.getElementById('content-area').innerHTML = `
+    <div style="margin-bottom:32px;">
+        <h1 style="font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;color:#2c1810;line-height:1.1;">Payment QR Scanner</h1>
+        <p style="font-size:0.78rem;font-weight:700;color:#8b736b;margin-top:6px;text-transform:uppercase;letter-spacing:0.12em;">Buyers see this scanner when they choose Online UPI payment</p>
+    </div>
+
+    ${existing ? `
+    <div class="card" style="padding:28px;margin-bottom:22px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;">
+        <div style="text-align:center;">
+            <p style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:#8b736b;margin-bottom:10px;">Your Active Scanner</p>
+            <img src="${existing}" id="sc-preview"
+                style="max-width:180px;max-height:180px;object-fit:contain;border-radius:14px;border:3px solid var(--accent);"
+                onerror="this.parentElement.innerHTML='<div style=padding:16px;background:#fef2f2;border-radius:12px;color:#991b1b;font-size:0.75rem;font-weight:700;>Image failed to load</div>'">
+        </div>
+        <div>
+            <span class="badge" style="background:#ecfdf5;color:#065f46;margin-bottom:12px;display:inline-flex;">
+                <i class="fa-solid fa-circle" style="font-size:6px;margin-right:6px;animation:pulse 1.5s infinite;"></i> Scanner Active
+            </span>
+            <p style="font-size:0.85rem;font-weight:700;color:#2c1810;margin-bottom:4px;">Buyers scan this QR to pay via any UPI app</p>
+            <p style="font-size:0.72rem;color:#8b736b;font-weight:600;">Source: ${isBase64?'Uploaded Image':'URL Link'}</p>
+            <button onclick="removeScanner()" style="margin-top:14px;padding:8px 16px;border-radius:8px;background:#fef2f2;color:#991b1b;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;border:1px solid #fca5a5;cursor:pointer;">
+                <i class="fa-solid fa-trash mr-1"></i> Remove Scanner
+            </button>
+        </div>
+    </div>` : `
+    <div class="card" style="padding:22px;margin-bottom:22px;display:flex;align-items:center;gap:16px;border-left:4px solid #f59e0b;">
+        <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;font-size:1.5rem;flex-shrink:0;"></i>
+        <div>
+            <p style="font-weight:900;color:#2c1810;font-size:0.9rem;">No Scanner Added Yet</p>
+            <p style="font-size:0.72rem;color:#8b736b;font-weight:600;margin-top:2px;">Add your UPI QR code — buyers will see it at checkout.</p>
+        </div>
+    </div>`}
+
+    <div class="card" style="padding:36px;max-width:600px;">
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1.1rem;margin-bottom:22px;">
+            ${existing ? 'Update Scanner' : 'Add Your UPI QR Code'}
+        </h3>
+        <div style="display:flex;gap:8px;margin-bottom:26px;">
+            <button id="tab-url"   class="tab-btn ${scannerTab==='url'?'active':''}"   onclick="switchTab('url')">
+                <i class="fa-solid fa-link mr-1"></i> Paste URL
+            </button>
+            <button id="tab-image" class="tab-btn ${scannerTab==='image'?'active':''}" onclick="switchTab('image')">
+                <i class="fa-solid fa-image mr-1"></i> Upload Image
+            </button>
+        </div>
+
+        <!-- URL Panel -->
+        <div id="panel-url" style="${scannerTab==='url'?'':'display:none'}">
+            <label class="field-label">QR Code Image URL</label>
+            <input id="scanner-url" class="field-input" placeholder="https://example.com/my-upi-qr.png"
+                value="${!isBase64&&existing?existing:''}">
+            <p style="font-size:0.68rem;color:#8b736b;font-weight:600;margin-top:8px;">
+                <i class="fa-solid fa-circle-info mr-1"></i>Paste direct link to your UPI QR image (Drive, Imgur, etc.)
+            </p>
+            <button class="btn-p" onclick="saveFromUrl()" style="margin-top:18px;"><i class="fa-solid fa-save"></i> Save Scanner</button>
+        </div>
+
+        <!-- Image Panel -->
+        <div id="panel-image" style="${scannerTab==='image'?'':'display:none'}">
+            <label class="field-label">Upload QR Code Image</label>
+            <div class="upload-zone" id="upload-zone"
+                onclick="document.getElementById('scanner-file').click()"
+                ondragover="event.preventDefault();this.classList.add('drag')"
+                ondragleave="this.classList.remove('drag')"
+                ondrop="handleDrop(event)">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size:2.2rem;color:#d4a373;margin-bottom:10px;display:block;"></i>
+                <p style="font-weight:900;color:#2c1810;font-size:0.88rem;margin-bottom:4px;">Click or Drag &amp; Drop</p>
+                <p style="font-size:0.72rem;color:#8b736b;font-weight:600;">PNG, JPG, JPEG · Max 2MB</p>
+            </div>
+            <input type="file" id="scanner-file" accept="image/*" style="display:none;" onchange="handleFileSelect(event)">
+            <div id="upload-preview" style="display:none;margin-top:16px;text-align:center;">
+                <img id="upload-preview-img" style="max-width:180px;max-height:180px;border-radius:12px;border:2px solid var(--accent);">
+                <div style="margin-top:12px;">
+                    <button class="btn-p" onclick="saveFromUpload()"><i class="fa-solid fa-save"></i> Save This Scanner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How it works card -->
+    <div class="card" style="padding:28px;margin-top:18px;background:linear-gradient(135deg,#3d1e17,#5b2d22);">
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#fff;font-size:0.95rem;margin-bottom:16px;">
+            <i class="fa-solid fa-circle-question mr-2" style="color:var(--accent);"></i>How It Works for Buyers
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;">
+            ${[['1','fa-cart-shopping','Buyer adds your product to cart'],['2','fa-credit-card','Selects Online UPI at checkout'],['3','fa-qrcode','Your QR code appears on screen'],['4','fa-mobile-screen-button','Buyer scans & pays via UPI app']].map(([n,ic,tx])=>`
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:900;color:var(--dark);font-size:0.72rem;">${n}</div>
+                <div><i class="fa-solid ${ic}" style="color:var(--accent);margin-bottom:3px;display:block;font-size:0.85rem;"></i><p style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.7);">${tx}</p></div>
+            </div>`).join('')}
+        </div>
+    </div>`;
+}
+
+function switchTab(tab) {
+    scannerTab = tab;
+    document.getElementById('tab-url').classList.toggle('active', tab==='url');
+    document.getElementById('tab-image').classList.toggle('active', tab==='image');
+    document.getElementById('panel-url').style.display   = tab==='url'   ? '' : 'none';
+    document.getElementById('panel-image').style.display = tab==='image' ? '' : 'none';
+}
+
+function saveFromUrl() {
+    const url = document.getElementById('scanner-url').value.trim();
+    if (!url) { toast('Please enter a valid URL.','error'); return; }
+    saveScanner(url);
+    updateProductScanner(url);
+    toast('<i class="fa-solid fa-check-circle mr-2"></i>Scanner saved! Buyers will see your QR at checkout.');
+    setTimeout(() => renderScanner(), 500);
+}
+
+function handleFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
+function handleDrop(e) {
+    e.preventDefault(); document.getElementById('upload-zone').classList.remove('drag');
+    const f = e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) processFile(f);
+}
+function processFile(file) {
+    if (file.size > 2*1024*1024) { toast('File too large. Max 2MB.','error'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+        pendingB64 = e.target.result;
+        document.getElementById('upload-preview-img').src = pendingB64;
+        document.getElementById('upload-preview').style.display = '';
+        document.getElementById('upload-zone').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+}
+function saveFromUpload() {
+    if (!pendingB64) { toast('No image selected.','error'); return; }
+    saveScanner(pendingB64);
+    updateProductScanner(pendingB64);
+    toast('<i class="fa-solid fa-check-circle mr-2"></i>Scanner saved!');
+    setTimeout(() => renderScanner(), 500);
+}
+function updateProductScanner(val) {
+    const all = JSON.parse(localStorage.getItem('milletProducts')||'[]');
+    all.forEach(p => { if(p.farmer_email===farmer.email||String(p.farmer_id)===String(farmer.id)) p.farmer_scanner=val; });
+    localStorage.setItem('milletProducts', JSON.stringify(all));
+}
+function removeScanner() {
+    if (!confirm('Remove your payment scanner?')) return;
+    localStorage.removeItem(`farmer_scanner_${farmer.email}`);
+    localStorage.removeItem('farmer_scanner_default');
+    toast('Scanner removed.','info'); renderScanner();
+}
+
+// ════════════════════════════════════════════════════
+// 4.  CUSTOMER ORDERS
+// ════════════════════════════════════════════════════
+function renderOrders(filter='') {
+    let orders = myOrders().reverse();
+    if (filter) orders = orders.filter(o=>(o.status||o.order_status||'').toLowerCase()===filter);
+    const statuses = ['','pending','confirmed','shipped','delivered','cancelled'];
+
+    document.getElementById('content-area').innerHTML = `
+    <div style="margin-bottom:32px;">
+        <h1 style="font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;color:#2c1810;line-height:1.1;">Customer Orders</h1>
+        <p style="font-size:0.78rem;font-weight:700;color:#8b736b;margin-top:6px;text-transform:uppercase;letter-spacing:0.12em;">${orders.length} order${orders.length!==1?'s':''} — update status as you ship</p>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px;">
+        ${statuses.map(s=>`<button onclick="renderOrders('${s}')" class="tab-btn ${filter===s?'active':''}">${s||'All'}</button>`).join('')}
+    </div>
+    ${orders.length===0 ? `
+    <div class="card" style="padding:60px;text-align:center;">
+        <i class="fa-solid fa-box-open" style="font-size:3rem;color:#d4a373;display:block;margin-bottom:14px;"></i>
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1.2rem;margin-bottom:8px;">No Orders Yet</h3>
+        <p style="font-size:0.83rem;color:#8b736b;font-weight:600;">Orders from buyers will appear here once they purchase your products.</p>
+    </div>` : `
+    <div style="display:flex;flex-direction:column;gap:14px;">
+        ${orders.map(o => {
+            const st    = (o.status||o.order_status||'confirmed').toLowerCase();
+            const items = o.items||[];
+            const total = o.total_price || items.reduce((s,i)=>s+(parseFloat(i.price||0)*(i.qty||1)),0);
+            const payL  = o.payment_type==='cash_on_delivery'?'💵 Cash on Delivery':o.payment_type==='online_upi'?'📱 Online UPI':o.utr_ref==='COD'?'💵 Cash on Delivery':'📱 UPI';
+            const stBg  = {pending:'#fff8e6;color:#b45309',confirmed:'#eff6ff;color:#1d4ed8',shipped:'#f5f3ff;color:#6d28d9',delivered:'#ecfdf5;color:#065f46',cancelled:'#fef2f2;color:#991b1b'};
+            const stStyle = stBg[st]||'#faf7f2;color:#8b736b';
+            return `
+            <div class="card" style="padding:22px;">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:220px;">
+                        <!-- Items -->
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                            ${items.length ? items.map(i=>`
+                            <div style="display:flex;align-items:center;gap:8px;background:#faf7f2;border-radius:10px;padding:6px 10px;">
+                                <img src="${i.img||i.image_url||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=40'}"
+                                    style="width:30px;height:30px;border-radius:6px;object-fit:cover;"
+                                    onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=40'">
+                                <div>
+                                    <p style="font-size:0.75rem;font-weight:900;color:#2c1810;">${i.title||i.name||'Product'}</p>
+                                    <p style="font-size:0.6rem;color:#8b736b;font-weight:700;">×${i.qty||1} · ₹${i.price}</p>
+                                </div>
+                            </div>`).join('') : `<p style="font-size:0.8rem;font-weight:700;color:#2c1810;">Order #${o.id}</p>`}
+                        </div>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+                            <span class="badge" style="background:${stStyle};">${st.charAt(0).toUpperCase()+st.slice(1)}</span>
+                            <span class="badge" style="background:#faf7f2;color:#8b736b;">${payL}</span>
+                            ${o.utr_ref&&o.utr_ref!=='COD'?`<span style="font-size:0.58rem;font-family:monospace;color:#8b736b;">UTR: ${o.utr_ref}</span>`:''}
+                        </div>
+                        <p style="font-size:0.68rem;color:#8b736b;font-weight:600;margin-top:8px;">
+                            <i class="fa-solid fa-user mr-1"></i>${o.user_name||o.customer_name||'Customer'}
+                            ${o.date?` · ${new Date(o.date).toLocaleDateString()}`:''}
+                        </p>
+                    </div>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <p style="font-family:'Outfit',sans-serif;font-weight:900;font-size:1.5rem;color:#5b2d22;">₹${parseFloat(total).toFixed(0)}</p>
+                        <p style="font-size:0.6rem;font-weight:700;color:#8b736b;margin-bottom:10px;">Order #${o.id}</p>
+                        <label style="font-size:0.52rem;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:#d4a373;display:block;margin-bottom:4px;">Update Status</label>
+                        <select onchange="updateStatus('${o.id}',this.value)"
+                            style="background:#faf7f2;border:1.5px solid #e8ddd3;border-radius:10px;padding:8px 12px;font-size:0.7rem;font-weight:700;color:#2c1810;outline:none;cursor:pointer;">
+                            ${['pending','confirmed','shipped','delivered','cancelled'].map(s=>
+                                `<option value="${s}" ${st===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                </div>
+            </div>`;
+        }).join('')}
+    </div>`}`;
+}
+
+function updateStatus(orderId, newStatus) {
+    const all = allOrders().map(o => String(o.id)===String(orderId) ? {...o, status:newStatus, order_status:newStatus} : o);
+    localStorage.setItem('milletOrders', JSON.stringify(all));
+    fetch(`${API}/orders/${orderId}/status`,{method:'PATCH',headers:hdrs(),body:JSON.stringify({order_status:newStatus})}).catch(()=>{});
+    toast(`Order #${orderId} → <strong>${newStatus.toUpperCase()}</strong>`);
+}
+
+// ════════════════════════════════════════════════════
+// 5.  ANALYTICS
+// ════════════════════════════════════════════════════
+function renderAnalytics() {
+    const products = myProducts();
+    const orders   = myOrders();
+    const totalRev = orders.reduce((s,o)=>s+parseFloat(o.total_price||(o.items||[]).reduce((a,i)=>a+(parseFloat(i.price||0)*(i.qty||1)),0)||0),0);
+    const sc = {};
+    orders.forEach(o=>{ const s=(o.status||o.order_status||'pending').toLowerCase(); sc[s]=(sc[s]||0)+1; });
+    const cod  = orders.filter(o=>o.payment_type==='cash_on_delivery'||o.utr_ref==='COD').length;
+    const upi  = orders.filter(o=>o.payment_type==='online_upi'||(o.utr_ref&&o.utr_ref!=='COD')).length;
+    const del  = sc.delivered||0;
+
+    document.getElementById('content-area').innerHTML = `
+    <div style="margin-bottom:32px;">
+        <h1 style="font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;color:#2c1810;line-height:1.1;">My Analytics</h1>
+        <p style="font-size:0.78rem;font-weight:700;color:#8b736b;margin-top:6px;text-transform:uppercase;letter-spacing:0.12em;">Your harvest performance</p>
+    </div>
+
+    <!-- KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+        ${[
+            {icon:'fa-indian-rupee-sign',label:'Total Revenue',  val:'₹'+parseFloat(totalRev).toFixed(0), bg:'#ecfdf5', c:'#065f46', ib:'rgba(16,185,129,0.12)'},
+            {icon:'fa-box-open',         label:'Total Orders',   val:orders.length,                        bg:'#eff6ff', c:'#1d4ed8', ib:'rgba(59,130,246,0.12)'},
+            {icon:'fa-seedling',         label:'Products Listed',val:products.length,                      bg:'#faf7f2', c:'#5b2d22', ib:'rgba(91,45,34,0.08)' },
+            {icon:'fa-check-circle',     label:'Delivered',      val:del,                                  bg:'#ecfdf5', c:'#065f46', ib:'rgba(16,185,129,0.12)'},
+        ].map(k=>`
+        <div style="background:${k.bg};border-radius:18px;border:1px solid #f0ebe3;padding:22px;display:flex;align-items:center;gap:14px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:${k.ib};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="fa-solid ${k.icon}" style="color:${k.c};font-size:1.2rem;"></i>
+            </div>
+            <div>
+                <p style="font-family:'Outfit',sans-serif;font-weight:900;font-size:1.9rem;color:${k.c};line-height:1;">${k.val}</p>
+                <p style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:${k.c};opacity:0.65;margin-top:3px;">${k.label}</p>
+            </div>
+        </div>`).join('')}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+        <!-- Order Status -->
+        <div class="card" style="padding:26px;">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1rem;margin-bottom:18px;">
+                <i class="fa-solid fa-chart-bar mr-2" style="color:var(--accent);"></i>Order Status
+            </h3>
+            ${orders.length===0?`<p style="font-size:0.8rem;color:#8b736b;font-weight:600;">No orders yet.</p>`:`
+            <div style="display:flex;flex-direction:column;gap:13px;">
+                ${[['pending','#f59e0b','Pending'],['confirmed','#3b82f6','Confirmed'],['shipped','#8b5cf6','Shipped'],['delivered','#10b981','Delivered'],['cancelled','#ef4444','Cancelled']].map(([st,col,lab])=>{
+                    const cnt=sc[st]||0, pct=orders.length?Math.round((cnt/orders.length)*100):0;
+                    return `<div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.68rem;font-weight:900;text-transform:uppercase;letter-spacing:0.07em;">
+                            <span style="color:#8b736b;">${lab}</span><span style="color:#2c1810;">${cnt} (${pct}%)</span>
+                        </div>
+                        <div class="progress-track"><div class="progress-bar" style="width:${pct}%;background:${col};"></div></div>
+                    </div>`;
+                }).join('')}
+            </div>`}
+        </div>
+
+        <!-- Payment Split -->
+        <div class="card" style="padding:26px;">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1rem;margin-bottom:18px;">
+                <i class="fa-solid fa-wallet mr-2" style="color:var(--accent);"></i>Payment Methods
+            </h3>
+            ${orders.length===0?`<p style="font-size:0.8rem;color:#8b736b;font-weight:600;">No orders yet.</p>`:`
+            <div style="display:flex;flex-direction:column;gap:18px;">
+                <div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.68rem;font-weight:900;text-transform:uppercase;letter-spacing:0.07em;">
+                        <span style="color:#8b736b;">💵 Cash on Delivery</span><span style="color:#2c1810;">${cod} (${orders.length?Math.round((cod/orders.length)*100):0}%)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar" style="width:${orders.length?Math.min(100,(cod/orders.length)*100):0}%;background:#f59e0b;"></div></div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.68rem;font-weight:900;text-transform:uppercase;letter-spacing:0.07em;">
+                        <span style="color:#8b736b;">📱 Online UPI</span><span style="color:#2c1810;">${upi} (${orders.length?Math.round((upi/orders.length)*100):0}%)</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar" style="width:${orders.length?Math.min(100,(upi/orders.length)*100):0}%;background:#3b82f6;"></div></div>
+                </div>
+                <div style="background:#faf7f2;border-radius:12px;padding:16px;text-align:center;margin-top:4px;">
+                    <p style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:900;color:#5b2d22;">₹${parseFloat(totalRev).toFixed(0)}</p>
+                    <p style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:#8b736b;margin-top:3px;">Total Earned</p>
+                </div>
+            </div>`}
+        </div>
+    </div>
+
+    <!-- Products Table -->
+    ${products.length > 0 ? `
+    <div class="card" style="padding:26px;">
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:900;color:#2c1810;font-size:1rem;margin-bottom:18px;">
+            <i class="fa-solid fa-seedling mr-2" style="color:var(--accent);"></i>My Products Overview
+        </h3>
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="border-bottom:2px solid #f0ebe3;">
+                        <th style="text-align:left;padding:8px 12px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;">Product</th>
+                        <th style="text-align:left;padding:8px 12px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;">Type</th>
+                        <th style="text-align:right;padding:8px 12px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;">Price</th>
+                        <th style="text-align:right;padding:8px 12px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;">Stock</th>
+                        <th style="text-align:center;padding:8px 12px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#8b736b;">QR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${products.map(p=>`
+                    <tr style="border-bottom:1px solid #f0ebe3;">
+                        <td style="padding:12px;font-weight:900;font-size:0.85rem;color:#2c1810;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <img src="${p.image_url}" style="width:34px;height:34px;border-radius:8px;object-fit:cover;"
+                                    onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=40'">
+                                ${p.name}
+                            </div>
+                        </td>
+                        <td style="padding:12px;font-size:0.73rem;font-weight:700;color:#8b736b;">${p.millet_type||'—'}</td>
+                        <td style="padding:12px;text-align:right;font-weight:900;color:#5b2d22;">₹${p.price}</td>
+                        <td style="padding:12px;text-align:right;">
+                            <span class="badge" style="background:${p.stock_quantity>10?'#ecfdf5':'#fef2f2'};color:${p.stock_quantity>10?'#065f46':'#991b1b'};">${p.stock_quantity}</span>
+                        </td>
+                        <td style="padding:12px;text-align:center;">
+                            ${p.farmer_scanner?`<span class="badge" style="background:#ecfdf5;color:#065f46;"><i class="fa-solid fa-check mr-1"></i>Active</span>`:`<span class="badge" style="background:#fef2f2;color:#991b1b;">None</span>`}
+                        </td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>
+    </div>` : ''}`;
+}
+</script>
+</body>
+</html>

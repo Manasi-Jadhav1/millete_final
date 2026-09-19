@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Our Earthy Harvest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-gray-50">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-10 wave-bottom-white relative">
+        <!-- Stickers -->
+        <i class="fa-solid fa-leaf sticker text-accent/30 text-4xl top-10 left-10"></i>
+        <i class="fa-solid fa-seedling sticker text-accent/30 text-3xl top-20 right-20" style="animation-delay: 1.5s;"></i>
+
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <div class="hidden md:flex items-center gap-3 text-white/90">
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-instagram text-sm"></i></a>
+                </div>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-extrabold text-4xl text-white tracking-widest" style="font-family: 'Outfit', cursive;">MilletVerse</span>
+                </a>
+                <div id="nav-auth-area" class="flex items-center gap-4 text-white">
+                    <div class="relative bg-white text-primary rounded-full flex items-center px-4 py-2 gap-2 shadow-lg cursor-pointer" onclick="window.location.href='cart.html'">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span id="cart-count" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-[1200px] mx-auto px-5 mt-6 hidden md:flex items-center justify-center gap-10 font-medium text-white text-sm tracking-widest uppercase">
+                <a href="index.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Home</a>
+                <a href="products.html" class="text-accent border-b-2 border-accent">Products</a>
+                <a href="recipes.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Recipes</a>
+                <a href="health.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Health Guide</a>
+                <a href="learn.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Learn</a>
+                <a href="about.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">About</a>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-10 pb-16 relative z-10">
+            <h1 class="font-heading text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-md">Millet Marketplace</h1>
+            <p class="text-white/80 max-w-lg mx-auto">Premium, whole-grain millets sourced directly from sustainable farms. Flour, grains, and nutrient-packed snacks.</p>
+        </div>
+    </div>
+
+    <main class="max-w-[1200px] mx-auto px-5 lg:px-10 py-16 flex flex-col lg:flex-row gap-10 relative">
+        <!-- Floating Stickers in Background -->
+        <i class="fa-solid fa-wheat-awn text-gray-200 text-9xl absolute -left-20 top-40 -z-10 rotate-12"></i>
+        <i class="fa-solid fa-leaf text-gray-200 text-9xl absolute -right-20 bottom-40 -z-10 -rotate-12"></i>
+
+        <!-- Sidebar Filters -->
+        <aside class="w-full lg:w-1/4 space-y-8 bg-white p-8 rounded-3xl shadow-sm border border-gray-100 h-fit sticky top-24">
+            <!-- Search -->
+            <div>
+                <h3 class="font-heading font-bold text-xl mb-4 text-textDark">Search Harvest</h3>
+                <div class="relative">
+                    <input type="text" placeholder="Find seeds, flours..." class="w-full bg-gray-50 border border-gray-100 rounded-2xl py-3 px-5 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium">
+                    <i class="fa-solid fa-search absolute right-4 top-4 text-gray-300"></i>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div>
+                <h3 class="font-heading font-bold text-xl mb-4 text-textDark">Health Objectives</h3>
+                <div class="space-y-3">
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primary text-white rounded-xl text-sm font-bold shadow-md transition-all transform hover:scale-105" data-filter="all">All Harvest</button>
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="weight-loss">Weight Management</button>
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="diabetes">Glycemic Control</button>
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="kids">Growth & Nutrition</button>
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="high-protein">Muscle & Strength</button>
+                </div>
+            </div>
+
+            <!-- Price Sorting -->
+            <div>
+                <h3 class="font-heading font-bold text-xl mb-4 text-textDark">Sort Selection</h3>
+                <select class="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-5 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-bold cursor-pointer">
+                    <option>Curated Choice</option>
+                    <option>Price: Lowest First</option>
+                    <option>Price: Highest First</option>
+                    <option>Top Harvest Rating</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="w-full lg:w-3/4">
+            
+            <!-- Controls -->
+            <div class="flex justify-between items-center mb-8">
+                <span class="text-sm font-bold text-textGray">Displaying 1-6 of 24 Harvest Items</span>
+                <div class="flex gap-3">
+                    <button class="view-toggle w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center cursor-pointer text-primary shadow-sm hover:shadow-md transition" data-view="grid">
+                        <i class="fa-solid fa-border-all text-lg"></i>
+                    </button>
+                    <button class="view-toggle w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center cursor-pointer text-gray-300 shadow-sm hover:shadow-md transition" data-view="list">
+                        <i class="fa-solid fa-list text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Container (Populated by JS) -->
+            <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 fade-in-section">
+                <!-- Products will be injected here -->
+            </div>
+
+            <!-- Pagination (Populated by JS) -->
+            <div id="pagination-controls" class="flex justify-center mt-20 gap-3 fade-in-section">
+                <!-- Pagination buttons will be injected here -->
+            </div>
+        </div>
+    </main>
+
+    <div class="bg-primaryLight wave-top-lightbeige pt-16 pb-10">
+        <div class="max-w-[1200px] mx-auto px-10 text-center text-xs text-gray-400 font-bold uppercase tracking-widest">
+             <p>&copy; 2026 MilletVerse Harvest. Naturally Grounded.</p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Product Data Analysis
+        const productsData = [
+            { id: 1, title: 'Ragi Chocolate Delight Biscuits (250g)', category: 'weight-loss high-protein', millet: 'Finger Millet (Ragi)', price: 149, img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=600&h=600&fit=crop', tag: 'CALCIUM RICH', benefit: '10x more calcium than milk', rating: 4.5, reviews: '24', bgColor: '#faf7f2' },
+            { id: 2, title: 'Jowar Oats Crunchy Cookies (200g)', category: 'diabetes', millet: 'Sorghum (Jowar)', price: 129, img: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?q=80&w=600&h=600&fit=crop', tag: 'LOW GI', benefit: 'Slow release energy', rating: 4.3, reviews: '18', bgColor: '#fdf5ed' },
+            { id: 3, title: 'Bajra Jeera Crackers (150g)', category: 'kids', millet: 'Pearl Millet (Bajra)', price: 99, img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=600&h=600&fit=crop', tag: 'IRON RICH', benefit: 'Perfect growth snack', rating: 4.2, reviews: '15', bgColor: '#f4ebe1' },
+            { id: 4, title: 'Foxtail Millet Khakhra (300g)', category: 'weight-loss', millet: 'Foxtail Millet', price: 119, img: 'https://images.unsplash.com/photo-1628102491629-778571d893a3?q=80&w=600&h=600&fit=crop', tag: 'FIBER RICH', benefit: 'High fiber for digestion', rating: 4.4, reviews: '21', bgColor: '#eef7f2' },
+            { id: 5, title: 'Mixed Millet Gift Assortment (500g)', category: 'kids', millet: 'Assorted Millets', price: 299, img: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?q=80&w=600&h=600&fit=crop', tag: 'PREMIUM GIFT', benefit: 'Nutrient-packed variety', rating: 4.7, reviews: '32', bgColor: '#fdfaf0' },
+            { id: 6, title: 'Ragi Muesli Power Biscuits (250g)', category: 'diabetes', millet: 'Finger Millet (Ragi)', price: 179, img: 'https://images.unsplash.com/photo-1509482560494-4126f8225994?q=80&w=600&h=600&fit=crop', tag: 'HI-PROTEIN', benefit: 'Muscle recovery & energy', rating: 4.6, reviews: '28', bgColor: '#fdeef0' },
+            { id: 7, title: 'Jowar Sesame Thins (180g)', category: 'high-protein', millet: 'Sorghum (Jowar)', price: 109, img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&h=600&fit=crop', tag: 'HI-PROTEIN', benefit: 'Essential amino acids', rating: 4.1, reviews: '12', bgColor: '#f0f4fd' },
+            { id: 8, title: 'Bajra Nankhatai (220g)', category: 'immunity', millet: 'Pearl Millet (Bajra)', price: 139, img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=600&h=600&fit=crop', tag: 'IMMUNITY', benefit: 'Melt-in-mouth health', rating: 4.5, reviews: '19', bgColor: '#f5fdf0' },
+            { id: 9, title: 'Foxtail Millet Butter Cookies (200g)', category: 'kids weight-loss', millet: 'Foxtail Millet', price: 159, img: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=600&h=600&fit=crop', tag: 'ENERGY BOOST', benefit: 'Pure butter goodness', rating: 4.3, reviews: '16', bgColor: '#fdf5f0' },
+            { id: 10, title: 'Little Millet Spice Cookies (180g)', category: 'immunity', millet: 'Little Millet', price: 129, img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=600&h=600&fit=crop', tag: 'BONE HEALTH', benefit: 'Aromatic spice blend', rating: 4.4, reviews: '14', bgColor: '#fdf5f0' },
+            { id: 11, title: 'Barnyard Millet Mathri (200g)', category: 'diabetes', millet: 'Barnyard Millet', price: 109, img: 'https://images.unsplash.com/photo-1582170083046-1304e28236d3?q=80&w=600&h=600&fit=crop', tag: 'GUILT FREE', benefit: 'Traditional fiber snack', rating: 4.2, reviews: '11', bgColor: '#f4ebe1' },
+            { id: 12, title: 'Premium Millet Combo Pack (1kg)', category: 'high-protein', millet: 'All Millet Varieties', price: 899, img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&h=600&fit=crop', tag: 'BEST VALUE', benefit: 'The ultimate harvest kit', rating: 4.8, reviews: '45', bgColor: '#eef7f2' }
+        ];
+
+        let currentPage = 1;
+        let currentFilter = 'all';
+        let currentView = 'grid';
+        const itemsPerPage = 6;
+
+        async function renderProducts() {
+            const container = document.getElementById('products-container');
+            
+            let allProducts = [...productsData];
+            
+            try {
+                const res = await fetch('http://localhost:5000/api/products?limit=100');
+                const data = await res.json();
+                if (data.success && data.data.length) {
+                    // Map backend products to match frontend structure
+                    const backendProducts = data.data.map(p => ({
+                        id: p.id,
+                        title: p.name,
+                        category: p.millet_type, // Using millet_type as category for filtering
+                        millet: p.millet_type,
+                        price: p.price,
+                        img: p.image_url,
+                        tag: 'DIRECT HARVEST',
+                        benefit: p.description.substring(0, 50) + '...',
+                        rating: 4.5,
+                        reviews: 'New',
+                        bgColor: '#faf7f2'
+                    }));
+                    allProducts = [...backendProducts, ...allProducts];
+                }
+            } catch (e) {
+                console.error('Failed to fetch products from backend', e);
+            }
+
+            const filtered = allProducts.filter(p => currentFilter === 'all' || p.category.includes(currentFilter) || p.millet.includes(currentFilter));
+            
+            // Pagination math
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = filtered.slice(start, end);
+
+            container.innerHTML = '';
+            
+            pageItems.forEach(p => {
+                const card = document.createElement('div');
+                card.className = `product-item hover-card bg-white rounded-[2.5rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-gray-100 relative group animate-fade-in ${currentView === 'list' ? 'flex flex-row items-center p-4' : ''}`;
+                
+                const stars = Array(5).fill(0).map((_, i) => `<i class="fa-${i < Math.floor(p.rating) ? 'solid' : 'regular'} fa-star"></i>`).join('');
+                
+                if (currentView === 'grid') {
+                    card.innerHTML = `
+                        <div class="aspect-square relative overflow-hidden bg-gray-50">
+                            <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute top-6 left-6 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg z-10">${p.tag}</div>
+                            <button class="absolute top-6 right-6 text-gray-400 hover:text-red-500 bg-white/90 w-10 h-10 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-20"><i class="fa-solid fa-heart"></i></button>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex flex-col mb-4">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-accent mb-1">${p.millet}</span>
+                                <h3 class="font-heading font-extrabold text-2xl text-textDark leading-tight group-hover:text-primary transition-colors">${p.title}</h3>
+                            </div>
+                            <p class="text-xs text-textGray mb-4 font-medium flex items-center gap-2">
+                               <i class="fa-solid fa-check-circle text-primary"></i> ${p.benefit}
+                            </p>
+                            <div class="flex items-center gap-1 text-accent text-[10px] mb-6">
+                                ${stars}
+                                <span class="text-gray-400 font-bold ml-2">${p.rating} (${p.reviews})</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-heading font-extrabold text-3xl text-primary">₹${p.price}</span>
+                                <button class="bg-primary hover:bg-primaryDark text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110" onclick="addToCart('${p.title.replace(/'/g, "\\'")}', ${p.price}, '${p.img}', ${p.id})">
+                                    <i class="fa-solid fa-plus text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="w-1/3 aspect-square relative overflow-hidden rounded-2xl bg-gray-50">
+                            <img src="${p.img}" class="w-full h-full object-cover" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200';">
+                            <div class="absolute top-3 left-3 bg-primary text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full">${p.tag}</div>
+                        </div>
+                        <div class="flex-1 px-8">
+                             <span class="text-[10px] font-black uppercase tracking-widest text-accent">${p.millet}</span>
+                             <h3 class="font-heading font-extrabold text-xl text-textDark">${p.title}</h3>
+                             <div class="flex items-center gap-1 text-accent text-[10px] my-2">${stars}</div>
+                             <p class="text-xs text-textGray font-medium">${p.benefit}</p>
+                        </div>
+                        <div class="pr-8 text-right">
+                            <span class="font-heading font-extrabold text-2xl text-primary block mb-2">₹${p.price}</span>
+                            <button class="bg-primary text-white px-6 py-2 rounded-full font-bold text-xs" onclick="addToCart('${p.title.replace(/'/g, "\\'")}', ${p.price}, '${p.img}', ${p.id})">Add to Bag</button>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+
+            // Update Info
+            const infoEl = document.querySelector('.text-textGray');
+            if (infoEl) infoEl.innerText = `Displaying ${filtered.length ? start + 1 : 0}-${Math.min(end, filtered.length)} of ${filtered.length} Harvest Items`;
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(total) {
+            const controls = document.getElementById('pagination-controls');
+            if (!controls) return;
+            controls.innerHTML = '';
+            
+            if (total <= 1) return;
+
+            // Prev
+            const prev = document.createElement('button');
+            prev.className = `w-14 h-14 rounded-2xl border border-gray-100 bg-white flex items-center justify-center hover:bg-primaryLight text-gray-400 transition shadow-sm ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
+            prev.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            prev.onclick = () => { if (currentPage > 1) { currentPage--; renderProducts(); window.scrollTo({top: 0, behavior: 'smooth'}); } };
+            controls.appendChild(prev);
+
+            // Page Indicator
+            const indicator = document.createElement('div');
+            indicator.className = 'flex items-center px-6 bg-white border border-gray-100 rounded-2xl shadow-sm text-sm font-black text-textDark uppercase tracking-widest';
+            indicator.innerText = `PAGE ${currentPage} / ${total}`;
+            controls.appendChild(indicator);
+
+            // Next
+            const next = document.createElement('button');
+            next.className = `w-14 h-14 rounded-2xl border border-gray-100 bg-white flex items-center justify-center hover:bg-primaryLight text-gray-400 transition shadow-sm ${currentPage === total ? 'opacity-50 cursor-not-allowed' : ''}`;
+            next.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            next.onclick = () => { if (currentPage < total) { currentPage++; renderProducts(); window.scrollTo({top: 0, behavior: 'smooth'}); } };
+            controls.appendChild(next);
+        }
+
+        // Filter Logic
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white', 'shadow-md', 'transform', 'scale-105');
+                    b.classList.add('bg-primaryLight', 'text-primary');
+                });
+                this.classList.remove('bg-primaryLight', 'text-primary');
+                this.classList.add('bg-primary', 'text-white', 'shadow-md', 'transform', 'scale-105');
+                
+                currentFilter = this.getAttribute('data-filter');
+                currentPage = 1;
+                renderProducts();
+            });
+        });
+
+        // View Logic
+        document.querySelectorAll('.view-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-toggle').forEach(v => v.classList.replace('text-primary', 'text-gray-300'));
+                this.classList.replace('text-gray-300', 'text-primary');
+                currentView = this.getAttribute('data-view');
+                renderProducts();
+            });
+        });
+
+        // Initial Render
+        renderProducts();
+    </script>
+</body>
+</html>

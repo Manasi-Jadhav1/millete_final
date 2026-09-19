@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Earthy Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-primaryLight text-textDark font-sans antialiased min-h-screen flex flex-col lg:flex-row relative overflow-x-hidden">
+
+    <script>
+        // Redirect if already logged in
+        const _sess = JSON.parse(localStorage.getItem('milletSession') || 'null');
+        if (_sess && _sess.email) window.location.href = 'index.html';
+    </script>
+
+    <!-- Decorative stickers in background -->
+    <i class="fa-solid fa-leaf sticker text-primary/5 text-[300px] absolute -top-10 -left-10 rotate-12"></i>
+    <i class="fa-solid fa-seedling sticker text-accent/5 text-[200px] absolute -bottom-10 -right-10 -rotate-12"></i>
+
+    <!-- Left Image Section (Larger Image) -->
+    <div class="hidden lg:flex lg:w-3/5 relative p-4 lg:p-6 z-10">
+        <div class="w-full h-full bg-primaryDark rounded-[2rem] overflow-hidden relative shadow-[0_40px_100px_rgba(0,0,0,0.3)] group">
+            <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80" class="w-full h-full object-cover mix-blend-overlay opacity-70 group-hover:scale-105 transition duration-[2s]" alt="Millet Grains">
+            <div class="absolute inset-0 bg-gradient-to-t from-primaryDark to-transparent flex flex-col justify-end p-12 lg:p-16 text-white">
+                <div class="w-16 h-2 bg-accent mb-6 rounded-full shadow-2xl"></div>
+                <h2 class="font-heading text-4xl lg:text-5xl font-black mb-4 leading-none">Welcome<br><span class="text-accent underline decoration-4 underline-offset-8">Back.</span></h2>
+                <p class="text-white/70 font-bold text-sm lg:text-base max-w-lg leading-relaxed">Sign back into your account. Manage your ancient grain subscriptions and track your soul-to-body wellness journey.</p>
+                <div class="mt-8 flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md">
+                         <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-white/50">SECURE LOGIN ACTIVE</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Login Section -->
+    <div class="w-full lg:w-2/5 flex flex-col justify-center items-center py-4 px-6 lg:py-6 lg:px-8 relative z-10 overflow-y-auto">
+        
+        <!-- Back to home (Earthy Button) -->
+        <a href="index.html" class="absolute top-6 right-6 lg:top-8 lg:right-8 text-white bg-primaryDark/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl flex items-center gap-2 font-black text-[10px] uppercase tracking-widest hover:bg-primaryDark transition-all hover:scale-105 border border-white/10">
+            <i class="fa-solid fa-arrow-left text-sm"></i> Home
+        </a>
+
+        <div class="w-full max-w-md pt-8 lg:pt-0">
+            <div class="flex flex-col items-center mb-6 lg:mb-8">
+                <div class="w-12 h-12 bg-primaryDark text-accent rounded-2xl flex items-center justify-center text-2xl shadow-xl mb-4 transform rotate-6 border-2 border-accent animate-pulse">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <span class="font-heading font-black text-2xl lg:text-3xl tracking-[0.2em] text-primaryDark">MILLETVERSE</span>
+                <p class="text-[8px] lg:text-[10px] font-black text-accent uppercase tracking-[0.5em] mt-1 text-center">ANCIENT SOUL • MODERN HARVEST</p>
+            </div>
+
+            <div class="bg-white p-6 lg:p-8 rounded-[2rem] shadow-[0_30px_60px_rgba(44,24,16,0.1)] border border-gray-50 relative overflow-hidden">
+                <i class="fa-solid fa-leaf text-primary/5 text-8xl absolute -bottom-10 -right-10 pointer-events-none"></i>
+                
+                <h1 class="font-heading text-2xl lg:text-3xl font-black mb-1 text-textDark">Sign In</h1>
+                <p class="text-gray-400 text-xs mb-3 lg:mb-4 font-bold">Please enter your credentials.</p>
+                <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs font-black uppercase tracking-widest px-4 py-2 rounded-xl mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="login-error-msg"></span>
+                </div>
+                <form class="space-y-4" id="login-form" onsubmit="handleLogin(event)">
+                    <div>
+                        <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">EMAIL ADDRESS</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-envelope absolute left-4 top-3 text-primary/30 text-sm"></i>
+                            <input id="login-email" type="email" class="w-full bg-primaryLight border border-gray-100 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:bg-white transition-all font-bold text-sm text-textDark placeholder-primary/20" placeholder="you@millet.com" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent">PASSWORD</label>
+                            <a href="#" class="text-[9px] text-primary font-black uppercase tracking-widest hover:text-accent transition-colors">Forgotten Password?</a>
+                        </div>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-3 text-primary/30 text-sm"></i>
+                            <input id="login-password" type="password" class="w-full bg-primaryLight border border-gray-100 rounded-xl pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:bg-white transition-all font-bold text-sm text-textDark placeholder-primary/20" placeholder="••••••••" required>
+                            <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute right-4 top-3 text-primary/30 hover:text-accent transition-colors"><i class="fa-solid fa-eye text-sm"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="relative">
+                            <input type="checkbox" id="remember" class="peer hidden">
+                            <label for="remember" class="w-5 h-5 border-2 border-primaryLight rounded bg-primaryLight flex items-center justify-center cursor-pointer peer-checked:bg-primary peer-checked:border-primary transition-all">
+                                <i class="fa-solid fa-check text-white text-[10px] opacity-0 peer-checked:opacity-100"></i>
+                            </label>
+                        </div>
+                        <label for="remember" class="text-xs text-gray-500 font-bold uppercase tracking-widest cursor-pointer select-none">Remember Me</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-white font-black uppercase tracking-widest py-3 rounded-xl shadow-lg hover:bg-primaryDark hover:-translate-y-1 transition-all flex justify-center items-center gap-2 text-xs border-b-4 border-primaryDark">
+                        LOG IN <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="mt-12 text-center text-xs font-black uppercase tracking-widest text-gray-400">
+                    Don't have an account? <a href="signup.html" class="text-accent hover:text-primary transition-colors border-b-2 border-accent/20">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const result = await milletLogin(email, password);
+
+            if (!result.success) {
+                const errBox = document.getElementById('login-error');
+                document.getElementById('login-error-msg').textContent = result.message;
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            // Redirect to ?next= param or index
+            const params = new URLSearchParams(window.location.search);
+            const next = params.get('next') || 'index.html';
+            window.location.href = next;
+        }
+    </script>
+</body>
+</html>

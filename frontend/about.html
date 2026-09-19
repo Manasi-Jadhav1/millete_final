@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse - Our Earthy Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22',
+                        primaryLight: '#faf7f2',
+                        primaryDark: '#3d1e17',
+                        accent: '#d4a373',
+                        textDark: '#2c1810',
+                        textGray: '#8b736b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-textDark font-sans antialiased overflow-x-hidden bg-white relative">
+
+    <!-- Header Overlay -->
+    <div class="bg-primary bg-drops pb-10 wave-bottom-white relative">
+        <!-- Stickers -->
+        <i class="fa-solid fa-leaf sticker text-accent/20 text-5xl top-10 left-10"></i>
+        <i class="fa-solid fa-seedling sticker text-accent/20 text-3xl bottom-0 right-10" style="animation-delay: 1.5s;"></i>
+
+        <nav class="pt-6 pb-4">
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 flex items-center justify-between">
+                <div class="hidden md:flex items-center gap-3 text-white/90">
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30"><i class="fa-brands fa-instagram text-sm"></i></a>
+                </div>
+                <a href="index.html" class="flex flex-col items-center flex-1 justify-center relative">
+                    <span class="font-heading font-extrabold text-4xl text-white tracking-widest">MilletVerse</span>
+                </a>
+                <div class="flex items-center gap-4 text-white">
+                    <a href="dashboard.html" class="hover:text-accent transition-colors hidden sm:block">My Account</a>
+                    <div class="relative bg-white text-primary rounded-full flex items-center px-4 py-2 gap-2 shadow-lg cursor-pointer" onclick="window.location.href='cart.html'">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span id="cart-count" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-[1200px] mx-auto px-5 mt-6 hidden md:flex items-center justify-center gap-10 font-medium text-white text-sm tracking-widest uppercase">
+                <a href="index.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Home</a>
+                <a href="products.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Products</a>
+                <a href="recipes.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Recipes</a>
+                <a href="health.html" class="hover:text-accent transition-colors border-b-2 border-transparent hover:border-accent">Health Guide</a>
+                <a href="learn.html" class="hover:text-accent transition-colors border-b-2 border-transparent">Learn</a>
+                <a href="about.html" class="text-accent border-b-2 border-accent">About</a>
+            </div>
+        </nav>
+        
+        <div class="text-center text-white pt-10 pb-16 relative z-10 fade-in-section">
+            <p class="font-bold text-sm tracking-widest uppercase mb-2 text-accent">Our Soul Mission</p>
+            <h1 class="font-heading text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-md">Nurtured by Nature</h1>
+            <p class="text-white/80 max-w-lg mx-auto">We are on a journey to revive the earth's ancient intelligence through the most resilient grains known to humanity.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative">
+        <i class="fa-solid fa-wheat-awn text-primary/5 text-[400px] absolute -right-20 top-40 -z-10 rotate-12"></i>
+        
+        <!-- Story Section (Larger Layout) -->
+        <section class="max-w-[1200px] mx-auto px-5 lg:px-10 py-24 flex flex-col md:flex-row items-center gap-20 fade-in-section">
+            <div class="w-full md:w-1/2 relative">
+                <div class="absolute -inset-4 bg-primaryLight transform rotate-3 rounded-[3rem] z-0"></div>
+                <!-- Larger Story Image -->
+                <div class="relative w-full h-[500px]">
+                    <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Farming" class="w-full h-full object-cover rounded-[3rem] shadow-2xl relative z-10 transform -rotate-3 hover:rotate-0 transition-all duration-700">
+                    <!-- Floating Sticker -->
+                    <div class="absolute -bottom-10 -right-10 bg-accent p-8 rounded-[2rem] shadow-2xl z-20 animate-bounce">
+                        <i class="fa-solid fa-leaf text-white text-4xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <h3 class="font-black text-sm tracking-[0.3em] uppercase text-accent mb-4">THE HARVEST GENESIS</h3>
+                <h2 class="font-heading text-5xl font-black mb-10 text-textDark leading-tight">A Mission Beyond the Plate</h2>
+                <p class="text-gray-500 text-lg mb-8 leading-relaxed font-medium">
+                    MilletVerse didn't start in a boardroom; it started in the dry, sun-baked fields of traditional millet growers. We saw a disconnect between the world's most resilient superfood and the people who needed it most.
+                </p>
+                <p class="text-gray-500 text-lg mb-12 leading-relaxed font-medium">
+                    By partnering with smallholders who use zero chemicals and 70% less water than rice farmers, we've created a loop of sustainability that feeds the soul as much as the body.
+                </p>
+                <div class="flex items-center gap-10 border-l-8 border-primary pl-10 py-4 bg-primaryLight rounded-r-3xl">
+                    <div class="font-heading text-6xl font-black text-primary">50+</div>
+                    <div class="text-xs font-black text-textDark uppercase tracking-[0.2em] leading-loose">SUSTAINABLE <br>PARTNER FARMS</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Badges (Earthy Style) -->
+        <section class="bg-primaryLight/50 py-24 wave-top-lightbeige wave-bottom-lightbeige fade-in-section relative overflow-hidden">
+             <i class="fa-solid fa-seedling text-primary/5 text-[300px] absolute -left-20 -bottom-20 rotate-45"></i>
+            <div class="max-w-[1200px] mx-auto px-5 lg:px-10 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="font-heading text-5xl font-black mb-4">Our Earthy Promise</h2>
+                    <p class="text-gray-400 font-bold uppercase tracking-widest text-sm">Certified • Pure • Transparent</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-10 max-w-5xl mx-auto text-center">
+                    <div class="bg-white p-10 rounded-[2rem] shadow-sm border border-gray-50 flex flex-col items-center hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+                        <i class="fa-solid fa-leaf text-5xl text-primary mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-black text-sm uppercase tracking-widest">100% ORGANIC</h4>
+                    </div>
+                    <div class="bg-white p-10 rounded-[2rem] shadow-sm border border-gray-50 flex flex-col items-center hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+                        <i class="fa-solid fa-wheat-awn-circle-exclamation text-5xl text-accent mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-black text-sm uppercase tracking-widest">NON-GMO SEEDS</h4>
+                    </div>
+                    <div class="bg-white p-10 rounded-[2rem] shadow-sm border border-gray-50 flex flex-col items-center hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+                        <i class="fa-solid fa-hand-holding-heart text-5xl text-[#d48c73] mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-black text-sm uppercase tracking-widest">FAIR TRADE</h4>
+                    </div>
+                    <div class="bg-white p-10 rounded-[2rem] shadow-sm border border-gray-50 flex flex-col items-center hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+                        <i class="fa-solid fa-recycle text-5xl text-textDark mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-black text-sm uppercase tracking-widest">ECO PACKING</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team (Earthy Team Layout) -->
+        <section class="max-w-[1200px] mx-auto px-5 lg:px-10 py-32 fade-in-section text-center">
+            <h2 class="font-heading text-5xl font-black mb-6">The Harvest Keepers</h2>
+            <p class="text-gray-400 mb-24 max-w-2xl mx-auto text-lg">A collective of botanists, nutritionists, and earth-lovers dedicated to your harvest.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-20 max-w-6xl mx-auto">
+                <!-- Team 1 (Larger) -->
+                <div class="group">
+                    <div class="relative w-56 h-56 mx-auto mb-10 overflow-hidden rounded-[2.5rem] shadow-2xl border-8 border-white group-hover:border-primaryLight transition-all duration-500">
+                        <img src="https://images.unsplash.com/photo-1594824436951-7f12bc44ce7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <h4 class="font-heading font-black text-3xl mb-2 text-textDark">Sarah Jenkins</h4>
+                    <p class="text-accent font-black text-xs tracking-[0.3em] uppercase mb-6">NUTRI-GENETICS LEAD</p>
+                    <p class="text-sm text-gray-400 font-medium px-6">Mapping ancient grain codes for modern biological peak performance.</p>
+                </div>
+                <!-- Team 2 -->
+                <div class="group transform md:-translate-y-10">
+                    <div class="relative w-56 h-56 mx-auto mb-10 overflow-hidden rounded-[2.5rem] shadow-2xl border-8 border-white group-hover:border-primaryLight transition-all duration-500">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <h4 class="font-heading font-black text-3xl mb-2 text-textDark">David Chen</h4>
+                    <p class="text-accent font-black text-xs tracking-[0.3em] uppercase mb-6">FOUNDER & VISIONARY</p>
+                    <p class="text-sm text-gray-400 font-medium px-6">Ensuring the soil's legacy reaches every corner of the planet.</p>
+                </div>
+                <!-- Team 3 -->
+                <div class="group">
+                    <div class="relative w-56 h-56 mx-auto mb-10 overflow-hidden rounded-[2.5rem] shadow-2xl border-8 border-white group-hover:border-primaryLight transition-all duration-500">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <h4 class="font-heading font-black text-3xl mb-2 text-textDark">Priya Kumar</h4>
+                    <p class="text-accent font-black text-xs tracking-[0.3em] uppercase mb-6">AGRONOMY DIRECTOR</p>
+                    <p class="text-sm text-gray-400 font-medium px-6">Direct liaison with our farmers, ensuring stone-ground purity.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="bg-primaryLight wave-top-lightbeige pt-24 pb-16">
+        <div class="max-w-[1200px] mx-auto px-5 text-center">
+             <i class="fa-solid fa-wheat-awn text-primary/10 text-8xl mb-10"></i>
+             <p class="text-xs text-gray-400 font-black uppercase tracking-[0.5em]">&copy; 2026 MilletVerse. Earthy & Grounded Story.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

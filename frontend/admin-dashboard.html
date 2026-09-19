@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior:smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilletVerse — Admin Control Panel</title>
+    <meta name="description" content="MilletVerse Admin Dashboard — manage users, orders, products and analytics.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5b2d22', primaryLight: '#faf7f2', primaryDark: '#3d1e17',
+                        accent: '#d4a373', textDark: '#2c1810', textGray: '#8b736b',
+                    },
+                    fontFamily: { sans: ['Inter','sans-serif'], heading: ['Outfit','sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #0f172a; color: #e2e8f0; }
+        .admin-card { background: #1e293b; border: 1px solid #334155; border-radius: 1.5rem; }
+        .sidebar-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1.25rem; border-radius: 0.75rem; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.2s; color: #94a3b8; cursor: pointer; border: none; background: none; }
+        .sidebar-btn:hover, .sidebar-btn.active { background: #0f172a; color: #fff; }
+        .sidebar-btn.active { border-left: 3px solid #d4a373; padding-left: calc(1.25rem - 3px); }
+        .abadge { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+        .btn-sm { font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.375rem 0.875rem; border-radius: 0.5rem; cursor: pointer; border: none; transition: all 0.15s; }
+        .progress-bar { height: 0.5rem; border-radius: 9999px; background: #0f172a; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 9999px; transition: width 0.8s ease; }
+        .table-row { border-bottom: 1px solid #1e293b; }
+        .table-row:hover td { background: rgba(30,41,59,0.5); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+        .toast-box { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+        .toast { background: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; padding: 0.875rem 1.25rem; font-size: 0.75rem; font-weight: 700; color: #e2e8f0; animation: slideInToast 0.3s ease; }
+        @keyframes slideInToast { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+    <div class="toast-box" id="toast-box"></div>
+
+    <!-- Top Nav -->
+    <nav class="sticky top-0 z-50 flex items-center justify-between px-6 lg:px-10 py-4 border-b border-slate-700/60" style="background:#0f172a;">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-accent flex items-center justify-center shadow-lg shrink-0">
+                <i class="fa-solid fa-shield-halved text-primaryDark text-lg"></i>
+            </div>
+            <div>
+                <span class="font-heading font-black text-xl tracking-widest text-white">MILLETVERSE</span>
+                <span class="ml-3 abadge bg-red-500/20 text-red-400 border border-red-500/30">Admin Panel</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="text-right hidden sm:block">
+                <p id="admin-name" class="text-xs font-black tracking-widest text-white uppercase">Admin</p>
+                <p class="text-[10px] text-accent uppercase tracking-widest font-black">Global Keeper</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+                <i class="fa-solid fa-user-shield text-accent"></i>
+            </div>
+            <button onclick="adminLogout()" class="btn-sm bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40" style="border:1px solid rgba(239,68,68,0.3);">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <div class="flex" style="height:calc(100vh - 73px);">
+        <!-- Sidebar -->
+        <aside class="w-64 shrink-0 border-r border-slate-700/60 flex flex-col p-4 gap-1 overflow-y-auto hidden lg:flex" style="background:#0f172a;">
+            <p class="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500 px-3 py-3">Admin Modules</p>
+            <button class="sidebar-btn active" id="btn-overview"   onclick="loadSection('overview')">   <i class="fa-solid fa-chart-pie w-4 text-center"></i> Global Overview</button>
+            <button class="sidebar-btn"        id="btn-approvals"  onclick="loadSection('approvals')">  <i class="fa-solid fa-hourglass-half w-4 text-center"></i> Pending Approvals</button>
+            <button class="sidebar-btn"        id="btn-users"      onclick="loadSection('users')">      <i class="fa-solid fa-users w-4 text-center"></i> Keeper Registry</button>
+            <button class="sidebar-btn"        id="btn-orders"     onclick="loadSection('orders')">     <i class="fa-solid fa-box-open w-4 text-center"></i> All Orders</button>
+            <button class="sidebar-btn"        id="btn-products"   onclick="loadSection('products')">   <i class="fa-solid fa-seedling w-4 text-center"></i> All Products</button>
+            <button class="sidebar-btn"        id="btn-analytics"  onclick="loadSection('analytics')">  <i class="fa-solid fa-chart-line w-4 text-center"></i> Analytics</button>
+            <div class="flex-1"></div>
+            <div class="admin-card p-4 mt-4">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Quick Links</p>
+                <button onclick="loadSection('approvals')" class="btn-sm mb-2 w-full flex items-center justify-center gap-2" style="background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);">
+                    <i class="fa-solid fa-bell"></i> Check Approvals
+                </button>
+                <a href="index.html" class="btn-sm flex items-center justify-center gap-2" style="background:#334155;color:#cbd5e1;text-decoration:none;display:flex;">
+                    <i class="fa-solid fa-house"></i> Back to Store
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-6 lg:p-10" id="admin-main">
+            <div class="text-center py-20 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-4 block"></i>
+                <p class="font-black uppercase tracking-widest text-sm">Loading Admin Panel...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+    const API = 'http://localhost:5000/api';
+    let adminSess = null;
+
+    // ── Ensure admin is seeded on page load ──
+    document.addEventListener('DOMContentLoaded', () => {
+        // Force-seed the admin credentials in localStorage
+        _getUsers();
+
+        adminSess = JSON.parse(localStorage.getItem('milletSession'));
+        if (!adminSess || adminSess.role !== 'admin') {
+            window.location.href = 'login.html';
+            return;
+        }
+        document.getElementById('admin-name').textContent =
+            `${adminSess.firstName || ''} ${adminSess.lastName || ''}`.trim() || 'Admin';
+        loadSection('overview');
+    });
+
+    function adminLogout() {
+        localStorage.removeItem('milletSession');
+        window.location.href = 'login.html';
+    }
+
+    function toast(msg, type) {
+        const tc = document.getElementById('toast-box');
+        const t = document.createElement('div');
+        const palettes = {
+            success: { border:'#10b981', color:'#6ee7b7' },
+            error:   { border:'#ef4444', color:'#fca5a5' },
+            info:    { border:'#3b82f6', color:'#93c5fd' }
+        };
+        const p = palettes[type] || palettes.success;
+        t.className = 'toast';
+        t.style.borderColor = p.border;
+        t.style.color = p.color;
+        t.innerHTML = msg;
+        tc.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+    }
+
+    function hdrs() {
+        return { 'Authorization': `Bearer ${adminSess?.token}`, 'Content-Type': 'application/json' };
+    }
+
+    function setActive(section) {
+        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById(`btn-${section}`);
+        if (btn) btn.classList.add('active');
+    }
+
+    async function loadSection(section) {
+        setActive(section);
+        document.getElementById('admin-main').innerHTML =
+            `<div class="text-center py-20 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-4 block"></i>
+                <p class="font-black uppercase tracking-widest text-sm">Loading...</p>
+            </div>`;
+        if (section === 'overview')   await renderOverview();
+        if (section === 'approvals')  await renderApprovals();
+        if (section === 'users')      await renderUsers('');
+        if (section === 'orders')     await renderOrders('');
+        if (section === 'products')   await renderProducts();
+        if (section === 'analytics')  await renderAnalytics();
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  LOCAL DATA HELPERS
+    // ═══════════════════════════════════════════════════
+    function lsUsers()    { return JSON.parse(localStorage.getItem('milletUsers')    || '[]'); }
+    function lsOrders()   { return JSON.parse(localStorage.getItem('milletOrders')  || '[]'); }
+    function lsProducts() { return JSON.parse(localStorage.getItem('milletProducts') || '[]'); }
+
+    function lsOrderRevenue(orders) {
+        return orders.reduce((sum, o) => {
+            const itemTotal = (o.items || []).reduce((s, i) => s + (parseFloat(i.price||0) * (i.qty||1)), 0);
+            return sum + (parseFloat(o.total_price || itemTotal || 0));
+        }, 0);
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  OVERVIEW
+    // ═══════════════════════════════════════════════════
+    async function renderOverview() {
+        // Try backend first, fall back to localStorage
+        let apiStats = null;
+        try {
+            const r = await fetch(`${API}/admin/dashboard`, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success) apiStats = d.data;
+        } catch(e) {}
+
+        const lsU = lsUsers();
+        const lsO = lsOrders();
+        const lsP = lsProducts();
+        const lsPending = lsU.filter(u => (u.role === 'startup' || u.role === 'farmer') && !u.is_approved);
+        const lsRev = lsOrderRevenue(lsO);
+
+        // Merge: prefer backend numbers if available
+        const totalUsers    = apiStats?.overview?.totalUsers    || lsU.length;
+        const totalProducts = apiStats?.overview?.totalProducts || lsP.length;
+        const totalOrders   = apiStats?.overview?.totalOrders   || lsO.length;
+        const totalRevenue  = apiStats?.overview?.totalRevenue  || lsRev;
+
+        // Order status breakdown from localStorage
+        const obLocal = {};
+        lsO.forEach(o => {
+            const st = (o.order_status || o.status || 'pending').toLowerCase().replace(/[^a-z]/g,'').split(' ')[0];
+            obLocal[st] = (obLocal[st] || 0) + 1;
+        });
+        const ob = apiStats?.orderBreakdown || obLocal;
+
+        const pending = apiStats?.pendingSellers?.length > 0 ? apiStats.pendingSellers : lsPending;
+        const recentOrders = apiStats?.recentOrders || lsO.slice(-5).reverse();
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-black text-white">Global Overview</h1>
+                <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">MilletVerse Platform Command Centre</p>
+            </div>
+            <span class="abadge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-sm px-4 py-2 self-start sm:self-auto">
+                <i class="fa-solid fa-circle text-[8px] animate-ping inline-block mr-1"></i> Live
+            </span>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            ${[
+                { icon:'fa-users',            label:'Total Users',   val: totalUsers,                           color:'#3b82f6', bg:'rgba(59,130,246,0.1)'  },
+                { icon:'fa-seedling',          label:'Products',      val: totalProducts,                        color:'#10b981', bg:'rgba(16,185,129,0.1)'  },
+                { icon:'fa-box-open',          label:'Total Orders',  val: totalOrders,                          color:'#a855f7', bg:'rgba(168,85,247,0.1)'  },
+                { icon:'fa-indian-rupee-sign', label:'Revenue',       val:'₹'+parseFloat(totalRevenue).toFixed(0), color:'#f59e0b', bg:'rgba(245,158,11,0.1)'  },
+            ].map(k => `
+                <div class="admin-card p-6" style="border-color:${k.color}30;">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:${k.bg};">
+                        <i class="fa-solid ${k.icon} text-xl" style="color:${k.color};"></i>
+                    </div>
+                    <p class="text-3xl font-black text-white">${k.val}</p>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">${k.label}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <!-- Pending Alert -->
+        ${pending.length > 0 ? `
+        <div class="admin-card p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style="border-color:rgba(245,158,11,0.4);">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(245,158,11,0.15);">
+                    <i class="fa-solid fa-hourglass-half text-amber-400 text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <p class="font-black text-white"><span class="text-amber-400">${pending.length}</span> seller/startup account(s) awaiting approval</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Click to review pending applications</p>
+                </div>
+            </div>
+            <button onclick="loadSection('approvals')" class="btn-sm whitespace-nowrap" style="background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);">
+                Review Now <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+        </div>` : `
+        <div class="admin-card p-5 mb-8 flex items-center gap-4" style="border-color:rgba(16,185,129,0.3);">
+            <i class="fa-solid fa-check-circle text-emerald-400 text-2xl shrink-0"></i>
+            <p class="font-black text-emerald-300 text-sm">No pending approvals — all sellers are verified!</p>
+        </div>`}
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="admin-card p-8">
+                <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-bar text-accent"></i> Order Status Breakdown
+                </h3>
+                <div class="space-y-4">
+                    ${(()=>{
+                        const statsList = { Pending: ob.pending||obLocal.pending||0, Confirmed: ob.confirmed||obLocal.confirmed||0, Shipped: ob.shipped||obLocal.shipped||0, Delivered: ob.delivered||obLocal.delivered||0, Cancelled: ob.cancelled||obLocal.cancelled||0 };
+                        const total = Object.values(statsList).reduce((a,b)=>a+b,0)||1;
+                        const cols = { Pending:'#f59e0b', Confirmed:'#3b82f6', Shipped:'#a855f7', Delivered:'#10b981', Cancelled:'#ef4444' };
+                        return Object.entries(statsList).map(([st,cnt])=>`
+                            <div>
+                                <div class="flex justify-between text-xs font-black uppercase tracking-widest mb-1" style="color:#94a3b8;">
+                                    <span>${st}</span><span style="color:#fff;">${cnt}</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,(cnt/total)*100)}%;background:${cols[st]||'#64748b'};"></div></div>
+                            </div>`).join('');
+                    })()}
+                </div>
+            </div>
+            <div class="admin-card p-8">
+                <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-clock-rotate-left text-accent"></i> Recent Orders
+                </h3>
+                <div class="space-y-3">
+                    ${recentOrders.length > 0 ? recentOrders.slice(0,5).map(o => {
+                        const itemName = (o.items||[])[0]?.title || o.product_name || 'Product';
+                        const payType  = o.payment_type === 'cash_on_delivery' ? '💵 COD' : o.payment_type === 'online_upi' ? '📱 UPI' : '';
+                        const status   = o.order_status || o.status || 'pending';
+                        const price    = o.total_price || lsOrderRevenue([o]).toFixed(2);
+                        return `
+                        <div class="flex justify-between items-center py-2" style="border-bottom:1px solid rgba(51,65,85,0.5);">
+                            <div>
+                                <p class="font-black text-white text-sm">${itemName} ${payType}</p>
+                                <p class="text-[10px] font-bold" style="color:#94a3b8;">#${o.id||'—'} · ${o.user_name||o.date||'Customer'}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-accent">₹${price}</p>
+                                <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded" style="background:#1e293b;color:#94a3b8;">${status}</span>
+                            </div>
+                        </div>`;
+                    }).join('') : '<p class="text-slate-500 font-bold text-sm">No orders yet.</p>'}
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Configuration Settings -->
+        <div class="admin-card p-8 mt-6" style="border-color:rgba(16,185,129,0.3);">
+            <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-gear text-emerald-400"></i> Platform Charge Settings
+            </h3>
+            <p class="text-xs text-slate-400 mb-6 font-bold">Configure the mandatory registration fee and your payment QR code required for new Farmer and Startup accounts before admin approval.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Fee Amount -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-300 mb-2">Platform Registration Fee (₹)</label>
+                    <input type="number" id="platform-fee-amount" class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500/50 text-white font-bold placeholder-slate-500" placeholder="e.g. 500" value="${JSON.parse(localStorage.getItem('milletPlatformSettings')||'{}').fee || ''}">
+                </div>
+
+                <!-- QR Code Upload -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-300 mb-2">Admin Payment QR Code</label>
+                    <!-- Tabs -->
+                    <div class="flex gap-2 mb-3">
+                        <button type="button" id="qr-tab-upload" onclick="switchQrTab('upload')" class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-emerald-600 text-white transition-all">Upload Image</button>
+                        <button type="button" id="qr-tab-url" onclick="switchQrTab('url')" class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all">Paste URL</button>
+                    </div>
+                    <!-- Upload panel -->
+                    <div id="qr-panel-upload">
+                        <label class="flex flex-col items-center justify-center w-full py-6 px-4 bg-slate-800/50 border-2 border-dashed border-emerald-500/40 rounded-xl cursor-pointer hover:border-emerald-400 transition-all group">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-emerald-400 mb-2 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Click to upload QR image</span>
+                            <input type="file" id="platform-qr-file" accept="image/*" class="hidden" onchange="previewAdminQr(this)">
+                        </label>
+                    </div>
+                    <!-- URL panel -->
+                    <div id="qr-panel-url" class="hidden">
+                        <input type="text" id="platform-fee-qr" class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500/50 text-white font-bold placeholder-slate-500" placeholder="https://..." value="${JSON.parse(localStorage.getItem('milletPlatformSettings')||'{}').qr || ''}" oninput="previewAdminQrUrl(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live QR Preview -->
+            <div id="admin-qr-preview-wrap" class="mt-6 ${JSON.parse(localStorage.getItem('milletPlatformSettings')||'{}').qr ? '' : 'hidden'}">
+                <p class="text-[10px] font-black uppercase tracking-widest text-emerald-300 mb-3"><i class="fa-solid fa-eye mr-1"></i> QR Preview</p>
+                <div class="flex items-center gap-6">
+                    <div class="bg-white p-3 rounded-2xl border-4 border-emerald-400 w-40 h-40 flex items-center justify-center shadow-xl">
+                        <img id="admin-qr-preview-img" src="${JSON.parse(localStorage.getItem('milletPlatformSettings')||'{}').qr || ''}" class="w-full h-full object-contain rounded-lg">
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold mb-1">This QR will be shown to sellers during registration.</p>
+                        <button type="button" onclick="clearAdminQr()" class="text-[10px] font-black uppercase tracking-widest text-red-400 hover:text-red-300 flex items-center gap-1 mt-2"><i class="fa-solid fa-trash"></i> Remove QR</button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="savePlatformSettings()" class="mt-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black px-6 py-3 rounded-xl text-xs transition-all uppercase tracking-widest shadow-lg hover:shadow-emerald-500/20">
+                <i class="fa-solid fa-save mr-1"></i> Save Platform Settings
+            </button>
+        </div>`;
+    }
+
+    function switchQrTab(tab) {
+        const uploadPanel = document.getElementById('qr-panel-upload');
+        const urlPanel    = document.getElementById('qr-panel-url');
+        const tabUpload   = document.getElementById('qr-tab-upload');
+        const tabUrl      = document.getElementById('qr-tab-url');
+        if (tab === 'upload') {
+            uploadPanel.classList.remove('hidden');
+            urlPanel.classList.add('hidden');
+            tabUpload.classList.replace('bg-slate-700','bg-emerald-600');
+            tabUpload.classList.replace('text-slate-300','text-white');
+            tabUrl.classList.replace('bg-emerald-600','bg-slate-700');
+            tabUrl.classList.replace('text-white','text-slate-300');
+        } else {
+            urlPanel.classList.remove('hidden');
+            uploadPanel.classList.add('hidden');
+            tabUrl.classList.replace('bg-slate-700','bg-emerald-600');
+            tabUrl.classList.replace('text-slate-300','text-white');
+            tabUpload.classList.replace('bg-emerald-600','bg-slate-700');
+            tabUpload.classList.replace('text-white','text-slate-300');
+        }
+    }
+
+    function previewAdminQr(input) {
+        if (!input.files || !input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            window._adminQrBase64 = e.target.result;
+            const wrap = document.getElementById('admin-qr-preview-wrap');
+            const img  = document.getElementById('admin-qr-preview-img');
+            if (img) img.src = e.target.result;
+            if (wrap) wrap.classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    function previewAdminQrUrl(url) {
+        window._adminQrBase64 = url;
+        const wrap = document.getElementById('admin-qr-preview-wrap');
+        const img  = document.getElementById('admin-qr-preview-img');
+        if (img) img.src = url;
+        if (url) wrap?.classList.remove('hidden');
+        else wrap?.classList.add('hidden');
+    }
+
+    function clearAdminQr() {
+        window._adminQrBase64 = '';
+        const wrap = document.getElementById('admin-qr-preview-wrap');
+        const img  = document.getElementById('admin-qr-preview-img');
+        const fileInput = document.getElementById('platform-qr-file');
+        const urlInput  = document.getElementById('platform-fee-qr');
+        if (img) img.src = '';
+        if (wrap) wrap.classList.add('hidden');
+        if (fileInput) fileInput.value = '';
+        if (urlInput) urlInput.value = '';
+    }
+
+    function savePlatformSettings() {
+        const fee = document.getElementById('platform-fee-amount')?.value || '';
+        // Prefer uploaded image (base64) or URL input
+        const qr  = window._adminQrBase64 || document.getElementById('platform-fee-qr')?.value || '';
+        localStorage.setItem('milletPlatformSettings', JSON.stringify({ fee, qr }));
+        toast('<i class="fa-solid fa-check-circle mr-1"></i> Platform Settings saved!', 'success');
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  APPROVALS — reads milletUsers localStorage
+    // ═══════════════════════════════════════════════════
+    async function renderApprovals() {
+        let pending = [];
+
+        // Try backend
+        try {
+            const r = await fetch(`${API}/admin/sellers/pending`, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success && (Array.isArray(d.data) ? d.data : []).length > 0) {
+                pending = Array.isArray(d.data) ? d.data : Object.values(d.data || {});
+            }
+        } catch(e) {}
+
+        // Always merge with localStorage pending users
+        const lsU = lsUsers();
+        const lsPending = lsU.filter(u =>
+            (u.role === 'startup' || u.role === 'farmer') && u.is_approved === false
+        );
+        // Deduplicate by email
+        lsPending.forEach(lp => {
+            if (!pending.find(p => p.email === lp.email)) pending.push(lp);
+        });
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8">
+            <h1 class="font-heading text-4xl font-black text-white">Pending Approvals</h1>
+            <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">
+                Review startup &amp; farmer registration applications — ${pending.length} pending
+            </p>
+        </div>
+        <div id="approvals-list" class="space-y-4">
+            ${pending.length === 0 ? `
+                <div class="admin-card p-16 text-center">
+                    <i class="fa-solid fa-check-circle text-5xl text-emerald-400 mb-6 block"></i>
+                    <p class="font-black text-white text-xl mb-2">All Clear!</p>
+                    <p class="text-slate-400 text-sm font-bold">No pending applications right now.</p>
+                </div>
+            ` : pending.map(s => `
+                <div class="admin-card p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" id="ap-card-${s.id}">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style="background:rgba(245,158,11,0.15);">
+                            <i class="fa-solid fa-${s.role==='farmer'?'tractor':'rocket'} text-amber-400 text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-black text-white text-lg">${s.name || (s.firstName+' '+s.lastName)}</p>
+                            <p class="text-slate-400 text-sm font-bold">${s.email}</p>
+                            <div class="flex items-center gap-3 mt-2 flex-wrap">
+                                <span class="abadge bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                                    ${s.role === 'farmer' ? '🌾 Farmer' : '🚀 Startup Seller'}
+                                </span>
+                                <span class="abadge bg-slate-700 text-slate-300">Pending</span>
+                                ${s.phone ? `<span class="text-[10px] text-slate-500 font-bold"><i class="fa-solid fa-phone mr-1"></i>${s.phone}</span>` : ''}
+                                <span class="text-[10px] text-slate-500 font-bold">
+                                    <i class="fa-solid fa-calendar mr-1"></i>
+                                    ${s.created_at || s.joinedAt ? new Date(s.created_at||s.joinedAt).toLocaleDateString() : 'Recently'}
+                                </span>
+                            </div>
+                            
+                            <!-- Platform Fee Proof Display -->
+                            ${s.platform_payment_proof ? `
+                                <div class="mt-4 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50 w-full sm:w-auto self-start inline-block">
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-2"><i class="fa-solid fa-receipt mr-1"></i> Platform Fee Paid</p>
+                                    ${s.platform_payment_proof.startsWith('data:image') || s.platform_payment_proof.startsWith('http') ? 
+                                        `<img src="${s.platform_payment_proof}" class="h-16 rounded-lg cursor-pointer hover:scale-110 transition-transform origin-left border border-slate-600" title="Payment Screenshot" onclick="window.open(this.src)">` : 
+                                        `<span class="text-xs font-mono font-bold text-white bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700">${s.platform_payment_proof}</span>`
+                                    }
+                                </div>
+                            ` : `
+                                <div class="mt-4 p-3 rounded-xl bg-red-900/20 border border-red-500/20 w-full sm:w-auto self-start inline-block">
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-red-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i> No Platform Fee Payment</p>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                    <div class="flex gap-3 shrink-0">
+                        <button onclick="approveUser('${s.id}','${s.email}')" class="btn-sm flex items-center gap-2"
+                            style="background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);">
+                            <i class="fa-solid fa-check"></i> Approve &amp; Activate
+                        </button>
+                        <button onclick="rejectUser('${s.id}','${s.email}')" class="btn-sm flex items-center gap-2"
+                            style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">
+                            <i class="fa-solid fa-xmark"></i> Reject
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>`;
+    }
+
+    async function approveUser(id, email) {
+        // Try backend
+        let backendOk = false;
+        try {
+            const r = await fetch(`${API}/admin/sellers/${id}/approve`, { method:'PATCH', headers: hdrs() });
+            const d = await r.json();
+            if (d.success) backendOk = true;
+        } catch(e) {}
+
+        // Always update localStorage
+        const users = lsUsers();
+        const idx = users.findIndex(u => u.id == id || u.email === email);
+        if (idx > -1) {
+            users[idx].is_approved = true;
+            localStorage.setItem('milletUsers', JSON.stringify(users));
+        }
+
+        document.getElementById(`ap-card-${id}`)?.remove();
+        toast('<i class="fa-solid fa-check-circle mr-2"></i> Account approved! Seller can now log in.', 'success');
+
+        // Update approvals count in sidebar
+        const remaining = document.querySelectorAll('[id^="ap-card-"]').length;
+        if (remaining === 0) {
+            const list = document.getElementById('approvals-list');
+            if (list) list.innerHTML = `
+                <div class="admin-card p-16 text-center">
+                    <i class="fa-solid fa-check-circle text-5xl text-emerald-400 mb-6 block"></i>
+                    <p class="font-black text-white text-xl mb-2">All Clear!</p>
+                    <p class="text-slate-400 text-sm font-bold">No pending applications right now.</p>
+                </div>`;
+        }
+    }
+
+    async function rejectUser(id, email) {
+        if (!confirm('Reject and remove this application? The user will need to re-register.')) return;
+
+        // Try backend
+        try {
+            await fetch(`${API}/admin/sellers/${id}/reject`, { method:'PATCH', headers: hdrs() });
+        } catch(e) {}
+
+        // Remove from localStorage
+        const users = lsUsers();
+        const filtered = users.filter(u => u.id != id && u.email !== email);
+        localStorage.setItem('milletUsers', JSON.stringify(filtered));
+
+        document.getElementById(`ap-card-${id}`)?.remove();
+        toast('Application rejected and removed.', 'info');
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  USERS — all users from localStorage + backend
+    // ═══════════════════════════════════════════════════
+    async function renderUsers(roleFilter) {
+        let users = lsUsers(); // Start with localStorage
+
+        try {
+            const url = `${API}/admin/users${roleFilter ? `?role=${roleFilter}` : ''}`;
+            const r = await fetch(url, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success) {
+                const backendUsers = d.data?.users || d.data || [];
+                // Merge: add backend users not in localStorage by email
+                backendUsers.forEach(bu => {
+                    if (!users.find(u => u.email === bu.email)) users.push(bu);
+                });
+            }
+        } catch(e) {}
+
+        if (roleFilter) users = users.filter(u => u.role === roleFilter);
+
+        const roleStyle = {
+            admin:    'background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)',
+            seller:   'background:rgba(59,130,246,0.2);color:#93c5fd;border:1px solid rgba(59,130,246,0.3)',
+            farmer:   'background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)',
+            startup:  'background:rgba(168,85,247,0.2);color:#d8b4fe;border:1px solid rgba(168,85,247,0.3)',
+            consumer: 'background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.3)',
+            user:     'background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.3)'
+        };
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-black text-white">Keeper Registry</h1>
+                <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">${users.length} users found</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                ${['','consumer','farmer','startup','seller','admin'].map(r => `
+                    <button onclick="renderUsers('${r}')" class="btn-sm"
+                        style="${roleFilter===r ? 'background:#d4a373;color:#3d1e17;' : 'background:#334155;color:#cbd5e1;'}">
+                        ${r || 'All'}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+        <div class="admin-card overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr style="border-bottom:1px solid #334155;">
+                        <th class="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">User</th>
+                        <th class="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hidden md:table-cell">Email</th>
+                        <th class="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Role</th>
+                        <th class="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hidden sm:table-cell">Status</th>
+                        <th class="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${users.length === 0 ? `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500 font-bold">No users found.</td></tr>` :
+                    users.map(u => `
+                        <tr class="table-row" id="user-row-${u.id}">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:#334155;">
+                                        <i class="fa-solid fa-user text-slate-400 text-sm"></i>
+                                    </div>
+                                    <span class="font-black text-white text-sm">${u.name || (u.firstName+' '+u.lastName)}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-bold hidden md:table-cell" style="color:#94a3b8;">${u.email}</td>
+                            <td class="px-6 py-4">
+                                <span class="abadge" style="${roleStyle[u.role] || roleStyle.user}">${u.role}</span>
+                            </td>
+                            <td class="px-6 py-4 hidden sm:table-cell">
+                                <span class="abadge" style="${u.is_approved !== false
+                                    ? 'background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);'
+                                    : 'background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);'}">
+                                    ${u.is_approved !== false ? 'Approved' : 'Pending'}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-2">
+                                    ${u.is_approved === false && u.role !== 'admin'
+                                        ? `<button onclick="approveUser('${u.id}','${u.email}')" class="btn-sm"
+                                            style="background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);">
+                                            <i class="fa-solid fa-check mr-1"></i>Approve</button>` : ''}
+                                    ${u.role !== 'admin'
+                                        ? `<button onclick="deleteUserRow('${u.id}','${u.email}')" class="btn-sm"
+                                            style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">
+                                            <i class="fa-solid fa-trash"></i></button>`
+                                        : '<span class="text-slate-600 text-xs font-bold">Protected</span>'}
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>`;
+    }
+
+    async function deleteUserRow(id, email) {
+        if (!confirm('Delete this user permanently?')) return;
+        try {
+            await fetch(`${API}/admin/users/${id}`, { method:'DELETE', headers: hdrs() });
+        } catch(e) {}
+        const users = lsUsers().filter(u => u.id != id && u.email !== email);
+        localStorage.setItem('milletUsers', JSON.stringify(users));
+        document.getElementById(`user-row-${id}`)?.remove();
+        toast('User deleted.', 'info');
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  ORDERS — backend + localStorage milletOrders
+    // ═══════════════════════════════════════════════════
+    async function renderOrders(statusFilter) {
+        let orders = [];
+
+        // Try backend
+        try {
+            const url = `${API}/admin/orders${statusFilter ? `?order_status=${statusFilter}` : ''}`;
+            const r = await fetch(url, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success) orders = d.data?.orders || d.data || [];
+        } catch(e) {}
+
+        // Merge with localStorage orders
+        const lsO = lsOrders();
+        lsO.forEach(lo => {
+            if (!orders.find(o => String(o.id) === String(lo.id))) {
+                // Normalize localStorage order format
+                const payBadge = lo.payment_type === 'cash_on_delivery' ? '💵 COD'
+                               : lo.payment_type === 'online_upi'       ? '📱 UPI' : '';
+                orders.push({
+                    id:           lo.id,
+                    product_name: `${(lo.items||[]).map(i=>i.title).join(', ').substring(0,40) || 'Product'} ${payBadge}`,
+                    quantity:     (lo.items||[]).reduce((s,i)=>s+(i.qty||1),0),
+                    user_name:    lo.user_name || 'Customer',
+                    order_date:   lo.date || lo.created_at || new Date().toISOString(),
+                    order_status: lo.status || lo.order_status || 'confirmed',
+                    payment_type: lo.payment_type || 'unknown',
+                    utr_ref:      lo.utr_ref || '',
+                    total_price:  parseFloat(lo.total_price || lsOrderRevenue([lo])).toFixed(2)
+                });
+            }
+        });
+
+        if (statusFilter) orders = orders.filter(o => (o.order_status||'').toLowerCase().includes(statusFilter));
+
+        const sColors = {
+            pending:    'rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)',
+            confirmed:  'rgba(59,130,246,0.2);color:#93c5fd;border:1px solid rgba(59,130,246,0.3)',
+            processing: 'rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)',
+            shipped:    'rgba(168,85,247,0.2);color:#d8b4fe;border:1px solid rgba(168,85,247,0.3)',
+            delivered:  'rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)',
+            cancelled:  'rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)'
+        };
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="font-heading text-4xl font-black text-white">All Orders</h1>
+                <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">${orders.length} orders (online + offline)</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                ${['','pending','confirmed','shipped','delivered','cancelled'].map(s => `
+                    <button onclick="renderOrders('${s}')" class="btn-sm"
+                        style="${statusFilter===s ? 'background:#d4a373;color:#3d1e17;' : 'background:#334155;color:#cbd5e1;'}">
+                        ${s || 'All'}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+        <div class="space-y-3">
+            ${orders.length === 0
+                ? `<div class="admin-card p-16 text-center" style="color:#64748b;">
+                    <i class="fa-solid fa-box-open text-4xl mb-4 block"></i>
+                    <p class="font-black uppercase tracking-widest">No orders found.</p>
+                   </div>`
+                : orders.map(o => {
+                    const st = (o.order_status || 'confirmed').toLowerCase().split(' ')[0];
+                    const payStyle = o.payment_type === 'cash_on_delivery'
+                        ? 'background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)'
+                        : 'background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)';
+                    const payLabel = o.payment_type === 'cash_on_delivery' ? '💵 Cash on Delivery'
+                                   : o.payment_type === 'online_upi'       ? '📱 Online UPI'
+                                   : o.utr_ref === 'COD'                   ? '💵 Cash on Delivery' : '📱 Online UPI';
+                    return `
+                    <div class="admin-card p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" id="ord-row-${o.id}">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#334155;">
+                                <i class="fa-solid fa-box text-slate-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-black text-white text-sm">${o.product_name || 'Product'} <span style="color:#64748b;">×${o.quantity||1}</span></p>
+                                <p class="text-[10px] font-bold mt-0.5" style="color:#64748b;">#${o.id} · ${o.user_name||'Customer'} · ${new Date(o.order_date||o.created_at||Date.now()).toLocaleDateString()}</p>
+                                <div class="flex gap-2 mt-1 flex-wrap">
+                                    <span class="abadge" style="${sColors[st] || 'background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.3)'}">${o.order_status||'Unknown'}</span>
+                                    <span class="abadge" style="${payStyle}">${payLabel}</span>
+                                    ${o.utr_ref && o.utr_ref !== 'COD' ? `<span class="text-[9px] font-mono text-slate-400">UTR: ${o.utr_ref}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 shrink-0">
+                            <p class="font-black text-accent text-xl">₹${o.total_price}</p>
+                            <select onchange="updateOrdStatus('${o.id}', this.value)"
+                                style="background:#334155;border:1px solid #475569;color:#e2e8f0;font-size:0.7rem;font-weight:700;border-radius:0.5rem;padding:0.5rem 0.75rem;outline:none;cursor:pointer;">
+                                ${['pending','confirmed','processing','shipped','delivered','cancelled'].map(s =>
+                                    `<option value="${s}" ${(o.order_status||'confirmed')===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                    </div>`;
+                }).join('')}
+        </div>`;
+    }
+
+    async function updateOrdStatus(id, status) {
+        // Try backend
+        try {
+            await fetch(`${API}/admin/orders/${id}/status`, { method:'PATCH', headers: hdrs(), body: JSON.stringify({ order_status: status }) });
+        } catch(e) {}
+        // Update localStorage orders
+        const orders = lsOrders().map(o => String(o.id)===String(id) ? {...o, order_status:status, status:status} : o);
+        localStorage.setItem('milletOrders', JSON.stringify(orders));
+        toast(`Order #${id} → <strong>${status}</strong>`, 'success');
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  PRODUCTS — backend + localStorage
+    // ═══════════════════════════════════════════════════
+    async function renderProducts() {
+        let products = lsProducts();
+
+        try {
+            const r = await fetch(`${API}/admin/products`, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success) {
+                const bp = d.data?.products || d.data || [];
+                bp.forEach(p => { if (!products.find(lp => String(lp.id)===String(p.id))) products.push(p); });
+            }
+        } catch(e) {}
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8">
+            <h1 class="font-heading text-4xl font-black text-white">All Products</h1>
+            <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">${products.length} products on platform</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            ${products.length === 0
+                ? `<div class="admin-card col-span-full p-16 text-center" style="color:#64748b;">
+                    <i class="fa-solid fa-seedling text-4xl mb-4 block"></i>
+                    <p class="font-black uppercase tracking-widest">No products found.</p>
+                   </div>`
+                : products.map(p => `
+                <div class="admin-card p-5 flex gap-4" id="prod-card-${p.id}">
+                    <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0" style="background:#334155;">
+                        <img src="${p.image_url||p.img||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'}"
+                            class="w-full h-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-black text-white text-sm truncate">${p.name||p.title||'Product'}</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mt-0.5" style="color:#64748b;">${p.millet_type||p.category||'Grain'}</p>
+                        <p class="font-black text-accent mt-1">₹${p.price}</p>
+                        ${p.farmer_name ? `<p class="text-[10px] text-amber-400 font-bold mt-0.5">🌾 ${p.farmer_name}</p>` : ''}
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-[10px] font-bold" style="color:#64748b;">Stock: ${p.stock_quantity||p.qty||0}</span>
+                            <button onclick="deleteProduct('${p.id}')" class="btn-sm"
+                                style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">
+                                <i class="fa-solid fa-trash mr-1"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>`;
+    }
+
+    async function deleteProduct(id) {
+        if (!confirm('Delete this product permanently?')) return;
+        try {
+            await fetch(`${API}/admin/products/${id}`, { method:'DELETE', headers: hdrs() });
+        } catch(e) {}
+        const products = lsProducts().filter(p => String(p.id) !== String(id));
+        localStorage.setItem('milletProducts', JSON.stringify(products));
+        document.getElementById(`prod-card-${id}`)?.remove();
+        toast('Product deleted.', 'info');
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  ANALYTICS — full localStorage fallback
+    // ═══════════════════════════════════════════════════
+    async function renderAnalytics() {
+        let analytics = null;
+        try {
+            const r = await fetch(`${API}/admin/analytics`, { headers: hdrs() });
+            const d = await r.json();
+            if (d.success) analytics = d.data;
+        } catch(e) {}
+
+        // Build from localStorage
+        const lsU = lsUsers();
+        const lsO = lsOrders();
+        const lsP = lsProducts();
+
+        const roleDist = analytics?.roleDistribution || {
+            user:   lsU.filter(u => u.role === 'consumer' || u.role === 'user').length,
+            seller: lsU.filter(u => u.role === 'seller' || u.role === 'startup' || u.role === 'farmer').length,
+            admin:  lsU.filter(u => u.role === 'admin').length
+        };
+        const totalRevenue   = analytics?.orderStats?.total_revenue  || lsOrderRevenue(lsO);
+        const totalOrders    = analytics?.orderStats?.total_orders    || lsO.length;
+        const deliveredCount = analytics?.orderStats?.delivered_orders || lsO.filter(o => (o.status||o.order_status||'').toLowerCase().includes('deliver')).length;
+        const codOrders      = lsO.filter(o => o.payment_type === 'cash_on_delivery' || o.utr_ref === 'COD').length;
+        const upiOrders      = lsO.filter(o => o.payment_type === 'online_upi' || (o.utr_ref && o.utr_ref !== 'COD')).length;
+        const topProducts    = analytics?.topProducts || lsP.slice(0, 10);
+        const totalUsers     = Object.values(roleDist).reduce((a,b)=>a+b,0) || 1;
+
+        document.getElementById('admin-main').innerHTML = `
+        <div class="mb-8">
+            <h1 class="font-heading text-4xl font-black text-white">Platform Analytics</h1>
+            <p class="text-slate-400 text-sm font-bold mt-1 uppercase tracking-widest">System-wide performance insights</p>
+        </div>
+
+        <!-- Payment Split -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            ${[
+                { label:'Total Revenue',    val:'₹'+parseFloat(totalRevenue).toFixed(0), color:'#10b981', icon:'fa-indian-rupee-sign' },
+                { label:'COD Orders',       val:codOrders,                                color:'#f59e0b', icon:'fa-money-bill-wave'  },
+                { label:'UPI Online Orders',val:upiOrders,                                color:'#3b82f6', icon:'fa-qrcode'           },
+            ].map(s => `
+                <div class="admin-card p-6 flex items-center gap-4" style="border-color:${s.color}30;">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0" style="background:${s.color}15;">
+                        <i class="fa-solid ${s.icon} text-2xl" style="color:${s.color};"></i>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-black text-white">${s.val}</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">${s.label}</p>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- User Role Distribution -->
+            <div class="admin-card p-8">
+                <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-users text-accent"></i> User Role Distribution
+                </h3>
+                <div class="space-y-5">
+                    ${Object.entries({
+                        'Buyers (Consumers)': roleDist.user||0,
+                        'Sellers / Farmers':  roleDist.seller||0,
+                        'Admins':             roleDist.admin||0
+                    }).map(([label,cnt]) => {
+                        const cols = { 'Buyers (Consumers)':'#3b82f6', 'Sellers / Farmers':'#10b981', 'Admins':'#ef4444' };
+                        const pct  = Math.round((cnt / totalUsers) * 100);
+                        return `<div>
+                            <div class="flex justify-between mb-2" style="color:#94a3b8;">
+                                <span class="text-xs font-black uppercase tracking-widest">${label}</span>
+                                <span class="text-xs font-black text-white">${cnt} (${pct}%)</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${cols[label]};"></div></div>
+                        </div>`;
+                    }).join('')}
+                </div>
+                <div class="flex justify-center gap-6 mt-6 flex-wrap">
+                    ${Object.entries({'Buyers':'#3b82f6','Sellers':'#10b981','Admins':'#ef4444'}).map(([l,c])=>`
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full" style="background:${c};"></div>
+                            <span class="text-[10px] font-black uppercase tracking-widest" style="color:#64748b;">${l}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Revenue & Order Stats -->
+            <div class="admin-card p-8">
+                <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-line text-accent"></i> Revenue Summary
+                </h3>
+                <div class="space-y-4">
+                    ${[
+                        { label:'Total Orders',    val: totalOrders,                                     color:'#6366f1', icon:'fa-box'                },
+                        { label:'Total Revenue',   val:'₹'+parseFloat(totalRevenue).toFixed(0),          color:'#10b981', icon:'fa-indian-rupee-sign'  },
+                        { label:'Avg Order Value', val:'₹'+(totalOrders?Math.round(totalRevenue/totalOrders):0), color:'#f59e0b', icon:'fa-chart-bar'  },
+                        { label:'Delivered',       val: deliveredCount,                                  color:'#22c55e', icon:'fa-check-circle'        },
+                        { label:'COD Pending Pay', val: codOrders,                                       color:'#f59e0b', icon:'fa-money-bill-wave'     },
+                        { label:'UPI Completed',   val: upiOrders,                                       color:'#3b82f6', icon:'fa-qrcode'              },
+                    ].map(item=>`
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:${item.color}15;border:1px solid ${item.color}30;">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:${item.color}20;">
+                                <i class="fa-solid ${item.icon} text-sm" style="color:${item.color};"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-[10px] font-black uppercase tracking-widest" style="color:#64748b;">${item.label}</p>
+                            </div>
+                            <p class="font-black text-white text-xl">${item.val}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method Breakdown -->
+        <div class="admin-card p-8 mb-6">
+            <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-wallet text-accent"></i> Payment Method Breakdown
+            </h3>
+            ${totalOrders > 0 ? `
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between mb-2" style="color:#94a3b8;">
+                        <span class="text-xs font-black uppercase tracking-widest">💵 Cash on Delivery</span>
+                        <span class="text-xs font-black text-white">${codOrders} (${Math.round((codOrders/totalOrders)*100)}%)</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,(codOrders/totalOrders)*100)}%;background:#f59e0b;"></div></div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2" style="color:#94a3b8;">
+                        <span class="text-xs font-black uppercase tracking-widest">📱 Online UPI / QR</span>
+                        <span class="text-xs font-black text-white">${upiOrders} (${Math.round((upiOrders/totalOrders)*100)}%)</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,(upiOrders/totalOrders)*100)}%;background:#3b82f6;"></div></div>
+                </div>
+            </div>` : '<p class="text-slate-500 font-bold text-sm">No order data yet.</p>'}
+        </div>
+
+        <!-- Top Products -->
+        <div class="admin-card p-8">
+            <h3 class="font-black text-white text-lg mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-trophy text-accent"></i> Top Products
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                ${topProducts.slice(0,10).map(p => `
+                    <div class="text-center p-4 rounded-xl" style="background:#0f172a;border:1px solid #334155;">
+                        <div class="w-16 h-16 rounded-xl overflow-hidden mx-auto mb-3" style="background:#334155;">
+                            <img src="${p.image_url||p.img||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'}"
+                                class="w-full h-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'">
+                        </div>
+                        <p class="font-black text-white text-xs truncate">${p.name||p.title||'Product'}</p>
+                        <p class="font-black text-accent mt-1">₹${p.price}</p>
+                        <div class="flex justify-center gap-0.5 mt-1">
+                            ${Array.from({length:5},(_,j)=>`<i class="fa-${j<Math.round(p.rating||4)?'solid':'regular'} fa-star text-amber-400 text-[10px]"></i>`).join('')}
+                        </div>
+                    </div>
+                `).join('') || '<p class="col-span-full text-center font-bold" style="color:#475569;">No product data.</p>'}
+            </div>
+        </div>`;
+    }
+    </script>
+</body>
+</html>
