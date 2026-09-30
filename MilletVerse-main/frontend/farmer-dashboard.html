@@ -80,7 +80,6 @@
         <button class="nav-btn"        id="nav-scanner"     onclick="show('scanner')">    <i class="fa-solid fa-qrcode"      style="width:16px;text-align:center;"></i> Payment Scanner</button>
         <button class="nav-btn"        id="nav-orders"      onclick="show('orders')">     <i class="fa-solid fa-box-open"    style="width:16px;text-align:center;"></i> Customer Orders</button>
         <button class="nav-btn"        id="nav-analytics"   onclick="show('analytics')">  <i class="fa-solid fa-chart-line"  style="width:16px;text-align:center;"></i> Analytics</button>
-        <button class="nav-btn"        id="nav-earnings"    onclick="show('earnings')">   <i class="fa-solid fa-indian-rupee-sign" style="width:16px;text-align:center;"></i> Earnings</button>
         <div style="flex:1;min-height:20px;"></div>
         <button onclick="milletLogout()" class="nav-btn" style="color:rgba(255,100,100,0.65);"><i class="fa-solid fa-right-from-bracket" style="width:16px;text-align:center;"></i> Logout</button>
     </nav>
@@ -97,7 +96,6 @@
             <button class="tab-btn" onclick="show('scanner')"     style="font-size:0.55rem;">Scanner</button>
             <button class="tab-btn" onclick="show('orders')"      style="font-size:0.55rem;">Orders</button>
             <button class="tab-btn" onclick="show('analytics')"   style="font-size:0.55rem;">Analytics</button>
-            <button class="tab-btn" onclick="show('earnings')"    style="font-size:0.55rem;">Earnings</button>
         </div>
     </div>
     <div style="padding:36px 40px;" id="content-area"></div>
@@ -174,7 +172,7 @@ function hdrs()        { return { 'Authorization':`Bearer ${farmer?.token}`, 'Co
 function show(section) {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`nav-${section}`)?.classList.add('active');
-    ({ 'add-product':renderAddProduct, 'my-products':renderMyProducts, 'scanner':renderScanner, 'orders':renderOrders, 'analytics':renderAnalytics, 'earnings':renderEarnings })[section]?.();
+    ({ 'add-product':renderAddProduct, 'my-products':renderMyProducts, 'scanner':renderScanner, 'orders':renderOrders, 'analytics':renderAnalytics })[section]?.();
 }
 
 // ════════════════════════════════════════════════════
@@ -1044,6 +1042,5 @@ function renderAnalytics() {
     </div>` : ''}`;
 }
 </script>
-<script src="farmer-earnings.js"></script>
 </body>
 </html>

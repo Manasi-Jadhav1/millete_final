@@ -43,6 +43,13 @@ async function updateCartCount() {
 // Add to Cart
 async function addToCart(title, price, img, id, qty = 1) {
     const user = JSON.parse(localStorage.getItem('milletSession'));
+    
+    // Producers (Farmer, Startup, Seller) cannot purchase products
+    if (user && ['farmer', 'startup', 'seller'].includes(user.role)) {
+        showToast('Farmer and Startup accounts are producer accounts and cannot purchase products. Please use a Consumer account.', 'error');
+        return;
+    }
+
     let addedToCloud = false;
 
     // Check if product has farmer details in local storage
@@ -83,7 +90,10 @@ async function addToCart(title, price, img, id, qty = 1) {
                 cartItem.is_farmer = farmerProd.is_farmer || farmerProd.type === 'farmer';
                 cartItem.farmer_name = farmerProd.farmer_name || farmerProd.title;
                 cartItem.farmer_upi = farmerProd.farmer_upi;
-                cartItem.payment_qr = farmerProd.payment_qr;
+                cartItem.payment_qr = farmerProd.payment_qr || farmerProd.farmer_scanner;
+                cartItem.farmer_scanner = farmerProd.farmer_scanner || farmerProd.payment_qr;
+                cartItem.farmer_email = farmerProd.farmer_email || farmerProd.sellerEmail;
+                cartItem.farmer_id = farmerProd.farmer_id || farmerProd.seller_id;
             }
             cart.push(cartItem);
         }
@@ -1124,37 +1134,39 @@ let quickBuyCurrentItem = null;
 let quickBuyQuantity = 1;
 
 function openQuickBuyModal(id, title, price, img, millet, ageTag, farmerName, farmerUpi, paymentQr) {
+    // Check if current user is a producer (farmer or startup)
+    const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
+    if (session && ['farmer', 'startup', 'seller'].includes(session.role)) {
+        showToast('Farmer and Startup accounts are producer accounts and cannot buy products. Please use a Consumer account.', 'error');
+        return;
+    }
+
     let modal = document.getElementById('meesho-quick-buy-modal');
     if (!modal) {
         initQuickBuyModal();
         modal = document.getElementById('meesho-quick-buy-modal');
     }
 
-    // Auto-resolve farmer details if missing
-    let resolvedFarmerName = farmerName;
-    let resolvedFarmerUpi = farmerUpi;
-    let resolvedPaymentQr = paymentQr;
+    const localProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+    const found = localProducts.find(p => p.id == id || p.title === title || p.name === title);
 
-    if (!resolvedFarmerUpi) {
-        const localProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
-        const found = localProducts.find(p => p.id == id || p.title === title || p.name === title);
-        if (found && found.farmer_upi) {
-            resolvedFarmerName = found.farmer_name;
-            resolvedFarmerUpi = found.farmer_upi;
-            resolvedPaymentQr = found.payment_qr;
-        } else {
-            // Check if user has saved a default scanner
-            const saved = getFarmerSavedScanner();
-            if (saved && saved.farmer_upi) {
-                resolvedFarmerName = saved.farmer_name;
-                resolvedFarmerUpi = saved.farmer_upi;
-                resolvedPaymentQr = saved.payment_qr;
-            } else {
-                resolvedFarmerName = 'MilletVerse Verified Farm Producer';
-                resolvedFarmerUpi = 'farmer.milletverse@upi';
-            }
+    let resolvedFarmerName = farmerName || (found ? (found.farmer_name || found.farmer) : '');
+    let resolvedFarmerUpi = farmerUpi || (found ? found.farmer_upi : '');
+    let resolvedPaymentQr = paymentQr || (found ? (found.payment_qr || found.farmer_scanner) : '');
+    let resolvedFarmerEmail = found ? (found.farmer_email || found.sellerEmail) : '';
+    let resolvedFarmerId = found ? (found.farmer_id || found.seller_id) : '';
+
+    if (!resolvedFarmerUpi || !resolvedPaymentQr) {
+        const saved = getFarmerSavedScanner();
+        if (saved) {
+            if (!resolvedFarmerName) resolvedFarmerName = saved.farmer_name;
+            if (!resolvedFarmerUpi) resolvedFarmerUpi = saved.farmer_upi;
+            if (!resolvedPaymentQr) resolvedPaymentQr = saved.custom_qr || saved.payment_qr;
         }
     }
+
+    if (!resolvedFarmerName) resolvedFarmerName = 'MilletVerse Verified Farm Producer';
+    if (!resolvedFarmerUpi) resolvedFarmerUpi = 'farmer.milletverse@upi';
 
     quickBuyCurrentItem = {
         id: id,
@@ -1163,9 +1175,11 @@ function openQuickBuyModal(id, title, price, img, millet, ageTag, farmerName, fa
         img: img || 'assets/ragi.png',
         millet: millet || 'Ancient Organic Grain',
         ageTag: ageTag || 'All Ages',
-        farmerName: resolvedFarmerName || 'MilletVerse Direct Farm',
-        farmerUpi: resolvedFarmerUpi || 'farmer.milletverse@upi',
-        paymentQr: resolvedPaymentQr
+        farmerName: resolvedFarmerName,
+        farmerUpi: resolvedFarmerUpi,
+        paymentQr: resolvedPaymentQr,
+        farmerEmail: resolvedFarmerEmail,
+        farmerId: resolvedFarmerId
     };
 
     quickBuyQuantity = 1;
@@ -1182,7 +1196,6 @@ function openQuickBuyModal(id, title, price, img, millet, ageTag, farmerName, fa
     document.getElementById('qb-farmer-upi').innerText = quickBuyCurrentItem.farmerUpi;
 
     // Pre-fill user info if logged in
-    const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
     if (session) {
         const nameIn = document.getElementById('qb-buyer-name');
         if (nameIn && !nameIn.value) nameIn.value = `${session.firstName} ${session.lastName}`.trim();
@@ -1224,13 +1237,18 @@ function updateQuickBuyCalculations() {
     document.getElementById('qb-btn-total').innerText = `₹${total.toFixed(2)}`;
     document.getElementById('qb-qr-payable-text').innerText = `₹${total.toFixed(2)}`;
 
-    // Update dynamic QR Code with the live exact total amount and farmer's UPI
+    // Update dynamic QR Code with the live exact total amount and farmer's UPI / Custom Scanner
     const qrImg = document.getElementById('qb-dynamic-qr');
     const upi = quickBuyCurrentItem.farmerUpi || 'farmer.milletverse@upi';
     const farmName = quickBuyCurrentItem.farmerName || 'Direct Farm Harvest';
+    const customQr = quickBuyCurrentItem.paymentQr;
 
-    const upiUri = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(farmName)}&am=${total.toFixed(2)}&cu=INR`;
-    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+    if (customQr && (customQr.startsWith('data:image') || (customQr.startsWith('http') && !customQr.includes('api.qrserver.com')))) {
+        qrImg.src = customQr;
+    } else {
+        const upiUri = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(farmName)}&am=${total.toFixed(2)}&cu=INR`;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+    }
 }
 
 function copyFarmerUpiId() {
@@ -1245,6 +1263,12 @@ function copyFarmerUpiId() {
 function handleConfirmQuickBuy(e) {
     e.preventDefault();
     if (!quickBuyCurrentItem) return;
+
+    const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
+    if (session && ['farmer', 'startup', 'seller'].includes(session.role)) {
+        showToast('Farmer and Startup accounts are producer accounts and cannot purchase products. Please use a Consumer account.', 'error');
+        return;
+    }
 
     const buyerName = document.getElementById('qb-buyer-name').value.trim();
     const buyerPhone = document.getElementById('qb-buyer-phone').value.trim();
@@ -1263,9 +1287,22 @@ function handleConfirmQuickBuy(e) {
     const total = subtotal + shipping + tax;
     const orderId = 'MV-MEESHO-' + Math.floor(100000 + Math.random() * 900000);
 
+    const buyerEmail = session ? session.email : 'buyer@milletverse.in';
+
     const orderRecord = {
         id: orderId,
         date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        farmer_email: quickBuyCurrentItem.farmerEmail || '',
+        farmer_id: quickBuyCurrentItem.farmerId || '',
+        farmer_name: quickBuyCurrentItem.farmerName,
+        farmer_upi: quickBuyCurrentItem.farmerUpi,
+        user_name: buyerName,
+        buyer_email: buyerEmail,
+        total_price: total,
+        total_amount: total,
+        status: 'confirmed',
+        order_status: 'Order Placed & Farmer Payment Verified',
+        payment_type: 'online_upi',
         items: [{
             id: quickBuyCurrentItem.id,
             title: quickBuyCurrentItem.title,
@@ -1276,7 +1313,9 @@ function handleConfirmQuickBuy(e) {
             millet_type: quickBuyCurrentItem.millet,
             is_farmer: true,
             farmer_name: quickBuyCurrentItem.farmerName,
-            farmer_upi: quickBuyCurrentItem.farmerUpi
+            farmer_upi: quickBuyCurrentItem.farmerUpi,
+            farmer_email: quickBuyCurrentItem.farmerEmail,
+            farmer_id: quickBuyCurrentItem.farmerId
         }],
         buyer: {
             name: buyerName,
@@ -1290,7 +1329,6 @@ function handleConfirmQuickBuy(e) {
             utr_ref: utr || 'DIRECT-UPI-VERIFIED',
             amount: total
         },
-        order_status: 'Order Placed & Farmer Payment Verified',
         delivery_estimate: '3–5 Business Days'
     };
 
@@ -1300,7 +1338,6 @@ function handleConfirmQuickBuy(e) {
     localStorage.setItem('milletOrders', JSON.stringify(orders));
 
     // Try posting to backend if online
-    const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
     if (session && session.token) {
         try {
             fetch('http://localhost:5000/api/orders', {

@@ -28,32 +28,50 @@
 </head>
 <body class="text-textDark font-sans antialiased overflow-x-hidden bg-primaryLight flex flex-col h-screen">
 
-    <nav class="bg-primaryDark text-white py-6 px-10 flex items-center justify-between shrink-0 shadow-2xl z-50">
+    <nav class="bg-primaryDark text-white py-4 px-6 lg:px-10 flex items-center justify-between shrink-0 shadow-2xl z-50">
         <a href="index.html" class="flex flex-col items-center group">
-            <span class="font-heading font-black text-3xl tracking-widest">MILLETVERSE</span>
-            <span class="text-[8px] font-black tracking-[0.5em] text-accent/50 uppercase">Harvest Keeper</span>
+            <span class="font-heading font-black text-2xl lg:text-3xl tracking-widest text-white">MILLETVERSE</span>
+            <span class="text-[8px] font-black tracking-[0.5em] text-accent/70 uppercase">Farmer & Harvest Keeper</span>
         </a>
-        <div class="flex items-center gap-5 cursor-pointer relative group">
+
+        <!-- Quick Navbar Farmer Actions -->
+        <div id="quick-farmer-actions" class="hidden sm:flex items-center gap-3">
+            <button onclick="loadSection('add-product')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl shadow-lg transition-all flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle text-sm"></i> List New Harvest
+            </button>
+            <button onclick="loadSection('inventory')" class="bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                <i class="fa-solid fa-boxes-stacked text-sm"></i> Inventory
+            </button>
+        </div>
+
+        <div class="flex items-center gap-4 cursor-pointer relative group">
             <div class="text-right hidden sm:block">
-                <p id="header-name" class="text-xs uppercase tracking-widest text-white mb-0.5">Seed Seeker</p>
-                <p id="role-text" class="text-[8px] text-accent uppercase tracking-[0.2em]">Verified</p>
+                <p id="header-name" class="text-xs uppercase font-black tracking-widest text-white mb-0.5">Farmer Keeper</p>
+                <p id="role-text" class="text-[8px] text-emerald-400 uppercase tracking-[0.2em] font-black">Verified Producer</p>
             </div>
-            <div class="w-14 h-14 rounded-2xl bg-accent text-primaryDark flex items-center justify-center shadow-xl border-4 border-primaryDark overflow-hidden">
+            <div class="w-12 h-12 rounded-2xl bg-accent text-primaryDark flex items-center justify-center shadow-xl border-2 border-accent overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1594824436951-7f12bc44ce7e?w=100&h=100&fit=crop" class="w-full h-full object-cover">
             </div>
-            <div class="absolute right-0 top-full mt-4 w-64 bg-white rounded-[2rem] shadow-2xl border border-gray-50 py-4 hidden group-hover:block z-50">
-                <button onclick="milletLogout()" class="w-full text-left flex items-center gap-4 px-6 py-4 text-sm font-black text-red-500 hover:bg-red-50 uppercase">Logout</button>
+            <div class="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 hidden group-hover:block z-50">
+                <button onclick="milletLogout()" class="w-full text-left flex items-center gap-3 px-5 py-3 text-xs font-black text-red-500 hover:bg-red-50 uppercase">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
             </div>
         </div>
     </nav>
 
+    <!-- Mobile Top Navigation Bar for Tabs -->
+    <div class="lg:hidden bg-white border-b border-gray-100 p-3 overflow-x-auto flex gap-2 shrink-0" id="mobile-menu-container">
+        <!-- Injected dynamically by JS -->
+    </div>
+
     <main class="flex-1 flex overflow-hidden">
-        <aside class="w-80 bg-white border-r border-gray-100 flex flex-col hidden lg:flex shrink-0">
-            <div class="p-10 border-b border-gray-50"><h3 class="font-black text-gray-300 text-[10px] tracking-[0.4em] uppercase">HARVEST MENU</h3></div>
-            <div class="flex-1 overflow-y-auto p-6 space-y-3" id="sidebar-menu"></div>
+        <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden lg:flex shrink-0">
+            <div class="p-8 border-b border-gray-50"><h3 class="font-black text-gray-400 text-[10px] tracking-[0.4em] uppercase">HARVEST MENU</h3></div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2" id="sidebar-menu"></div>
         </aside>
 
-        <div class="flex-1 overflow-y-auto p-12 lg:p-16 relative" id="main-content-area">
+        <div class="flex-1 overflow-y-auto p-6 lg:p-12 relative" id="main-content-area">
             <!-- Dynamic Content -->
         </div>
     </main>
@@ -64,50 +82,293 @@
         document.addEventListener('DOMContentLoaded', () => {
             const session = JSON.parse(localStorage.getItem('milletSession'));
             if (!session) { window.location.href = 'login.html'; return; }
+
+            // Admin users get their own dedicated dashboard
+            if (session.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+                return;
+            }
             
             document.getElementById('header-name').innerText = `${session.firstName} ${session.lastName}`;
             document.getElementById('role-text').innerText = session.role.toUpperCase();
 
             renderSidebar(session.role);
-            loadContent(session.role);
+
+            // Default section per role
+            const initialSection = (session.role === 'farmer' || session.role === 'seller' || session.role === 'startup') ? 'add-product' : 'orders';
+            loadSection(initialSection);
         });
 
         function renderSidebar(role) {
             const menu = document.getElementById('sidebar-menu');
+            const mobileMenu = document.getElementById('mobile-menu-container');
             let links = [];
             
             if (role === 'consumer' || role === 'user') {
                 links = [
+                    { id: 'browse', icon: 'fa-wheat-awn', text: 'Marketplace Harvest', highlight: true },
                     { id: 'orders', icon: 'fa-box-open', text: 'My Orders' },
+                    { id: 'order-analytics', icon: 'fa-chart-bar', text: 'Order Analytics' },
                     { id: 'cart', icon: 'fa-shopping-cart', text: 'My Cart' },
-                    { id: 'profile', icon: 'fa-user-circle', text: 'Profile Rituals' }
+                    { id: 'profile', icon: 'fa-user-circle', text: 'Profile Settings' }
                 ];
             } else if (role === 'seller' || role === 'startup' || role === 'farmer') {
                 links = [
+                    { id: 'add-product', icon: 'fa-plus-circle', text: 'List New Harvest', highlight: true },
+                    { id: 'payment-scanner', icon: 'fa-qrcode', text: 'My Payment Scanner' },
                     { id: 'inventory', icon: 'fa-boxes-stacked', text: 'Grain Inventory' },
-                    { id: 'sales', icon: 'fa-sack-dollar', text: 'Farmer Sales' },
-                    { id: 'add-product', icon: 'fa-plus-circle', text: 'List New Harvest' },
+                    { id: 'sales', icon: 'fa-sack-dollar', text: 'Seller Orders' },
+                    { id: 'sales-analytics', icon: 'fa-chart-line', text: 'Sales Analytics' },
                     { id: 'add-recipe', icon: 'fa-mortar-pestle', text: 'List New Recipe' }
-                ];
-            } else if (role === 'admin') {
-                links = [
-                    { id: 'admin-stats', icon: 'fa-chart-pie', text: 'Global Yields' },
-                    { id: 'admin-users', icon: 'fa-users', text: 'Keeper Registry' }
                 ];
             }
 
-            menu.innerHTML = links.map(l => `
-                <button onclick="loadSection('${l.id}')" class="w-full flex items-center gap-4 px-6 py-5 text-gray-400 hover:bg-primaryLight hover:text-primary rounded-3xl font-black text-xs uppercase tracking-widest transition-all">
-                    <i class="fa-solid ${l.icon}"></i> ${l.text}
-                </button>
-            `).join('');
+            if (menu) {
+                menu.innerHTML = links.map(l => `
+                    <button onclick="loadSection('${l.id}')" id="tab-${l.id}" class="w-full flex items-center gap-4 px-5 py-4 ${l.highlight ? 'bg-emerald-600 text-white shadow-lg' : 'text-gray-500 hover:bg-primaryLight hover:text-primary'} rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                        <i class="fa-solid ${l.icon} text-sm"></i> ${l.text}
+                    </button>
+                `).join('');
+            }
+
+            if (mobileMenu) {
+                mobileMenu.innerHTML = links.map(l => `
+                    <button onclick="loadSection('${l.id}')" class="whitespace-nowrap flex items-center gap-2 px-4 py-2.5 ${l.highlight ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700'} rounded-xl font-black text-[10px] uppercase tracking-wider shrink-0">
+                        <i class="fa-solid ${l.icon}"></i> ${l.text}
+                    </button>
+                `).join('');
+            }
         }
 
         async function loadSection(section) {
             const container = document.getElementById('main-content-area');
             const session = JSON.parse(localStorage.getItem('milletSession'));
             
-            if (section === 'orders') {
+            // Farmer and Startup seller roles cannot buy products or access buyer cart
+            if (session && ['seller', 'startup', 'farmer'].includes(session.role) && (section === 'browse' || section === 'cart')) {
+                showToast('Producer accounts (Farmer & Startup) cannot buy products. Please use a Consumer account.', 'error');
+                loadSection('add-product');
+                return;
+            }
+            
+            if (section === 'payment-scanner') {
+                const saved = typeof getFarmerSavedScanner === 'function' ? getFarmerSavedScanner() : null;
+                const farmName = saved?.farmer_name || `${session?.firstName || 'Farmer'}'s Organic Farm`;
+                const farmUpi = saved?.farmer_upi || `${session?.firstName?.toLowerCase() || 'farmer'}@upi`;
+                const customQr = saved?.custom_qr || '';
+
+                const upiUri = `upi://pay?pa=${encodeURIComponent(farmUpi)}&pn=${encodeURIComponent(farmName)}&cu=INR`;
+                const qrImg = (customQr && customQr.startsWith('data:image')) ? customQr
+                            : (customQr && customQr.startsWith('http')) ? customQr
+                            : `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-4xl font-black text-textDark">My Payment Scanner</h2>
+                            <p class="text-sm font-bold text-amber-800 mt-1"><i class="fa-solid fa-qrcode"></i> Configure your direct UPI Scanner — attach via URL <strong>or</strong> upload your own QR image.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 bg-white p-10 rounded-[3.5rem] shadow-xl border border-gray-100">
+                            <form onsubmit="handleDashboardSaveScanner(event)" class="space-y-6">
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">FARM / PRODUCER NAME</label>
+                                    <input id="dash-scan-name" value="${farmName}" oninput="updateDashboardScannerPreview()" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-amber-500 text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">FARMER UPI ID (FOR DIRECT BUYER SCAN & PAY)</label>
+                                    <input id="dash-scan-upi" value="${farmUpi}" oninput="updateDashboardScannerPreview()" class="w-full bg-primaryLight p-4 rounded-2xl font-mono font-bold border border-gray-100 focus:ring-2 focus:ring-amber-500 text-sm" required>
+                                </div>
+
+                                <!-- Scanner Input: URL or Image Upload -->
+                                <div class="border border-gray-100 rounded-3xl p-6 space-y-4 bg-amber-50/40">
+                                    <h4 class="text-[10px] font-black uppercase tracking-widest text-amber-800"><i class="fa-solid fa-image mr-1"></i> Payment QR Scanner Source</h4>
+                                    <!-- Toggle tabs -->
+                                    <div class="flex gap-2 mb-2">
+                                        <button type="button" id="tab-url" onclick="switchScannerTab('url')" class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-amber-600 text-white">URL Link</button>
+                                        <button type="button" id="tab-upload" onclick="switchScannerTab('upload')" class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-gray-100 text-gray-500 hover:bg-amber-100">Upload Image</button>
+                                    </div>
+                                    <!-- URL Input -->
+                                    <div id="scanner-url-panel">
+                                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">CUSTOM QR IMAGE URL</label>
+                                        <input id="dash-scan-qr" value="${customQr && !customQr.startsWith('data:') ? customQr : ''}" oninput="updateDashboardScannerPreview()" placeholder="https://your-qr-image.png — or leave empty to auto-generate" class="w-full bg-white p-4 rounded-2xl font-bold border border-amber-200 focus:ring-2 focus:ring-amber-500 text-sm">
+                                    </div>
+                                    <!-- Image Upload -->
+                                    <div id="scanner-upload-panel" class="hidden">
+                                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">UPLOAD YOUR QR IMAGE</label>
+                                        <div class="border-2 border-dashed border-amber-300 rounded-2xl p-6 text-center cursor-pointer hover:bg-amber-50 transition-all" onclick="document.getElementById('qr-file-input').click()">
+                                            <i class="fa-solid fa-upload text-amber-500 text-2xl mb-2"></i>
+                                            <p class="text-xs font-black text-amber-700 uppercase tracking-widest">Click to upload QR image</p>
+                                            <p class="text-[10px] text-gray-400 font-bold mt-1">PNG, JPG — max 2MB</p>
+                                        </div>
+                                        <input type="file" id="qr-file-input" accept="image/*" class="hidden" onchange="handleScannerImageUpload(event)">
+                                        <p id="upload-filename" class="text-[10px] text-emerald-700 font-bold mt-2 hidden"><i class="fa-solid fa-check-circle"></i> <span></span></p>
+                                    </div>
+                                    <p class="text-[9px] text-amber-700 font-bold"><i class="fa-solid fa-circle-info"></i> Your scanner auto-attaches to all your product listings.</p>
+                                </div>
+
+                                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save & Activate Payment Scanner
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Live Scanner Card -->
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-[3.5rem] border border-amber-200 text-center flex flex-col items-center justify-center space-y-4">
+                            <span class="text-[9px] font-black uppercase tracking-[0.3em] text-amber-900 bg-amber-200/60 px-3 py-1 rounded-full">
+                                Live Preview
+                            </span>
+                            <div class="w-48 h-48 bg-white p-3 rounded-2xl shadow-lg border-2 border-amber-300 flex items-center justify-center relative">
+                                <img id="dash-scan-preview" src="${qrImg}" class="w-full h-full object-contain rounded-xl">
+                                <div class="absolute inset-x-2 h-0.5 bg-amber-500/70 animate-pulse top-3 pointer-events-none"></div>
+                            </div>
+                            <div>
+                                <h4 id="dash-scan-name-display" class="font-black text-textDark text-base">${farmName}</h4>
+                                <p id="dash-scan-upi-display" class="font-mono font-bold text-amber-800 text-xs mt-0.5">${farmUpi}</p>
+                            </div>
+                            <div class="flex gap-2 flex-wrap justify-center">
+                                <span class="text-[9px] font-bold bg-white px-2 py-0.5 rounded border border-amber-200 text-gray-700">Google Pay</span>
+                                <span class="text-[9px] font-bold bg-white px-2 py-0.5 rounded border border-amber-200 text-purple-700">PhonePe</span>
+                                <span class="text-[9px] font-bold bg-white px-2 py-0.5 rounded border border-amber-200 text-blue-700">Paytm</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'order-analytics') {
+                container.innerHTML = `
+                    <h2 class="text-4xl font-black mb-3">Order Analytics</h2>
+                    <p class="text-sm text-gray-400 font-bold mb-10 uppercase tracking-widest">Your personal harvest purchase history</p>
+                    <div id="oa-content">Loading...</div>
+                `;
+                let myOrders = JSON.parse(localStorage.getItem('milletOrders') || '[]');
+                // Also try to get from backend
+                try {
+                    const r = await fetch('http://localhost:5000/api/orders/my-orders', { headers: { 'Authorization': `Bearer ${session.token}` } });
+                    const d = await r.json();
+                    if (d.success && d.data && d.data.length) myOrders = [...myOrders, ...d.data];
+                } catch(e) {}
+                const totalSpend = myOrders.reduce((s,o) => s + parseFloat(o.total_price || (o.items||[]).reduce((a,i)=>a+i.price*i.qty,0) || 0), 0);
+                const byStatus = {};
+                myOrders.forEach(o => { const st = o.status || o.order_status || 'Unknown'; byStatus[st] = (byStatus[st]||0)+1; });
+                const statusColors = { 'Online Payment Verified — Preparing Dispatch':'bg-emerald-500','Confirmed — Pay on Delivery':'bg-amber-500','shipped':'bg-blue-500','delivered':'bg-green-600','cancelled':'bg-red-500' };
+                document.getElementById('oa-content').innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-indian-rupee-sign text-2xl text-emerald-600"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">₹${totalSpend.toFixed(2)}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Total Spent</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-box text-2xl text-blue-600"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">${myOrders.length}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Total Orders</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-star text-2xl text-amber-600"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">₹${myOrders.length ? (totalSpend/myOrders.length).toFixed(0) : 0}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Avg Order Value</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 mb-8">
+                        <h3 class="font-black text-lg mb-6">Orders by Status</h3>
+                        <div class="space-y-4">
+                            ${Object.entries(byStatus).map(([st, cnt]) => `
+                                <div>
+                                    <div class="flex justify-between text-xs font-black uppercase tracking-widest mb-1">
+                                        <span class="text-gray-500 truncate max-w-[70%]">${st}</span>
+                                        <span class="text-primaryDark">${cnt}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-3">
+                                        <div class="${statusColors[st] || 'bg-primary'} h-3 rounded-full transition-all" style="width:${Math.min(100,(cnt/myOrders.length)*100)}%"></div>
+                                    </div>
+                                </div>
+                            `).join('') || '<p class="text-gray-300 font-black uppercase">No orders yet.</p>'}
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'sales-analytics') {
+                container.innerHTML = `
+                    <h2 class="text-4xl font-black mb-3">Sales Analytics</h2>
+                    <p class="text-sm text-gray-400 font-bold mb-10 uppercase tracking-widest">Your harvest sales performance</p>
+                    <div id="sa-content">Loading...</div>
+                `;
+                let sellerOrders = [];
+                try {
+                    const r = await fetch('http://localhost:5000/api/orders/seller/orders', { headers: { 'Authorization': `Bearer ${session.token}` } });
+                    const d = await r.json();
+                    if (d.success && d.data) sellerOrders = d.data;
+                } catch(e) {}
+                const totalRev = sellerOrders.reduce((s,o) => s + parseFloat(o.total_price||0), 0);
+                const byStatus = {};
+                sellerOrders.forEach(o => { const st = o.order_status || 'Unknown'; byStatus[st] = (byStatus[st]||0)+1; });
+                const statusColors2 = { pending:'bg-amber-500', confirmed:'bg-blue-500', processing:'bg-indigo-500', shipped:'bg-purple-500', delivered:'bg-emerald-500', cancelled:'bg-red-500' };
+                document.getElementById('sa-content').innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-indian-rupee-sign text-2xl text-emerald-600"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">₹${totalRev.toFixed(2)}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Total Revenue</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-seedling text-2xl text-primary"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">${sellerOrders.length}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Total Orders</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 text-center">
+                            <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-chart-line text-2xl text-amber-600"></i>
+                            </div>
+                            <p class="text-4xl font-black text-primaryDark">₹${sellerOrders.length ? (totalRev/sellerOrders.length).toFixed(0) : 0}</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-2">Avg Order Value</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 mb-8">
+                        <h3 class="font-black text-lg mb-6">Orders by Status</h3>
+                        <div class="space-y-4">
+                            ${Object.entries(byStatus).map(([st, cnt]) => `
+                                <div>
+                                    <div class="flex justify-between text-xs font-black uppercase tracking-widest mb-1">
+                                        <span class="text-gray-500">${st}</span>
+                                        <span>${cnt}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-3">
+                                        <div class="${statusColors2[st]||'bg-primary'} h-3 rounded-full" style="width:${Math.min(100,(cnt/sellerOrders.length)*100)}%"></div>
+                                    </div>
+                                </div>
+                            `).join('') || '<p class="text-gray-300 font-black uppercase">No sales data yet.</p>'}
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50">
+                        <h3 class="font-black text-lg mb-6">Recent Sales</h3>
+                        <div class="space-y-4">
+                            ${sellerOrders.slice(0,5).map(o => `
+                                <div class="flex justify-between items-center py-3 border-b border-gray-50">
+                                    <div>
+                                        <p class="font-black text-sm">${o.product_name || 'Grain Product'}</p>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">#${o.id} • ${o.user_name||'Customer'}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-black text-primary">₹${o.total_price}</p>
+                                        <span class="text-[8px] bg-gray-100 px-2 py-0.5 rounded font-black uppercase text-gray-500">${o.order_status}</span>
+                                    </div>
+                                </div>
+                            `).join('') || '<p class="text-gray-300 font-black uppercase text-sm">No recent sales.</p>'}
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'orders') {
                 container.innerHTML = `<h2 class="text-4xl font-black mb-12">Your Harvest History</h2><div id="orders-list" class="space-y-6">Loading...</div>`;
                 const res = await fetch('http://localhost:5000/api/orders/my-orders', { headers: { 'Authorization': `Bearer ${session.token}` } });
                 const data = await res.json();
@@ -193,43 +454,246 @@
                 } else {
                     list.innerHTML = '<div class="text-center py-20 text-gray-300 uppercase font-black">Your bag is empty of seeds.</div>';
                 }
-            } else if (section === 'inventory') {
-                container.innerHTML = `<h2 class="text-4xl font-black mb-12">Grain Inventory</h2><div id="inv-list" class="grid grid-cols-1 md:grid-cols-2 gap-10">Loading...</div>`;
-                const res = await fetch(`http://localhost:5000/api/products/seller/${session.id}`);
-                const data = await res.json();
-                const list = document.getElementById('inv-list');
-                list.innerHTML = data.success && data.data.length ? data.data.map(p => `
-                    <div class="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-50 flex gap-8 group hover:shadow-xl transition-all">
-                        <div class="aspect-square w-24 h-24 rounded-[2rem] overflow-hidden bg-gray-50">
-                            <img src="${p.image_url}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+            } else if (section === 'browse') {
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-4xl font-black text-textDark">Marketplace Harvest</h2>
+                            <p class="text-sm font-bold text-accent mt-1"><i class="fa-solid fa-wheat-awn"></i> Direct Farm Products — Real-time Prices &amp; Instant Payment Scanners</p>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="font-black text-xl">${p.name}</h4>
-                            <p class="text-accent font-black tracking-widest text-xs mt-1 uppercase">${p.millet_type}</p>
-                            <div class="flex justify-between items-end mt-4">
-                                <p class="text-2xl font-black">₹${p.price}</p>
-                                <p class="text-[10px] text-gray-400 font-black uppercase">Stock: ${p.stock_quantity}</p>
+                        <a href="products.html" class="bg-primary text-white text-xs font-black uppercase tracking-widest px-5 py-3 rounded-2xl hover:bg-primaryDark transition shadow-md">
+                            Full Marketplace <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                    <div id="buyer-browse-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">Loading harvest...</div>
+                `;
+                
+                const localProds = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+                const browseGrid = document.getElementById('buyer-browse-grid');
+                
+                let allProds = [...localProds];
+                try {
+                    const r = await fetch('http://localhost:5000/api/products?limit=20');
+                    const d = await r.json();
+                    if (d.success && d.data) {
+                        d.data.forEach(bp => {
+                            if (!allProds.some(p => p.id == bp.id || p.title === bp.name || p.name === bp.name)) {
+                                allProds.push({
+                                    id: bp.id,
+                                    title: bp.name,
+                                    name: bp.name,
+                                    price: bp.price,
+                                    millet_type: bp.millet_type,
+                                    image_url: bp.image_url,
+                                    img: bp.image_url,
+                                    farmer_name: bp.farmer_name,
+                                    farmer_upi: bp.farmer_upi,
+                                    payment_qr: bp.payment_qr,
+                                    is_farmer: bp.is_farmer
+                                });
+                            }
+                        });
+                    }
+                } catch(e) {}
+
+                if (!allProds.length) {
+                    browseGrid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-300 uppercase font-black">No harvest listed yet.</div>';
+                } else {
+                    browseGrid.innerHTML = allProds.map(p => {
+                        const pName = (p.name || p.title || 'Millet Product').replace(/'/g, "\\'");
+                        const pImg = p.image_url || p.img || 'assets/ragi.png';
+                        const pType = p.millet_type || p.millet || 'Grain';
+                        const pFarmer = (p.farmer_name || 'Verified Farm').replace(/'/g, "\\'");
+                        const pUpi = (p.farmer_upi || '').replace(/'/g, "\\'");
+                        const pQr = (p.farmer_scanner || p.payment_qr || '').replace(/'/g, "\\'");
+                        return `
+                        <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between group hover:shadow-xl transition-all">
+                            <div>
+                                <div class="aspect-square w-full rounded-[2rem] overflow-hidden bg-gray-50 mb-4 relative">
+                                    <img src="${pImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+                                    <span class="absolute top-4 left-4 bg-emerald-700 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow">
+                                        🌾 ${pType}
+                                    </span>
+                                </div>
+                                <h4 class="font-black text-xl text-textDark mb-1 leading-snug">${p.name || p.title}</h4>
+                                ${p.farmer_name ? `<p class="text-xs font-bold text-emerald-800 mb-1"><i class="fa-solid fa-wheat-field mr-1"></i> ${p.farmer_name}</p>` : ''}
+                                ${(p.farmer_scanner || p.payment_qr || p.farmer_upi) ? `
+                                    <span class="inline-flex items-center gap-1 text-[9px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded border border-emerald-200 mb-3">
+                                        <i class="fa-solid fa-qrcode text-emerald-600"></i> Direct QR Scanner Pay
+                                    </span>
+                                ` : ''}
+                            </div>
+                            <div class="pt-4 border-t border-gray-100 flex items-center justify-between mt-3">
+                                <div>
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase block">Price</span>
+                                    <span class="text-2xl font-black text-primaryDark">₹${p.price}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="addToCart('${pName}', ${p.price}, '${pImg}', '${p.id}')" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition" title="Add to Bag">
+                                        <i class="fa-solid fa-bag-shopping text-sm"></i>
+                                    </button>
+                                    <button onclick="openQuickBuyModal('${p.id}', '${pName}', ${p.price}, '${pImg}', '${pType}', 'All Ages', '${pFarmer}', '${pUpi}', '${pQr}')" class="px-3.5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1 shadow-md transition hover:scale-105">
+                                        <i class="fa-solid fa-bolt text-amber-300"></i> Buy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            } else if (section === 'inventory') {
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-4xl font-black text-textDark">Grain &amp; Farm Inventory</h2>
+                            <p class="text-sm font-bold text-amber-800 mt-1"><i class="fa-solid fa-boxes-stacked"></i> Manage your listed harvests — update price, stock, or description anytime</p>
+                        </div>
+                        <button onclick="loadSection('add-product')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-2xl shadow-lg transition">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> Add Harvest
+                        </button>
+                    </div>
+                    <div id="inv-list" class="grid grid-cols-1 md:grid-cols-2 gap-8">Loading...</div>
+                `;
+                let items = [];
+                try {
+                    const res = await fetch(`http://localhost:5000/api/products/seller/${session.id}`);
+                    const data = await res.json();
+                    if (data.success && data.data.length) items = data.data;
+                } catch (e) {}
+                
+                const localProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+                const combined = [...localProducts, ...items];
+                const list = document.getElementById('inv-list');
+                
+                list.innerHTML = combined.length ? combined.map(p => `
+                    <div class="bg-white p-7 rounded-[3rem] shadow-sm border border-gray-100 flex flex-col justify-between group hover:shadow-xl transition-all relative overflow-hidden" id="inv-item-${p.id}">
+                        <div class="flex gap-6">
+                            <div class="aspect-square w-24 h-24 rounded-[2rem] overflow-hidden bg-gray-50 shrink-0 border border-gray-100">
+                                <img src="${p.image_url||p.img||'assets/ragi.png'}" class="w-full h-full object-cover transition-transform group-hover:scale-110" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="bg-emerald-100 text-emerald-800 text-[8px] font-black uppercase px-2 py-0.5 rounded-full"><i class="fa-solid fa-tractor mr-1"></i> Farmer Harvest</span>
+                                    <span class="text-accent font-black tracking-widest text-xs uppercase truncate">${p.millet_type||'Grain'}</span>
+                                </div>
+                                <h4 class="font-black text-xl text-textDark truncate">${p.name||p.title}</h4>
+                                ${(p.farmer_upi||p.farmer_scanner||p.payment_qr) ? `<p class="text-[10px] text-gray-500 font-bold mt-1"><i class="fa-solid fa-qrcode text-emerald-600"></i> QR Active</p>` : ''}
+                                <div class="flex items-baseline gap-3 mt-3">
+                                    <p class="text-2xl font-black text-primaryDark">₹${p.price}</p>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase">Stock: ${p.stock_quantity || 100}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `).join('') : '<div class="col-span-full text-center py-20 text-gray-300 uppercase font-black">No harvests listed.</div>';
-            } else if (section === 'add-product') {
-                container.innerHTML = `
-                    <h2 class="text-4xl font-black mb-12">List New Harvest</h2>
-                    <form onsubmit="handleAddProduct(event)" class="bg-white p-12 rounded-[3.5rem] shadow-xl space-y-8 max-w-3xl border border-gray-50">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <input id="p-name" placeholder="Grain/Product Name" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
-                            <input id="p-price" type="number" placeholder="Price (₹)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
-                            <select id="p-type" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent">
-                                <option value="ragi">Ragi</option><option value="jowar">Jowar</option><option value="bajra">Bajra</option>
-                                <option value="foxtail">Foxtail</option><option value="mixed">Mixed</option>
-                            </select>
-                            <input id="p-stock" type="number" placeholder="Stock Quantity" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
+                        <div class="flex gap-3 pt-5 border-t border-gray-100 mt-5">
+                            <button onclick="openDashboardEditHarvest('${p.id}')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Harvest &amp; Price
+                            </button>
+                            <button onclick="removeDashboardProduct('${p.id}')" class="px-4 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-black text-[10px] uppercase tracking-widest rounded-xl transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
-                        <textarea id="p-desc" placeholder="Harvest Description & Benefits" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent h-32" required></textarea>
-                        <textarea id="p-ing" placeholder="Ingredients (if processed)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>Whole Millet Grains</textarea>
-                        <input id="p-img" placeholder="Image URL (Unsplash/CDN)" class="w-full bg-primaryLight p-5 rounded-2xl font-bold border-none focus:ring-2 focus:ring-accent" required>
-                        <button type="submit" class="bg-primaryDark text-white font-black px-12 py-5 rounded-2xl uppercase tracking-widest shadow-2xl hover:bg-primary transition-all hover:scale-105">Post Harvest to Market</button>
+                    </div>
+                `).join('') : '<div class="col-span-full text-center py-20 text-gray-300 uppercase font-black">No harvests listed yet.</div>';
+            } else if (section === 'add-product') {
+                const saved = typeof getFarmerSavedScanner === 'function' ? getFarmerSavedScanner() : null;
+                const defaultFarm = saved?.farmer_name || `${session?.firstName || 'Farmer'}'s Organic Farm`;
+                const defaultUpi = saved?.farmer_upi || `${session?.firstName?.toLowerCase() || 'farmer'}@upi`;
+
+                container.innerHTML = `
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-4xl font-black text-textDark">List New Harvest</h2>
+                            <p class="text-sm font-bold text-emerald-700 mt-1"><i class="fa-solid fa-tractor"></i> Farmer Direct Harvest & Instant Payment Scanner Registration</p>
+                        </div>
+                        <span class="bg-emerald-100 border border-emerald-300 text-emerald-800 font-black text-xs uppercase tracking-widest px-4 py-2 rounded-2xl">
+                            Direct Farm Harvest Mode
+                        </span>
+                    </div>
+
+                    <form onsubmit="handleAddProduct(event)" class="bg-white p-10 lg:p-12 rounded-[3.5rem] shadow-xl space-y-8 max-w-4xl border border-gray-100">
+                        <!-- Product Basic Details -->
+                        <div class="border-b border-gray-100 pb-6">
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] text-accent mb-4"><i class="fa-solid fa-seedling"></i> 1. Grain & Harvest Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">GRAIN / PRODUCT NAME *</label>
+                                    <input id="p-name" placeholder="e.g. Organic Finger Millet (Ragi)" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-accent focus:bg-white transition-all text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">PRICE PER UNIT (₹) *</label>
+                                    <input id="p-price" type="number" step="0.01" min="1" placeholder="e.g. 180" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-accent focus:bg-white transition-all text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">MILLET VARIETY *</label>
+                                    <select id="p-type" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-accent focus:bg-white transition-all text-sm">
+                                        <option value="ragi">Ragi (Finger Millet)</option>
+                                        <option value="jowar">Jowar (Sorghum)</option>
+                                        <option value="bajra">Bajra (Pearl Millet)</option>
+                                        <option value="foxtail">Foxtail Millet</option>
+                                        <option value="kodo">Kodo Millet</option>
+                                        <option value="barnyard">Barnyard Millet</option>
+                                        <option value="mixed">Mixed Organic Grains</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">STOCK QUANTITY (KG / PACKS) *</label>
+                                    <input id="p-stock" type="number" value="100" min="0" placeholder="Stock Quantity" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-accent focus:bg-white transition-all text-sm" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Farmer & Direct Payment Scanner Section -->
+                        <div class="border-b border-gray-100 pb-6 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] text-emerald-800 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-qrcode text-emerald-600 text-lg"></i> 2. Farmer Payment QR Scanner & UPI Details
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-900 mb-2">FARM / PRODUCER NAME</label>
+                                    <input id="p-farm" value="${defaultFarm}" placeholder="e.g. Green Earth Organic Farm, Hassan" class="w-full bg-white p-4 rounded-2xl font-bold border border-emerald-200 focus:ring-2 focus:ring-emerald-500 transition-all text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-900 mb-2">FARMER UPI ID FOR DIRECT PAYMENT</label>
+                                    <input id="p-upi" value="${defaultUpi}" placeholder="e.g. farmer.ramesh@upi or 9876543210@paytm" class="w-full bg-white p-4 rounded-2xl font-bold border border-emerald-200 focus:ring-2 focus:ring-emerald-500 transition-all text-sm" required>
+                                </div>
+                                <div class="col-span-full">
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-900 mb-2">PAYMENT SCANNER QR (AUTO-LINKED)</label>
+                                    <input id="p-qr" value="${saved?.custom_qr || saved?.payment_qr || ''}" placeholder="Active farmer scanner automatically attached" class="w-full bg-white p-4 rounded-2xl font-bold border border-emerald-200 focus:ring-2 focus:ring-emerald-500 transition-all text-sm">
+                                    <p class="text-[10px] text-emerald-700 font-bold mt-2"><i class="fa-solid fa-circle-check"></i> Automatically attaches your permanent payment scanner so buyers can scan &amp; pay directly.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description & Image Upload -->
+                        <div>
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] text-accent mb-4"><i class="fa-solid fa-image"></i> 3. Media &amp; Description</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">HARVEST DESCRIPTION</label>
+                                    <textarea id="p-desc" placeholder="Freshly harvested, naturally grown without synthetic fertilizers. Rich in dietary fiber and essential mineral nutrients." class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-accent focus:bg-white transition-all h-28 text-sm" required></textarea>
+                                </div>
+                                
+                                <!-- Image Upload Component -->
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">PRODUCT IMAGE</label>
+                                    <div class="flex gap-4 items-center bg-primaryLight p-4 rounded-2xl border border-gray-100">
+                                        <div class="w-20 h-20 rounded-2xl bg-white border border-gray-200 overflow-hidden shrink-0 flex items-center justify-center">
+                                            <img id="dash-add-img-preview" src="assets/ragi.png" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="flex-1 space-y-2">
+                                            <button type="button" onclick="document.getElementById('dash-img-file-in').click()" class="bg-primary hover:bg-primaryDark text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                                <i class="fa-solid fa-upload"></i> Upload Image File
+                                            </button>
+                                            <input type="file" id="dash-img-file-in" accept="image/*" class="hidden" onchange="handleDashAddProductImg(event)">
+                                            <input id="p-img" placeholder="Or paste image URL" value="assets/ragi.png" oninput="document.getElementById('dash-add-img-preview').src=this.value" class="w-full bg-white p-2.5 rounded-xl font-bold border border-gray-200 text-xs">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-emerald-700 text-white font-black py-5 rounded-2xl uppercase tracking-widest shadow-xl hover:bg-emerald-800 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Post Harvest & Activate Payment Scanner
+                        </button>
                     </form>
                 `;
             } else if (section === 'add-recipe') {
@@ -277,33 +741,300 @@
             }
         }
 
+        /* ===== Scanner Tab Switch ===== */
+        function switchScannerTab(tab) {
+            const urlPanel    = document.getElementById('scanner-url-panel');
+            const uploadPanel = document.getElementById('scanner-upload-panel');
+            const tabUrl      = document.getElementById('tab-url');
+            const tabUpload   = document.getElementById('tab-upload');
+            if (tab === 'url') {
+                urlPanel?.classList.remove('hidden');
+                uploadPanel?.classList.add('hidden');
+                tabUrl?.classList.replace('bg-gray-100','bg-amber-600');
+                tabUrl?.classList.replace('text-gray-500','text-white');
+                tabUpload?.classList.replace('bg-amber-600','bg-gray-100');
+                tabUpload?.classList.replace('text-white','text-gray-500');
+            } else {
+                urlPanel?.classList.add('hidden');
+                uploadPanel?.classList.remove('hidden');
+                tabUpload?.classList.replace('bg-gray-100','bg-amber-600');
+                tabUpload?.classList.replace('text-gray-500','text-white');
+                tabUrl?.classList.replace('bg-amber-600','bg-gray-100');
+                tabUrl?.classList.replace('text-white','text-gray-500');
+            }
+        }
+
+        function handleScannerImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                // Store base64 in a temporary global for preview
+                window._uploadedScannerBase64 = base64;
+                const previewImg = document.getElementById('dash-scan-preview');
+                if (previewImg) previewImg.src = base64;
+                // Show filename
+                const fnEl = document.getElementById('upload-filename');
+                if (fnEl) { fnEl.classList.remove('hidden'); fnEl.querySelector('span').textContent = file.name; }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateDashboardScannerPreview() {
+            const name = document.getElementById('dash-scan-name')?.value || 'Farmer Farm';
+            const upi = document.getElementById('dash-scan-upi')?.value || 'farmer@upi';
+            const customQr = document.getElementById('dash-scan-qr')?.value;
+            const previewImg = document.getElementById('dash-scan-preview');
+            const nameDisp = document.getElementById('dash-scan-name-display');
+            const upiDisp = document.getElementById('dash-scan-upi-display');
+
+            if (nameDisp) nameDisp.innerText = name;
+            if (upiDisp) upiDisp.innerText = upi;
+
+            // Only update from URL if no uploaded image is pending
+            if (previewImg && !window._uploadedScannerBase64) {
+                if (customQr && customQr.startsWith('http')) {
+                    previewImg.src = customQr;
+                } else {
+                    const upiUri = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(name)}&cu=INR`;
+                    previewImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+                }
+            }
+        }
+
+        function handleDashboardSaveScanner(e) {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
+            const name = document.getElementById('dash-scan-name').value.trim();
+            const upi = document.getElementById('dash-scan-upi').value.trim();
+            const customQrUrl = document.getElementById('dash-scan-qr')?.value.trim() || '';
+
+            // Determine final QR: uploaded image base64 > URL > auto-generated
+            let finalQr;
+            let storedCustomQr = customQrUrl;
+            if (window._uploadedScannerBase64) {
+                finalQr = window._uploadedScannerBase64;
+                storedCustomQr = window._uploadedScannerBase64;
+            } else if (customQrUrl && customQrUrl.startsWith('http')) {
+                finalQr = customQrUrl;
+            } else {
+                const upiUri = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(name)}&cu=INR`;
+                finalQr = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+            }
+
+            const scannerData = {
+                farmer_name: name,
+                farmer_upi: upi,
+                custom_qr: storedCustomQr,
+                payment_qr: finalQr,
+                updated_at: new Date().toISOString()
+            };
+
+            if (session) {
+                if (session.id) localStorage.setItem(`farmer_scanner_${session.id}`, JSON.stringify(scannerData));
+                if (session.email) localStorage.setItem(`farmer_scanner_${session.email}`, JSON.stringify(scannerData));
+            }
+            localStorage.setItem('farmer_scanner_default', JSON.stringify(scannerData));
+
+            // Sync all products for this farmer
+            let products = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            products = products.map(p => {
+                if (!p.farmer_upi || (session && (p.seller_id == session.id || p.sellerEmail == session.email))) {
+                    p.farmer_name = name;
+                    p.farmer_upi = upi;
+                    p.payment_qr = finalQr;
+                    p.is_farmer = true;
+                }
+                return p;
+            });
+            localStorage.setItem('milletProducts', JSON.stringify(products));
+
+            window._uploadedScannerBase64 = null; // Clear after save
+            showToast('🌾 Payment Scanner saved & activated for all your products!', 'success');
+        }
+
+        window._dashProductImgBase64 = null;
+
+        function handleDashAddProductImg(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 3*1024*1024) { showToast('Image is too large. Max 3MB.', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = ev => {
+                window._dashProductImgBase64 = ev.target.result;
+                const prev = document.getElementById('dash-add-img-preview');
+                if (prev) prev.src = window._dashProductImgBase64;
+                const urlIn = document.getElementById('p-img');
+                if (urlIn) urlIn.value = file.name;
+                showToast('Image file attached!');
+            };
+            reader.readAsDataURL(file);
+        }
+
         async function handleAddProduct(e) {
             e.preventDefault();
-            const session = JSON.parse(localStorage.getItem('milletSession'));
-            const body = {
-                name: document.getElementById('p-name').value,
-                description: document.getElementById('p-desc').value,
-                price: parseFloat(document.getElementById('p-price').value),
-                millet_type: document.getElementById('p-type').value,
-                image_url: document.getElementById('p-img').value,
-                stock_quantity: parseInt(document.getElementById('p-stock').value),
-                ingredients: document.getElementById('p-ing').value
-            };
-            const res = await fetch('http://localhost:5000/api/products', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json', 
-                    'Authorization': `Bearer ${session.token}` 
-                },
-                body: JSON.stringify(body)
-            });
-            const data = await res.json();
-            if (data.success) { 
-                showToast('Harvest posted successfully!', 'success'); 
-                e.target.reset();
-                loadSection('inventory'); 
+            const session = JSON.parse(localStorage.getItem('milletSession')) || { firstName: 'Farmer', token: '' };
+            
+            const name = document.getElementById('p-name').value;
+            const price = parseFloat(document.getElementById('p-price').value);
+            const millet_type = document.getElementById('p-type').value;
+            const stock_quantity = parseInt(document.getElementById('p-stock').value) || 100;
+            const farm_name = document.getElementById('p-farm')?.value || `${session.firstName}'s Organic Farm`;
+            const upi_id = document.getElementById('p-upi')?.value || `${session.firstName.toLowerCase()}@upi`;
+            let custom_qr = document.getElementById('p-qr')?.value;
+            
+            if (!custom_qr) {
+                const upiUri = `upi://pay?pa=${encodeURIComponent(upi_id)}&pn=${encodeURIComponent(farm_name)}&cu=INR`;
+                custom_qr = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
             }
-            else { showToast(data.message, 'error'); }
+
+            const chosenImg = window._dashProductImgBase64 || document.getElementById('p-img').value || 'assets/ragi.png';
+
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                title: name,
+                description: document.getElementById('p-desc').value,
+                price: price,
+                millet_type: millet_type,
+                image_url: chosenImg,
+                image: chosenImg,
+                img: chosenImg,
+                stock_quantity: stock_quantity,
+                ingredients: '100% Organic Direct Farm Grain',
+                is_farmer: true,
+                type: 'farmer',
+                farmer_name: farm_name,
+                farmer_upi: upi_id,
+                payment_qr: custom_qr,
+                farmer_scanner: custom_qr,
+                seller_id: session.id,
+                farmer_id: session.id,
+                farmer_email: session.email
+            };
+
+            // 1. Save to local marketplace products array
+            let localProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            localProducts.unshift(newProduct);
+            localStorage.setItem('milletProducts', JSON.stringify(localProducts));
+
+            // 2. Try posting to backend API if running
+            try {
+                await fetch('http://localhost:5000/api/products', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'Authorization': `Bearer ${session.token}` 
+                    },
+                    body: JSON.stringify(newProduct)
+                });
+            } catch (err) {
+                console.log('Backend API offline, harvest saved to local marketplace');
+            }
+
+            window._dashProductImgBase64 = null;
+            showToast('🌾 Direct Harvest & Payment Scanner posted successfully!', 'success'); 
+            e.target.reset();
+            loadSection('inventory');
+        }
+
+        /* ===== Edit Harvest Functions ===== */
+        window._dashEditHarvestImgBase64 = null;
+
+        function openDashboardEditHarvest(id) {
+            const all = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            const p = all.find(item => String(item.id) === String(id));
+            if (!p) { showToast('Harvest product not found', 'error'); return; }
+
+            document.getElementById('dash-edit-p-id').value = p.id;
+            document.getElementById('dash-edit-p-name').value = p.name || p.title || '';
+            document.getElementById('dash-edit-p-price').value = p.price || '';
+            document.getElementById('dash-edit-p-stock').value = p.stock_quantity || 0;
+            document.getElementById('dash-edit-p-desc').value = p.description || '';
+            document.getElementById('dash-edit-p-type').value = p.millet_type || 'ragi';
+            
+            const currentImg = p.image_url || p.img || 'assets/ragi.png';
+            document.getElementById('dash-edit-img-preview').src = currentImg;
+            document.getElementById('dash-edit-p-img').value = currentImg.startsWith('data:') ? '' : currentImg;
+            window._dashEditHarvestImgBase64 = currentImg;
+
+            const modal = document.getElementById('dash-edit-harvest-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeDashboardEditHarvest() {
+            const modal = document.getElementById('dash-edit-harvest-modal');
+            if (modal) modal.classList.add('hidden');
+            window._dashEditHarvestImgBase64 = null;
+        }
+
+        function handleDashEditHarvestImg(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 3*1024*1024) { showToast('Image is too large. Max 3MB.', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = ev => {
+                window._dashEditHarvestImgBase64 = ev.target.result;
+                document.getElementById('dash-edit-img-preview').src = window._dashEditHarvestImgBase64;
+                showToast('New image selected!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveDashboardEditHarvest() {
+            const id = document.getElementById('dash-edit-p-id').value;
+            const name = document.getElementById('dash-edit-p-name').value.trim();
+            const price = parseFloat(document.getElementById('dash-edit-p-price').value);
+            const stock = parseInt(document.getElementById('dash-edit-p-stock').value);
+            const type = document.getElementById('dash-edit-p-type').value;
+            const desc = document.getElementById('dash-edit-p-desc').value.trim();
+            const urlImg = document.getElementById('dash-edit-p-img').value.trim();
+            const finalImg = window._dashEditHarvestImgBase64 || urlImg || 'assets/ragi.png';
+
+            if (!name || isNaN(price) || isNaN(stock)) {
+                showToast('Please fill all required fields with valid values.', 'error');
+                return;
+            }
+
+            const all = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            const idx = all.findIndex(item => String(item.id) === String(id));
+            if (idx === -1) { showToast('Product not found', 'error'); return; }
+
+            all[idx].name = name;
+            all[idx].title = name;
+            all[idx].price = price;
+            all[idx].stock_quantity = stock;
+            all[idx].millet_type = type;
+            all[idx].description = desc;
+            all[idx].image_url = finalImg;
+            all[idx].img = finalImg;
+            all[idx].image = finalImg;
+            all[idx].updated_at = new Date().toISOString();
+
+            localStorage.setItem('milletProducts', JSON.stringify(all));
+
+            // Also call backend PUT if reachable
+            try {
+                const session = JSON.parse(localStorage.getItem('milletSession') || '{}');
+                await fetch(`http://localhost:5000/api/products/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.token}` },
+                    body: JSON.stringify({ name, price, stock_quantity: stock, millet_type: type, description: desc, image_url: finalImg })
+                });
+            } catch(e) {}
+
+            closeDashboardEditHarvest();
+            showToast('🌾 Harvest updated! New price and details are immediately live for buyers.', 'success');
+            loadSection('inventory');
+        }
+
+        function removeDashboardProduct(id) {
+            if (!confirm('Remove this harvest item from marketplace?')) return;
+            const all = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            localStorage.setItem('milletProducts', JSON.stringify(all.filter(p => String(p.id) !== String(id))));
+            document.getElementById(`inv-item-${id}`)?.remove();
+            showToast('Harvest product removed.');
         }
 
         async function updateStatus(id, status) {
@@ -374,10 +1105,83 @@
         }
 
         function loadContent(role) {
-            if (role === 'consumer' || role === 'user') loadSection('orders');
+            if (role === 'consumer' || role === 'user') loadSection('browse');
             else if (role === 'admin') loadSection('admin-stats');
             else loadSection('inventory');
         }
     </script>
+
+    <!-- Modal for Editing Harvest in Dashboard -->
+    <div id="dash-edit-harvest-modal" class="hidden fixed inset-0 bg-primaryDark/80 backdrop-blur-md z-[10000] flex items-center justify-center p-4">
+        <div class="bg-white rounded-[3rem] p-8 lg:p-10 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 relative">
+            <button onclick="closeDashboardEditHarvest()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-black text-2xl text-textDark">Edit Harvest Listing</h3>
+                    <p class="text-xs text-amber-800 font-bold">Update price, stock, or harvest details</p>
+                </div>
+            </div>
+
+            <input type="hidden" id="dash-edit-p-id">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">PRODUCT NAME</label>
+                    <input id="dash-edit-p-name" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">PRICE (₹)</label>
+                        <input id="dash-edit-p-price" type="number" step="0.01" min="1" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">STOCK QUANTITY</label>
+                        <input id="dash-edit-p-stock" type="number" min="0" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">MILLET VARIETY</label>
+                    <select id="dash-edit-p-type" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 text-sm">
+                        <option value="ragi">Ragi (Finger Millet)</option>
+                        <option value="jowar">Jowar (Sorghum)</option>
+                        <option value="bajra">Bajra (Pearl Millet)</option>
+                        <option value="foxtail">Foxtail Millet</option>
+                        <option value="kodo">Kodo Millet</option>
+                        <option value="barnyard">Barnyard Millet</option>
+                        <option value="mixed">Mixed Organic Grains</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">DESCRIPTION</label>
+                    <textarea id="dash-edit-p-desc" rows="3" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 text-sm"></textarea>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">PRODUCT IMAGE</label>
+                    <div class="flex items-center gap-4 bg-primaryLight p-3.5 rounded-2xl border border-gray-100">
+                        <img id="dash-edit-img-preview" class="w-16 h-16 rounded-xl object-cover border border-gray-200">
+                        <div class="flex-1 space-y-1.5">
+                            <button type="button" onclick="document.getElementById('dash-edit-img-file').click()" class="bg-primary hover:bg-primaryDark text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition">
+                                <i class="fa-solid fa-upload mr-1"></i> Upload Image
+                            </button>
+                            <input type="file" id="dash-edit-img-file" accept="image/*" class="hidden" onchange="handleDashEditHarvestImg(event)">
+                            <input id="dash-edit-p-img" placeholder="Or image URL" class="w-full bg-white p-2 rounded-lg text-xs font-bold border border-gray-200" oninput="document.getElementById('dash-edit-img-preview').src=this.value">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-3">
+                    <button onclick="saveDashboardEditHarvest()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-xl transition">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Save Changes
+                    </button>
+                    <button onclick="closeDashboardEditHarvest()" class="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl uppercase tracking-widest transition">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

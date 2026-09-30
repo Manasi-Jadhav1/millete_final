@@ -12,6 +12,11 @@ import { successResponse, errorResponse, HTTP_STATUS } from '../utils/apiRespons
  */
 export const syncCart = async (req, res) => {
   try {
+    // Block producer accounts from syncing/maintaining shopping cart
+    if (['seller', 'farmer', 'startup'].includes(req.user.role)) {
+      return errorResponse(res, HTTP_STATUS.FORBIDDEN, 'Producer accounts (Farmer & Startup) cannot maintain a buyer cart.');
+    }
+
     const { items } = req.body;
 
     if (!items || !Array.isArray(items)) {
@@ -63,6 +68,11 @@ export const getCartCount = async (req, res) => {
  */
 export const addToCart = async (req, res) => {
   try {
+    // Block producer accounts from adding items to cart
+    if (['seller', 'farmer', 'startup'].includes(req.user.role)) {
+      return errorResponse(res, HTTP_STATUS.FORBIDDEN, 'Producer accounts (Farmer & Startup) cannot add products to cart.');
+    }
+
     const { product_id, quantity = 1 } = req.body;
 
     if (!product_id) {

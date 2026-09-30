@@ -135,27 +135,27 @@
                         </div>
 
                         <div>
-                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">I AM A</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="block text-[9px] font-black tracking-[0.3em] uppercase text-accent mb-2">REGISTER AS</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="role" value="consumer" class="peer hidden" checked>
-                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
-                                        <i class="fa-solid fa-basket-shopping mb-1"></i>
-                                        <span class="text-[10px] uppercase tracking-widest">Buyer</span>
-                                    </div>
-                                </label>
-                                <label class="relative cursor-pointer">
-                                    <input type="radio" name="role" value="startup" class="peer hidden">
-                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
-                                        <i class="fa-solid fa-rocket mb-1"></i>
-                                        <span class="text-[10px] uppercase tracking-widest text-center">Startup Seller</span>
+                                    <div class="w-full h-full bg-primaryLight border border-gray-100 rounded-xl py-3 px-3 flex flex-col items-center justify-center font-bold text-sm text-gray-500 transition-all peer-checked:bg-accent/10 peer-checked:text-primaryDark peer-checked:border-accent shadow-sm">
+                                        <i class="fa-solid fa-basket-shopping text-accent mb-1 text-base"></i>
+                                        <span class="text-[10px] uppercase tracking-widest font-black">Buyer</span>
                                     </div>
                                 </label>
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="role" value="farmer" class="peer hidden">
-                                    <div class="w-full h-full bg-primaryLight border border-gray-50 rounded-xl py-3 px-4 flex flex-col items-center justify-center font-bold text-sm text-gray-400 transition-all peer-checked:bg-accent/10 peer-checked:text-accent peer-checked:border-accent">
-                                        <i class="fa-solid fa-tractor mb-1"></i>
-                                        <span class="text-[10px] uppercase tracking-widest text-center">Farmer</span>
+                                    <div class="w-full h-full bg-primaryLight border border-emerald-200 rounded-xl py-3 px-3 flex flex-col items-center justify-center font-bold text-sm text-gray-500 transition-all peer-checked:bg-emerald-100 peer-checked:text-emerald-900 peer-checked:border-emerald-600 shadow-sm">
+                                        <i class="fa-solid fa-tractor text-emerald-600 mb-1 text-base"></i>
+                                        <span class="text-[10px] uppercase tracking-widest text-center font-black">Farmer / Producer</span>
+                                    </div>
+                                </label>
+                                <label class="relative cursor-pointer">
+                                    <input type="radio" name="role" value="startup" class="peer hidden">
+                                    <div class="w-full h-full bg-primaryLight border border-gray-100 rounded-xl py-3 px-3 flex flex-col items-center justify-center font-bold text-sm text-gray-500 transition-all peer-checked:bg-accent/10 peer-checked:text-primaryDark peer-checked:border-accent shadow-sm">
+                                        <i class="fa-solid fa-rocket text-accent mb-1 text-base"></i>
+                                        <span class="text-[10px] uppercase tracking-widest text-center font-black">Startup Seller</span>
                                     </div>
                                 </label>
                             </div>
@@ -186,7 +186,97 @@
         </div>
     </div>
 
+    <!-- Platform Fee Payment Modal -->
+    <div id="platform-fee-modal" class="fixed inset-0 bg-primaryDark/95 backdrop-blur-xl z-[200] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700">
+        <div class="bg-white rounded-[4rem] p-12 max-w-xl w-full mx-6 text-center relative shadow-[0_60px_120px_rgba(0,0,0,0.6)] border border-white/20 transform scale-90 transition-all duration-700" id="platform-fee-modal-inner">
+            <i class="fa-solid fa-seedling text-accent/10 text-[200px] absolute -top-20 -right-20 rotate-12 pointer-events-none"></i>
+            
+            <!-- Step indicator -->
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <span class="text-emerald-700 font-black text-xs">1</span>
+                </div>
+                <div class="h-1 w-10 bg-gray-200 rounded"></div>
+                <div class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg">
+                    <span class="text-white font-black text-xs">2</span>
+                </div>
+                <div class="h-1 w-10 bg-gray-200 rounded"></div>
+                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                    <span class="text-gray-400 font-black text-xs">3</span>
+                </div>
+            </div>
+
+            <div class="w-24 h-24 bg-emerald-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl">
+                <i class="fa-solid fa-qrcode text-4xl text-emerald-700"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-black mb-2 text-textDark leading-tight">Pay Platform Fee</h2>
+            <p class="text-emerald-700 text-xs font-black uppercase tracking-widest mb-2"><i class="fa-solid fa-circle-info"></i> Step 2 of 3 — One-time Registration Fee</p>
+            <p class="text-gray-500 text-sm mb-6 leading-relaxed font-bold">To list products on MilletVerse, a one-time platform registration fee is required. Scan the QR below and upload your payment screenshot.</p>
+
+            <!-- Fee Amount -->
+            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 mb-6">
+                <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-1">Platform Registration Fee</p>
+                <p id="platform-fee-display" class="text-4xl font-black text-emerald-700">₹500</p>
+                <p class="text-[10px] text-gray-400 font-bold mt-1">One-time, non-refundable</p>
+            </div>
+
+            <!-- Admin QR Code -->
+            <div class="flex justify-center mb-6">
+                <div class="bg-white p-3 rounded-2xl shadow-xl border-4 border-emerald-400 w-44 h-44 flex items-center justify-center">
+                    <img id="admin-platform-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=admin.milletverse@upi" class="w-full h-full object-contain rounded-xl" onerror="this.parentElement.innerHTML='<p class=text-xs text-gray-400 font-bold>QR not configured</p>'">
+                </div>
+            </div>
+
+            <!-- Upload Proof -->
+            <div class="text-left space-y-4 mb-8">
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-700 mb-2">Transaction UTR / Reference Number</label>
+                    <input type="text" id="platform-utr" placeholder="e.g. 426819028172" class="w-full bg-emerald-50 border border-emerald-200 rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500 font-mono font-bold text-textDark placeholder-gray-300">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-700 mb-2">Upload Payment Screenshot <span class="text-red-500">*</span></label>
+                    <input type="file" id="platform-screenshot" accept="image/*" class="w-full bg-emerald-50 border border-emerald-200 rounded-xl py-3 px-4 file:mr-3 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 text-xs font-bold text-gray-500">
+                </div>
+                <p id="platform-fee-error" class="text-red-500 text-xs font-bold hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i> Please upload a payment screenshot to continue.</p>
+            </div>
+
+            <button onclick="submitPlatformFee()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black py-5 px-10 rounded-[2rem] shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase tracking-[0.3em] flex items-center justify-center gap-3 mx-auto">
+                <i class="fa-solid fa-arrow-right"></i> Submit & Continue
+            </button>
+        </div>
+    </div>
+
+
+    <div id="pending-modal" class="fixed inset-0 bg-primaryDark/90 backdrop-blur-xl z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-700">
+        <div class="bg-white rounded-[4rem] p-12 max-w-lg w-full mx-6 text-center relative shadow-[0_60px_120px_rgba(0,0,0,0.5)] border border-white/20 transform scale-90 transition-all duration-700" id="pending-modal-inner">
+            <i class="fa-solid fa-leaf text-accent/10 text-[200px] absolute -top-20 -left-20 rotate-45 pointer-events-none"></i>
+            <div class="w-28 h-28 bg-amber-100 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                <i class="fa-solid fa-clock text-5xl text-amber-600 animate-pulse"></i>
+            </div>
+            <h2 class="font-heading text-4xl font-black mb-3 text-textDark leading-tight">Account Submitted!</h2>
+            <p id="pending-role-label" class="text-amber-700 text-xs font-black uppercase tracking-widest mb-6 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-hourglass-half"></i> Pending Admin Approval
+            </p>
+            <p class="text-gray-500 text-sm mb-4 leading-relaxed font-bold">
+                Your <span id="pending-role-name" class="text-primaryDark font-black">Startup Seller</span> account has been registered successfully.
+            </p>
+            <p class="text-gray-400 text-xs mb-10 leading-relaxed font-semibold">
+                Our admin team will review your application and approve your account within <strong class="text-amber-700">24–48 hours</strong>. Once approved, you'll be able to list products and access the full Harvest Dashboard.
+            </p>
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 text-left space-y-2">
+                <p class="text-[10px] font-black uppercase tracking-widest text-amber-800 mb-2"><i class="fa-solid fa-circle-info mr-1"></i> What happens next?</p>
+                <div class="flex items-center gap-3 text-xs font-bold text-gray-600"><span class="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-black text-[10px] shrink-0">1</span> Admin reviews your registration</div>
+                <div class="flex items-center gap-3 text-xs font-bold text-gray-600"><span class="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-black text-[10px] shrink-0">2</span> You receive approval notification</div>
+                <div class="flex items-center gap-3 text-xs font-bold text-gray-600"><span class="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-black text-[10px] shrink-0">3</span> Login & start listing your harvest products</div>
+            </div>
+            <button onclick="window.location.href='login.html'" class="w-full bg-primaryDark hover:bg-primary text-white font-black py-5 px-10 rounded-[2rem] shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase tracking-[0.3em] flex items-center justify-center gap-3 mx-auto">
+                <i class="fa-solid fa-door-open"></i> Go to Login
+            </button>
+        </div>
+    </div>
+
     <script src="auth.js"></script>
+    <script src="script.js"></script>
     <script>
         async function handleSignup(e) {
             e.preventDefault();
@@ -205,7 +295,80 @@
                 errBox.classList.remove('hidden');
                 return;
             }
-            window.location.href = 'index.html';
+
+            // Show platform fee modal for startup/farmer roles
+            if (role === 'startup' || role === 'farmer') {
+                // Clear session so they must login after approval
+                localStorage.removeItem('milletSession');
+
+                // Load admin platform settings
+                const settings = JSON.parse(localStorage.getItem('milletPlatformSettings') || '{}');
+                const fee = settings.fee || '500';
+                const qr  = settings.qr  || '';
+
+                // Update fee modal display
+                const feeDisplay = document.getElementById('platform-fee-display');
+                if (feeDisplay) feeDisplay.textContent = '₹' + fee;
+
+                const qrImg = document.getElementById('admin-platform-qr');
+                if (qrImg && qr) {
+                    qrImg.src = qr;
+                } else if (qrImg) {
+                    // Generate default QR with amount
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('upi://pay?pa=admin.milletverse@upi&pn=MilletVerse Platform Fee&am=' + fee + '&cu=INR')}`;
+                }
+
+                // Store pending user email for later use
+                window._pendingSignupEmail = email;
+                window._pendingSignupRole  = role;
+
+                const modal = document.getElementById('platform-fee-modal');
+                const inner = document.getElementById('platform-fee-modal-inner');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-90');
+                inner.classList.add('scale-100');
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function submitPlatformFee() {
+            const screenshotInput = document.getElementById('platform-screenshot');
+            const utr = document.getElementById('platform-utr').value.trim();
+            const errEl = document.getElementById('platform-fee-error');
+
+            if (!screenshotInput || screenshotInput.files.length === 0) {
+                errEl.classList.remove('hidden');
+                return;
+            }
+            errEl.classList.add('hidden');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Save proof to the user's localStorage record
+                const proof = e.target.result;
+                const users = JSON.parse(localStorage.getItem('milletUsers') || '[]');
+                const idx = users.findIndex(u => u.email === window._pendingSignupEmail);
+                if (idx > -1) {
+                    users[idx].platform_payment_proof = proof;
+                    users[idx].platform_utr = utr;
+                    localStorage.setItem('milletUsers', JSON.stringify(users));
+                }
+
+                // Close fee modal
+                const feeModal = document.getElementById('platform-fee-modal');
+                feeModal.classList.add('opacity-0', 'pointer-events-none');
+
+                // Show pending approval modal
+                const roleNames = { startup: 'Startup Seller', farmer: 'Farmer / Producer' };
+                document.getElementById('pending-role-name').textContent = roleNames[window._pendingSignupRole] || window._pendingSignupRole;
+                const pendingModal = document.getElementById('pending-modal');
+                const pendingInner = document.getElementById('pending-modal-inner');
+                pendingModal.classList.remove('opacity-0', 'pointer-events-none');
+                pendingInner.classList.remove('scale-90');
+                pendingInner.classList.add('scale-100');
+            };
+            reader.readAsDataURL(screenshotInput.files[0]);
         }
     </script>
 </body>

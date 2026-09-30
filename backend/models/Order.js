@@ -18,16 +18,17 @@ export const createOrder = async (orderData) => {
     total_price,
     delivery_address,
     order_status = 'pending',
-    payment_status = 'pending'
+    payment_status = 'pending',
+    payment_transaction_id = null
   } = orderData;
   
   const sql = `
-    INSERT INTO orders (user_id, product_id, quantity, total_price, delivery_address, order_status, payment_status)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO orders (user_id, product_id, quantity, total_price, delivery_address, order_status, payment_status, payment_transaction_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
   
   const result = await query(sql, [
-    user_id, product_id, quantity, total_price, delivery_address, order_status, payment_status
+    user_id, product_id, quantity, total_price, delivery_address, order_status, payment_status, payment_transaction_id
   ]);
   
   // Update product stock

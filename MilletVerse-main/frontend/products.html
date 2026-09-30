@@ -88,13 +88,63 @@
 
             <!-- Categories -->
             <div>
-                <h3 class="font-heading font-bold text-xl mb-4 text-textDark">Health Objectives</h3>
+                <h3 class="font-heading font-bold text-xl mb-4 text-textDark">Health Objectives & Source</h3>
                 <div class="space-y-3">
                     <button class="filter-btn block w-full text-left px-5 py-3 bg-primary text-white rounded-xl text-sm font-bold shadow-md transition-all transform hover:scale-105" data-filter="all">All Harvest</button>
+                    <button class="filter-btn block w-full text-left px-5 py-3 bg-emerald-100 text-emerald-900 hover:bg-emerald-200 rounded-xl text-sm font-black transition-all flex items-center justify-between" data-filter="farmer">
+                        <span><i class="fa-solid fa-tractor mr-2 text-emerald-700"></i> Direct Farm Harvests</span>
+                        <span class="bg-emerald-600 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">QR Pay</span>
+                    </button>
                     <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="weight-loss">Weight Management</button>
                     <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="diabetes">Glycemic Control</button>
-                    <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="kids">Growth & Nutrition</button>
                     <button class="filter-btn block w-full text-left px-5 py-3 bg-primaryLight text-primary hover:bg-accent/20 rounded-xl text-sm font-bold transition-all" data-filter="high-protein">Muscle & Strength</button>
+                </div>
+            </div>
+
+            <!-- Age-Based Selection Menu (User Requested) -->
+            <div class="pt-6 border-t border-gray-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-heading font-bold text-xl text-textDark flex items-center gap-2">
+                        <i class="fa-solid fa-cake-candles text-accent text-base"></i> Age Group Selection
+                    </h3>
+                    <span class="text-[9px] font-black uppercase text-accent bg-accent/10 px-2.5 py-0.5 rounded-full">Nutrition</span>
+                </div>
+                <div class="space-y-2.5">
+                    <button class="filter-btn block w-full text-left px-4 py-3 bg-primaryLight text-primary hover:bg-pink-100/60 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group" data-filter="age-0-2">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center text-xs font-black shadow-sm">🍼</span>
+                            <span>Infants & Toddlers</span>
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-extrabold group-hover:text-pink-700">0–2 Yrs</span>
+                    </button>
+                    <button class="filter-btn block w-full text-left px-4 py-3 bg-primaryLight text-primary hover:bg-amber-100/60 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group" data-filter="age-3-12">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-black shadow-sm">🎒</span>
+                            <span>Growing Children</span>
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-extrabold group-hover:text-amber-700">3–12 Yrs</span>
+                    </button>
+                    <button class="filter-btn block w-full text-left px-4 py-3 bg-primaryLight text-primary hover:bg-purple-100/60 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group" data-filter="age-13-24">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-black shadow-sm">⚡</span>
+                            <span>Teens & Youth</span>
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-extrabold group-hover:text-purple-700">13–24 Yrs</span>
+                    </button>
+                    <button class="filter-btn block w-full text-left px-4 py-3 bg-primaryLight text-primary hover:bg-blue-100/60 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group" data-filter="age-25-59">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-black shadow-sm">💼</span>
+                            <span>Adults & Working</span>
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-extrabold group-hover:text-blue-700">25–59 Yrs</span>
+                    </button>
+                    <button class="filter-btn block w-full text-left px-4 py-3 bg-primaryLight text-primary hover:bg-emerald-100/60 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group" data-filter="age-60+">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shadow-sm">🌿</span>
+                            <span>Seniors & Elders</span>
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-extrabold group-hover:text-emerald-700">60+ Yrs</span>
+                    </button>
                 </div>
             </div>
 
@@ -113,9 +163,42 @@
         <!-- Product Grid -->
         <div class="w-full lg:w-3/4">
             
+            <!-- Farmer Harvest Direct Action Banner (Hidden for Consumers / Regular Buyers) -->
+            <div id="farmer-producer-banner" class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-gradient-to-r from-emerald-900 via-emerald-800 to-primaryDark text-white p-6 rounded-[2.5rem] shadow-xl border border-emerald-500/30">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30 inline-block mb-1">
+                        🌾 Direct Producer Portal
+                    </span>
+                    <h3 class="font-heading font-black text-2xl text-white">
+                        Are You a Farmer or Grain Producer?
+                    </h3>
+                    <p class="text-xs text-white/80 font-medium mt-1">List your raw grains or harvest, specify your price, and receive direct UPI QR payments from buyers.</p>
+                </div>
+                <button onclick="openFarmerModal()" class="bg-emerald-500 hover:bg-emerald-400 text-primaryDark font-black text-xs uppercase tracking-widest px-6 py-4 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 shrink-0 flex items-center gap-2 border-2 border-white/20">
+                    <i class="fa-solid fa-plus-circle text-base"></i> + List New Harvest
+                </button>
+            </div>
+
+            <!-- Age Selection Pills Bar for Quick Filtering -->
+            <div class="mb-8 bg-white p-5 rounded-3xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-black uppercase tracking-widest text-textDark flex items-center gap-2">
+                        <i class="fa-solid fa-cake-candles text-accent text-base"></i> Filter by Age:
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-2" id="age-pills-container">
+                    <button onclick="applyAgePill('all', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-primary text-white shadow-sm">All Ages</button>
+                    <button onclick="applyAgePill('age-0-2', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200">🍼 0–2 Yrs</button>
+                    <button onclick="applyAgePill('age-3-12', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200">🎒 3–12 Yrs</button>
+                    <button onclick="applyAgePill('age-13-24', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200">⚡ 13–24 Yrs</button>
+                    <button onclick="applyAgePill('age-25-59', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200">💼 25–59 Yrs</button>
+                    <button onclick="applyAgePill('age-60+', this)" class="age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200">🌿 60+ Yrs</button>
+                </div>
+            </div>
+
             <!-- Controls -->
             <div class="flex justify-between items-center mb-8">
-                <span class="text-sm font-bold text-textGray">Displaying 1-6 of 24 Harvest Items</span>
+                <span id="display-info" class="text-sm font-bold text-textGray">Displaying Harvest Items</span>
                 <div class="flex gap-3">
                     <button class="view-toggle w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center cursor-pointer text-primary shadow-sm hover:shadow-md transition" data-view="grid">
                         <i class="fa-solid fa-border-all text-lg"></i>
@@ -127,7 +210,7 @@
             </div>
 
             <!-- Grid Container (Populated by JS) -->
-            <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 fade-in-section">
+            <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 fade-in-section">
                 <!-- Products will be injected here -->
             </div>
 
@@ -138,6 +221,115 @@
         </div>
     </main>
 
+    <!-- Modal for Adding Farmer Harvest -->
+    <div id="farmer-modal" class="fixed inset-0 bg-primaryDark/80 backdrop-blur-md z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+        <div class="bg-white rounded-[3rem] p-8 lg:p-10 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 relative">
+            <button onclick="closeFarmerModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-lg transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-tractor"></i>
+                </div>
+                <div>
+                    <h2 class="font-heading font-black text-2xl text-textDark">List New Harvest Product</h2>
+                    <p class="text-xs text-emerald-700 font-bold">Add your product details, price, and payment scanner for buyers</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleMarketplaceAddProduct(event)" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">GRAIN / PRODUCT NAME</label>
+                        <input id="modal-p-name" placeholder="e.g. Pure Organic Ragi Grains" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-emerald-500 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">PRICE PER UNIT (₹)</label>
+                        <input id="modal-p-price" type="number" step="0.01" placeholder="e.g. 150" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-emerald-500 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">MILLET VARIETY</label>
+                        <select id="modal-p-type" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-emerald-500 text-sm">
+                            <option value="Finger Millet (Ragi)">Finger Millet (Ragi)</option>
+                            <option value="Sorghum (Jowar)">Sorghum (Jowar)</option>
+                            <option value="Pearl Millet (Bajra)">Pearl Millet (Bajra)</option>
+                            <option value="Foxtail Millet">Foxtail Millet</option>
+                            <option value="Little Millet">Little Millet</option>
+                            <option value="Barnyard Millet">Barnyard Millet</option>
+                            <option value="Mixed Organic Grains">Mixed Organic Grains</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">STOCK (KG / PACKS)</label>
+                        <input id="modal-p-stock" type="number" value="100" class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-emerald-500 text-sm" required>
+                    </div>
+                </div>
+
+                <!-- Farmer UPI & Payment Details -->
+                <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-200 space-y-4">
+                    <h4 class="text-xs font-black uppercase tracking-wider text-emerald-900 flex items-center gap-2">
+                        <i class="fa-solid fa-qrcode text-emerald-600 text-base"></i> Farmer Payment QR Scanner & UPI Info
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-900 mb-1">FARM / PRODUCER NAME</label>
+                            <input id="modal-p-farm" placeholder="e.g. Ramesh Organic Farm" class="w-full bg-white p-3.5 rounded-xl font-bold border border-emerald-200 text-sm" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-900 mb-1">UPI ID FOR DIRECT SCAN & PAY</label>
+                            <input id="modal-p-upi" placeholder="e.g. farmer.ramesh@upi" class="w-full bg-white p-3.5 rounded-xl font-bold border border-emerald-200 text-sm" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">HARVEST DESCRIPTION / BENEFITS</label>
+                    <textarea id="modal-p-desc" placeholder="Naturally stone-harvested, pesticide-free, high fiber and essential minerals." class="w-full bg-primaryLight p-4 rounded-2xl font-bold border border-gray-100 focus:ring-2 focus:ring-emerald-500 text-sm h-24" required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">PRODUCT IMAGE</label>
+                    <div class="flex gap-4 items-center bg-primaryLight p-4 rounded-2xl border border-gray-100">
+                        <img id="modal-img-preview" src="assets/ragi.png" class="w-16 h-16 rounded-xl object-cover border border-gray-200 bg-white">
+                        <div class="flex-1 space-y-2">
+                            <button type="button" onclick="document.getElementById('modal-img-file').click()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-upload"></i> Upload Image File
+                            </button>
+                            <input type="file" id="modal-img-file" accept="image/*" class="hidden" onchange="handleModalImgFile(event)">
+                            <input id="modal-p-img" placeholder="Or paste image URL" value="assets/ragi.png" oninput="document.getElementById('modal-img-preview').src=this.value" class="w-full bg-white p-2.5 rounded-xl font-bold border border-gray-200 text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Post Harvest to Marketplace
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal to View Farmer Payment Scanner Directly -->
+    <div id="view-farmer-scanner-modal" class="fixed inset-0 bg-primaryDark/80 backdrop-blur-md z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+        <div class="bg-white rounded-[3rem] p-8 max-w-sm w-full text-center shadow-2xl border border-gray-100 relative">
+            <button onclick="closeFarmerScannerModal()" class="absolute top-5 right-5 text-gray-400 hover:text-red-500 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-base transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span class="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+                🌾 Direct Farmer Payment Scanner
+            </span>
+            <div class="w-48 h-48 mx-auto my-5 p-3 bg-white rounded-2xl border-2 border-emerald-400 shadow-lg flex items-center justify-center">
+                <img id="view-scanner-img" class="w-full h-full object-contain rounded-xl">
+            </div>
+            <h4 id="view-scanner-name" class="font-black text-xl text-textDark mb-1">Farmer Name</h4>
+            <p class="text-xs font-mono font-bold text-emerald-700 mb-4" id="view-scanner-upi">farmer@upi</p>
+            <p class="text-[10px] text-gray-400 font-bold mb-4">Buyers can scan this QR with Google Pay, PhonePe, Paytm or BHIM to pay directly to the farmer's account.</p>
+            <button id="view-scanner-buy-btn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black py-3.5 rounded-xl uppercase tracking-wider text-xs shadow-md transition">
+                <i class="fa-solid fa-bolt text-amber-300 mr-1"></i> Buy with This Scanner
+            </button>
+        </div>
+    </div>
+
     <div class="bg-primaryLight wave-top-lightbeige pt-16 pb-10">
         <div class="max-w-[1200px] mx-auto px-10 text-center text-xs text-gray-400 font-bold uppercase tracking-widest">
              <p>&copy; 2026 MilletVerse Harvest. Naturally Grounded.</p>
@@ -147,20 +339,218 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        // Product Data Analysis
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check session: Hide Farmer Producer banner if user is logged in as a buyer/consumer!
+            const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
+            const banner = document.getElementById('farmer-producer-banner');
+            if (banner) {
+                if (session && (session.role === 'consumer' || session.role === 'user')) {
+                    banner.style.display = 'none'; // Excluded for buyers as requested!
+                }
+            }
+
+            // If logged in as farmer, startup, or seller, display notice that producers cannot purchase products
+            if (session && ['farmer', 'startup', 'seller'].includes(session.role)) {
+                const roleLabel = session.role === 'startup' ? 'Startup Seller' : (session.role === 'farmer' ? 'Farmer / Producer' : 'Seller');
+                const notice = document.createElement('div');
+                notice.className = 'max-w-[1200px] mx-auto px-5 lg:px-10 mt-6';
+                notice.innerHTML = `
+                    <div class="bg-gradient-to-r from-amber-500/10 via-amber-100 to-amber-50 border-2 border-amber-300 p-5 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center shrink-0 text-xl shadow-md">
+                                <i class="fa-solid fa-wheat-awn"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-heading font-black text-amber-950 text-base">Producer Mode: ${roleLabel} Account</h4>
+                                <p class="text-xs font-semibold text-amber-800 mt-0.5">Farmer & Startup accounts are registered to list and sell harvests. Producer accounts cannot buy products. To purchase products, please sign in with a Consumer account.</p>
+                            </div>
+                        </div>
+                        <a href="farmer-dashboard.html" class="bg-amber-800 hover:bg-amber-900 text-white text-[11px] font-black uppercase tracking-wider px-5 py-3 rounded-2xl shadow-sm shrink-0 transition flex items-center gap-2">
+                            <i class="fa-solid fa-gauge"></i> My Dashboard
+                        </a>
+                    </div>
+                `;
+                const mainEl = document.querySelector('main');
+                if (mainEl) mainEl.parentNode.insertBefore(notice, mainEl);
+            }
+        });
+
+        function applyAgePill(ageKey, btnEl) {
+            // Reset pills styling
+            document.querySelectorAll('.age-pill').forEach(btn => {
+                btn.className = 'age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-gray-100 text-gray-700 hover:bg-gray-200';
+            });
+            btnEl.className = 'age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-primary text-white shadow-md scale-105';
+            
+            // Sync with sidebar filter buttons
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('bg-primary', 'text-white', 'shadow-md', 'transform', 'scale-105');
+                b.classList.add('bg-primaryLight', 'text-primary');
+                if (b.getAttribute('data-filter') === ageKey) {
+                    b.classList.remove('bg-primaryLight', 'text-primary');
+                    b.classList.add('bg-primary', 'text-white', 'shadow-md', 'transform', 'scale-105');
+                }
+            });
+
+            currentFilter = ageKey;
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function openFarmerModal() {
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            
+            // Auto fill farm name & UPI if farmer has a saved scanner
+            const session = JSON.parse(localStorage.getItem('milletSession') || 'null');
+            const savedScanner = typeof getFarmerSavedScanner === 'function' ? getFarmerSavedScanner() : null;
+
+            const farmInput = document.getElementById('modal-p-farm');
+            const upiInput = document.getElementById('modal-p-upi');
+
+            if (savedScanner) {
+                if (farmInput) farmInput.value = savedScanner.farmer_name;
+                if (upiInput) upiInput.value = savedScanner.farmer_upi;
+            } else if (session) {
+                if (farmInput && !farmInput.value) farmInput.value = `${session.firstName}'s Direct Farm Harvest`;
+                if (upiInput && !upiInput.value) upiInput.value = `${session.firstName.toLowerCase()}@upi`;
+            }
+        }
+
+        function closeFarmerModal() {
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        let modalProductImgBase64 = null;
+
+        function handleModalImgFile(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            if (f.size > 3*1024*1024) { showToast('Image is too large. Max 3MB.', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = ev => {
+                modalProductImgBase64 = ev.target.result;
+                const prev = document.getElementById('modal-img-preview');
+                if (prev) prev.src = modalProductImgBase64;
+                const urlIn = document.getElementById('modal-p-img');
+                if (urlIn) urlIn.value = f.name;
+                showToast('Image file attached!');
+            };
+            reader.readAsDataURL(f);
+        }
+
+        function previewFarmerScannerModal(farmerName, farmerUpi, farmerQr) {
+            const modal = document.getElementById('view-farmer-scanner-modal');
+            const nameEl = document.getElementById('view-scanner-name');
+            const upiEl = document.getElementById('view-scanner-upi');
+            const imgEl = document.getElementById('view-scanner-img');
+            const buyBtn = document.getElementById('view-scanner-buy-btn');
+
+            const fName = farmerName || 'Verified Farm Producer';
+            const fUpi = farmerUpi || 'farmer.milletverse@upi';
+            let fQr = farmerQr;
+
+            if (nameEl) nameEl.textContent = fName;
+            if (upiEl) upiEl.textContent = fUpi;
+
+            if (!fQr || fQr === 'undefined') {
+                const upiUri = `upi://pay?pa=${encodeURIComponent(fUpi)}&pn=${encodeURIComponent(fName)}&cu=INR`;
+                fQr = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+            }
+            if (imgEl) imgEl.src = fQr;
+
+            if (buyBtn) {
+                buyBtn.onclick = () => {
+                    closeFarmerScannerModal();
+                    openQuickBuyModal('direct', 'Farm Harvest', 149, 'assets/ragi.png', 'Ancient Grain', 'All Ages', fName, fUpi, fQr);
+                };
+            }
+
+            if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeFarmerScannerModal() {
+            const modal = document.getElementById('view-farmer-scanner-modal');
+            if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handleMarketplaceAddProduct(e) {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('milletSession') || 'null') || { firstName: 'Farmer', email: 'farmer@milletverse.com' };
+            
+            const name = document.getElementById('modal-p-name').value;
+            const price = parseFloat(document.getElementById('modal-p-price').value);
+            const millet_type = document.getElementById('modal-p-type').value;
+            const stock_quantity = parseInt(document.getElementById('modal-p-stock').value) || 100;
+            const farm_name = document.getElementById('modal-p-farm').value;
+            const upi_id = document.getElementById('modal-p-upi').value;
+            const description = document.getElementById('modal-p-desc').value;
+            const img = modalProductImgBase64 || document.getElementById('modal-p-img').value || 'assets/ragi.png';
+
+            const activeScanner = localStorage.getItem(`farmer_scanner_${session.email}`) || localStorage.getItem('farmer_scanner_default') || '';
+            const upiUri = `upi://pay?pa=${encodeURIComponent(upi_id)}&pn=${encodeURIComponent(farm_name)}&cu=INR`;
+            const qrUrl = activeScanner || `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+
+            const newProduct = {
+                id: Date.now(),
+                title: name,
+                name: name,
+                category: 'farmer ' + millet_type.toLowerCase() + ' age-0-2 age-3-12 age-13-24 age-25-59 age-60+',
+                millet: millet_type,
+                price: price,
+                img: img,
+                image_url: img,
+                tag: 'DIRECT FARM HARVEST',
+                age_tag: 'All Family Ages',
+                benefit: description.substring(0, 60) + '...',
+                description: description,
+                rating: 5.0,
+                reviews: 'Verified Farm',
+                stock_quantity: stock_quantity,
+                is_farmer: true,
+                type: 'farmer',
+                farmer_name: farm_name,
+                farmer_upi: upi_id,
+                payment_qr: qrUrl,
+                farmer_scanner: qrUrl,
+                farmer_email: session.email,
+                farmer_id: session.id
+            };
+
+            let localProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            localProducts.unshift(newProduct);
+            localStorage.setItem('milletProducts', JSON.stringify(localProducts));
+
+            // Also post to backend if available
+            try {
+                fetch('http://localhost:5000/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newProduct)
+                });
+            } catch(err) {}
+
+            modalProductImgBase64 = null;
+            closeFarmerModal();
+            showToast('🌾 Direct Farm Harvest with real image posted to Marketplace!', 'success');
+            renderProducts();
+        }
+
+        // Product Catalog Default Data with Rich Age Group Mapping
         const productsData = [
-            { id: 1, title: 'Ragi Chocolate Delight Biscuits (250g)', category: 'weight-loss high-protein', millet: 'Finger Millet (Ragi)', price: 149, img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=600&h=600&fit=crop', tag: 'CALCIUM RICH', benefit: '10x more calcium than milk', rating: 4.5, reviews: '24', bgColor: '#faf7f2' },
-            { id: 2, title: 'Jowar Oats Crunchy Cookies (200g)', category: 'diabetes', millet: 'Sorghum (Jowar)', price: 129, img: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?q=80&w=600&h=600&fit=crop', tag: 'LOW GI', benefit: 'Slow release energy', rating: 4.3, reviews: '18', bgColor: '#fdf5ed' },
-            { id: 3, title: 'Bajra Jeera Crackers (150g)', category: 'kids', millet: 'Pearl Millet (Bajra)', price: 99, img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=600&h=600&fit=crop', tag: 'IRON RICH', benefit: 'Perfect growth snack', rating: 4.2, reviews: '15', bgColor: '#f4ebe1' },
-            { id: 4, title: 'Foxtail Millet Khakhra (300g)', category: 'weight-loss', millet: 'Foxtail Millet', price: 119, img: 'https://images.unsplash.com/photo-1628102491629-778571d893a3?q=80&w=600&h=600&fit=crop', tag: 'FIBER RICH', benefit: 'High fiber for digestion', rating: 4.4, reviews: '21', bgColor: '#eef7f2' },
-            { id: 5, title: 'Mixed Millet Gift Assortment (500g)', category: 'kids', millet: 'Assorted Millets', price: 299, img: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?q=80&w=600&h=600&fit=crop', tag: 'PREMIUM GIFT', benefit: 'Nutrient-packed variety', rating: 4.7, reviews: '32', bgColor: '#fdfaf0' },
-            { id: 6, title: 'Ragi Muesli Power Biscuits (250g)', category: 'diabetes', millet: 'Finger Millet (Ragi)', price: 179, img: 'https://images.unsplash.com/photo-1509482560494-4126f8225994?q=80&w=600&h=600&fit=crop', tag: 'HI-PROTEIN', benefit: 'Muscle recovery & energy', rating: 4.6, reviews: '28', bgColor: '#fdeef0' },
-            { id: 7, title: 'Jowar Sesame Thins (180g)', category: 'high-protein', millet: 'Sorghum (Jowar)', price: 109, img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&h=600&fit=crop', tag: 'HI-PROTEIN', benefit: 'Essential amino acids', rating: 4.1, reviews: '12', bgColor: '#f0f4fd' },
-            { id: 8, title: 'Bajra Nankhatai (220g)', category: 'immunity', millet: 'Pearl Millet (Bajra)', price: 139, img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=600&h=600&fit=crop', tag: 'IMMUNITY', benefit: 'Melt-in-mouth health', rating: 4.5, reviews: '19', bgColor: '#f5fdf0' },
-            { id: 9, title: 'Foxtail Millet Butter Cookies (200g)', category: 'kids weight-loss', millet: 'Foxtail Millet', price: 159, img: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=600&h=600&fit=crop', tag: 'ENERGY BOOST', benefit: 'Pure butter goodness', rating: 4.3, reviews: '16', bgColor: '#fdf5f0' },
-            { id: 10, title: 'Little Millet Spice Cookies (180g)', category: 'immunity', millet: 'Little Millet', price: 129, img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=600&h=600&fit=crop', tag: 'BONE HEALTH', benefit: 'Aromatic spice blend', rating: 4.4, reviews: '14', bgColor: '#fdf5f0' },
-            { id: 11, title: 'Barnyard Millet Mathri (200g)', category: 'diabetes', millet: 'Barnyard Millet', price: 109, img: 'https://images.unsplash.com/photo-1582170083046-1304e28236d3?q=80&w=600&h=600&fit=crop', tag: 'GUILT FREE', benefit: 'Traditional fiber snack', rating: 4.2, reviews: '11', bgColor: '#f4ebe1' },
-            { id: 12, title: 'Premium Millet Combo Pack (1kg)', category: 'high-protein', millet: 'All Millet Varieties', price: 899, img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&h=600&fit=crop', tag: 'BEST VALUE', benefit: 'The ultimate harvest kit', rating: 4.8, reviews: '45', bgColor: '#eef7f2' }
+            { id: 1, title: 'Ragi Chocolate Delight Biscuits (250g)', category: 'weight-loss high-protein age-3-12 age-13-24', age_tag: 'Children & Teens (3–18 Yrs)', millet: 'Finger Millet (Ragi)', price: 149, img: 'assets/ragi_biscuits.png', tag: 'CALCIUM RICH', benefit: '10x more calcium than milk for growing bones', rating: 4.5, reviews: '24' },
+            { id: 2, title: 'Jowar Oats Crunchy Cookies (200g)', category: 'diabetes age-25-59 age-60+', age_tag: 'Adults & Golden Age (25+ Yrs)', millet: 'Sorghum (Jowar)', price: 129, img: 'assets/breakfast_kit.png', tag: 'LOW GI', benefit: 'Slow release energy & glucose control', rating: 4.3, reviews: '18' },
+            { id: 3, title: 'Bajra Jeera Crackers (150g)', category: 'kids age-3-12', age_tag: 'Kids (3–12 Yrs)', millet: 'Pearl Millet (Bajra)', price: 99, img: 'assets/bajra_puffs.png', tag: 'IRON RICH', benefit: 'High bioavailability iron for active growth', rating: 4.2, reviews: '15' },
+            { id: 4, title: 'Foxtail Millet Khakhra (300g)', category: 'weight-loss age-25-59 age-60+', age_tag: 'Adults & Seniors', millet: 'Foxtail Millet', price: 119, img: 'assets/recipe_foxtail_bowl.png', tag: 'FIBER RICH', benefit: 'High fiber for easy digestion and cardiac wellness', rating: 4.4, reviews: '21' },
+            { id: 5, title: 'Mixed Millet Family Assortment (500g)', category: 'kids age-3-12 age-13-24 age-25-59 age-60+', age_tag: 'All Family Ages', millet: 'Assorted Millets', price: 299, img: 'assets/millet_bars.png', tag: 'PREMIUM GIFT', benefit: 'Complete multi-grain micronutrient balance', rating: 4.7, reviews: '32' },
+            { id: 6, title: 'Ragi Muesli Power Biscuits (250g)', category: 'high-protein age-13-24 age-25-59', age_tag: 'Youth & Active Adults (13–45 Yrs)', millet: 'Finger Millet (Ragi)', price: 179, img: 'assets/product_little_millet_energy.png', tag: 'HI-PROTEIN', benefit: 'Athletic muscle recovery and energy boost', rating: 4.6, reviews: '28' },
+            { id: 7, title: 'Jowar Sesame Thins (180g)', category: 'high-protein age-13-24 age-25-59', age_tag: 'Teens & Young Adults (13–24 Yrs)', millet: 'Sorghum (Jowar)', price: 109, img: 'assets/product_proso_noodles.png', tag: 'HI-PROTEIN', benefit: 'Essential amino acids & healthy unsaturated fats', rating: 4.1, reviews: '12' },
+            { id: 8, title: 'Bajra Nankhatai Melt-in-Mouth (220g)', category: 'immunity age-60+ age-25-59', age_tag: 'Seniors & Elders (60+ Yrs)', millet: 'Pearl Millet (Bajra)', price: 139, img: 'assets/product_amaranth_chikki.png', tag: 'EASY DIGEST', benefit: 'Soft traditional texture, gentle on senior digestion', rating: 4.5, reviews: '19' },
+            { id: 9, title: 'Baby Sprouted Ragi Porridge Mix (300g)', category: 'age-0-2 kids', age_tag: 'Infants & Toddlers (0–2 Yrs)', millet: 'Finger Millet (Ragi)', price: 189, img: 'assets/ragi.png', tag: 'BABY FIRST MEAL', benefit: '100% Sprouted, ultra-gentle on delicate infant stomachs', rating: 5.0, reviews: '38' },
+            { id: 10, title: 'Little Millet Organic Infant Cereal (250g)', category: 'age-0-2 kids', age_tag: 'Infants (0–2 Yrs)', millet: 'Little Millet', price: 169, img: 'assets/breakfast_kit.png', tag: 'INFANT PUREE', benefit: 'Pre-cooked grain puree powder with vital B-complex', rating: 4.9, reviews: '29' },
+            { id: 11, title: 'Multi-Millet Workout Protein Bites (250g)', category: 'high-protein age-13-24', age_tag: 'Teens & Athletes (13–24 Yrs)', millet: 'Foxtail & Kodo Millet', price: 219, img: 'assets/millet_cooking.png', tag: 'POWER BITES', benefit: 'Clean plant protein without added sugar', rating: 4.8, reviews: '41' },
+            { id: 12, title: 'Barnyard Senior Digestive Mix (500g)', category: 'diabetes age-60+', age_tag: 'Seniors (60+ Yrs)', millet: 'Barnyard Millet', price: 159, img: 'assets/product_barnyard_mix.png', tag: 'EASY TO CHEW', benefit: 'Lowest glycemic index & optimal for joint comfort', rating: 4.7, reviews: '34' }
         ];
 
         let currentPage = 1;
@@ -171,33 +561,62 @@
         async function renderProducts() {
             const container = document.getElementById('products-container');
             
-            let allProducts = [...productsData];
+            // 1. Get dynamically added Farmer / Marketplace products from localStorage
+            const localFarmerProducts = JSON.parse(localStorage.getItem('milletProducts') || '[]');
+            const formattedLocal = localFarmerProducts.map(p => ({
+                id: p.id,
+                title: p.title || p.name,
+                category: (p.category || 'farmer') + ' ' + (p.millet_type || '').toLowerCase() + ' age-0-2 age-3-12 age-13-24 age-25-59 age-60+',
+                millet: p.millet || p.millet_type || 'Organic Farm Grain',
+                price: p.price,
+                img: p.img || p.image_url || p.image || 'assets/ragi.png',
+                tag: p.is_farmer || p.type === 'farmer' ? 'DIRECT FARM HARVEST' : 'MARKETPLACE',
+                age_tag: p.age_tag || 'All Ages Harvest',
+                benefit: p.benefit || p.description || '100% Organic Direct Farm Grain',
+                rating: p.rating || 5.0,
+                reviews: p.reviews || 'Direct Farm',
+                is_farmer: p.is_farmer || p.type === 'farmer',
+                farmer_name: p.farmer_name,
+                farmer_upi: p.farmer_upi,
+                payment_qr: p.payment_qr || p.farmer_scanner
+            }));
+
+            let allProducts = [...formattedLocal, ...productsData];
             
+            // 2. Fetch backend products if available
             try {
-                const res = await fetch('http://localhost:5000/api/products?limit=100');
+                const res = await fetch('http://localhost:5000/api/products?limit=50');
                 const data = await res.json();
                 if (data.success && data.data.length) {
-                    // Map backend products to match frontend structure
-                    const backendProducts = data.data.map(p => ({
-                        id: p.id,
-                        title: p.name,
-                        category: p.millet_type, // Using millet_type as category for filtering
-                        millet: p.millet_type,
-                        price: p.price,
-                        img: p.image_url,
-                        tag: 'DIRECT HARVEST',
-                        benefit: p.description.substring(0, 50) + '...',
-                        rating: 4.5,
-                        reviews: 'New',
-                        bgColor: '#faf7f2'
-                    }));
-                    allProducts = [...backendProducts, ...allProducts];
+                    const backendProducts = data.data
+                        .filter(bp => !allProducts.some(ap => ap.id == bp.id || ap.title === bp.name))
+                        .map(p => ({
+                            id: p.id,
+                            title: p.name,
+                            category: (p.millet_type || '') + (p.is_farmer ? ' farmer' : '') + ' age-0-2 age-3-12 age-13-24 age-25-59 age-60+',
+                            millet: p.millet_type || 'Ancient Grain',
+                            price: p.price,
+                            img: p.image_url || 'assets/ragi.png',
+                            tag: p.is_farmer ? 'DIRECT FARM HARVEST' : 'DIRECT HARVEST',
+                            age_tag: 'All Ages',
+                            benefit: (p.description || '').substring(0, 50) + '...',
+                            rating: 4.6,
+                            reviews: 'New',
+                            is_farmer: !!p.is_farmer,
+                            farmer_name: p.farmer_name,
+                            farmer_upi: p.farmer_upi,
+                            payment_qr: p.payment_qr || p.farmer_scanner
+                        }));
+                    allProducts = [...allProducts, ...backendProducts];
                 }
-            } catch (e) {
-                console.error('Failed to fetch products from backend', e);
-            }
+            } catch (e) {}
 
-            const filtered = allProducts.filter(p => currentFilter === 'all' || p.category.includes(currentFilter) || p.millet.includes(currentFilter));
+            // Filter logic
+            const filtered = allProducts.filter(p => {
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'farmer') return p.is_farmer || (p.category && p.category.includes('farmer')) || p.farmer_name;
+                return (p.category && p.category.includes(currentFilter)) || (p.millet && p.millet.toLowerCase().includes(currentFilter));
+            });
             
             // Pagination math
             const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -207,24 +626,59 @@
 
             container.innerHTML = '';
             
+            if (pageItems.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-white rounded-3xl border border-gray-100 p-8">
+                        <i class="fa-solid fa-seedling text-5xl text-emerald-600 mb-4"></i>
+                        <h4 class="font-heading font-black text-2xl text-textDark">No Harvest Items Found</h4>
+                        <p class="text-sm text-gray-400 mt-1 mb-6">Explore another age category or view All Harvests.</p>
+                        <button onclick="applyAgePill('all', document.querySelector('.age-pill'))" class="bg-primary text-white font-black px-6 py-3 rounded-2xl uppercase tracking-widest text-xs">
+                            View All Ages
+                        </button>
+                    </div>
+                `;
+            }
+
             pageItems.forEach(p => {
                 const card = document.createElement('div');
+                const isFarmer = p.is_farmer || (p.category && p.category.includes('farmer')) || p.farmer_name;
+                const badgeColor = isFarmer ? 'bg-emerald-700 border border-emerald-400/50' : 'bg-primary';
+                
                 card.className = `product-item hover-card bg-white rounded-[2.5rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-gray-100 relative group animate-fade-in ${currentView === 'list' ? 'flex flex-row items-center p-4' : ''}`;
                 
                 const stars = Array(5).fill(0).map((_, i) => `<i class="fa-${i < Math.floor(p.rating) ? 'solid' : 'regular'} fa-star"></i>`).join('');
                 
+                const sanitizedTitle = (p.title || '').replace(/'/g, "\\'");
+                const sanitizedFarmer = (p.farmer_name || '').replace(/'/g, "\\'");
+                const sanitizedUpi = (p.farmer_upi || '').replace(/'/g, "\\'");
+                const sanitizedQr = (p.payment_qr || p.farmer_scanner || '').replace(/'/g, "\\'");
+                const sanitizedImg = (p.img || 'assets/ragi.png').replace(/'/g, "\\'");
+                const sanitizedMillet = (p.millet || 'Ancient Millet').replace(/'/g, "\\'");
+                const sanitizedAge = (p.age_tag || 'All Ages').replace(/'/g, "\\'");
+
                 if (currentView === 'grid') {
                     card.innerHTML = `
                         <div class="aspect-square relative overflow-hidden bg-gray-50">
-                            <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';">
+                            <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${p.title}" onerror="this.src='assets/ragi.png';">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="absolute top-6 left-6 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg z-10">${p.tag}</div>
+                            <div class="absolute top-6 left-6 ${badgeColor} text-white text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg z-10 flex items-center gap-1.5">
+                                ${isFarmer ? '<i class="fa-solid fa-tractor"></i>' : ''} ${p.tag}
+                            </div>
                             <button class="absolute top-6 right-6 text-gray-400 hover:text-red-500 bg-white/90 w-10 h-10 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-20"><i class="fa-solid fa-heart"></i></button>
                         </div>
                         <div class="p-8">
-                            <div class="flex flex-col mb-4">
-                                <span class="text-[10px] font-black uppercase tracking-widest text-accent mb-1">${p.millet}</span>
+                            <div class="flex flex-col mb-3">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-black uppercase tracking-widest ${isFarmer ? 'text-emerald-800' : 'text-accent'}">${p.millet}</span>
+                                    <span class="text-[9px] bg-accent/10 text-primary font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">${p.age_tag || 'All Ages'}</span>
+                                </div>
                                 <h3 class="font-heading font-extrabold text-2xl text-textDark leading-tight group-hover:text-primary transition-colors">${p.title}</h3>
+                                ${p.farmer_name ? `<p class="text-[11px] font-bold text-emerald-800 mt-1 flex items-center gap-1"><i class="fa-solid fa-wheat-field"></i> Farm: ${p.farmer_name}</p>` : ''}
+                                ${(p.payment_qr || p.farmer_scanner || p.farmer_upi) ? `
+                                    <button type="button" onclick="previewFarmerScannerModal('${sanitizedFarmer}', '${sanitizedUpi}', '${sanitizedQr}')" class="inline-flex items-center gap-1.5 text-[9px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg border border-emerald-200 mt-2 w-fit transition cursor-pointer">
+                                        <i class="fa-solid fa-qrcode text-emerald-600"></i> Direct QR Scanner Pay
+                                    </button>
+                                ` : ''}
                             </div>
                             <p class="text-xs text-textGray mb-4 font-medium flex items-center gap-2">
                                <i class="fa-solid fa-check-circle text-primary"></i> ${p.benefit}
@@ -233,29 +687,51 @@
                                 ${stars}
                                 <span class="text-gray-400 font-bold ml-2">${p.rating} (${p.reviews})</span>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-heading font-extrabold text-3xl text-primary">₹${p.price}</span>
-                                <button class="bg-primary hover:bg-primaryDark text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110" onclick="addToCart('${p.title.replace(/'/g, "\\'")}', ${p.price}, '${p.img}', ${p.id})">
-                                    <i class="fa-solid fa-plus text-xl"></i>
-                                </button>
+                            <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                                <div>
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase block">Price</span>
+                                    <span class="font-heading font-extrabold text-3xl text-primary">₹${p.price}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 w-11 h-11 rounded-2xl flex items-center justify-center transition-all hover:scale-105" title="Add to Bag" onclick="addToCart('${sanitizedTitle}', ${p.price}, '${sanitizedImg}', '${p.id}')">
+                                        <i class="fa-solid fa-bag-shopping text-sm"></i>
+                                    </button>
+                                    <button class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-black text-xs uppercase tracking-wider px-4 py-3 rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5" onclick="openQuickBuyModal('${p.id}', '${sanitizedTitle}', ${p.price}, '${sanitizedImg}', '${sanitizedMillet}', '${sanitizedAge}', '${sanitizedFarmer}', '${sanitizedUpi}', '${sanitizedQr}')">
+                                        <i class="fa-solid fa-bolt text-amber-300"></i> Buy Now
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     `;
                 } else {
                     card.innerHTML = `
                         <div class="w-1/3 aspect-square relative overflow-hidden rounded-2xl bg-gray-50">
-                            <img src="${p.img}" class="w-full h-full object-cover" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=200';">
-                            <div class="absolute top-3 left-3 bg-primary text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full">${p.tag}</div>
+                            <img src="${p.img}" class="w-full h-full object-cover" alt="${p.title}" onerror="this.src='assets/ragi.png';">
+                            <div class="absolute top-3 left-3 ${badgeColor} text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full">${p.tag}</div>
                         </div>
                         <div class="flex-1 px-8">
-                             <span class="text-[10px] font-black uppercase tracking-widest text-accent">${p.millet}</span>
+                             <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-accent">${p.millet}</span>
+                                <span class="text-[8px] bg-accent/10 text-primary font-black px-2 py-0.5 rounded-full uppercase">${p.age_tag || 'All Ages'}</span>
+                             </div>
                              <h3 class="font-heading font-extrabold text-xl text-textDark">${p.title}</h3>
+                             ${p.farmer_name ? `<p class="text-[11px] font-bold text-emerald-800 mt-0.5"><i class="fa-solid fa-wheat-field"></i> ${p.farmer_name}</p>` : ''}
+                             ${(p.payment_qr || p.farmer_scanner || p.farmer_upi) ? `
+                                <button type="button" onclick="previewFarmerScannerModal('${sanitizedFarmer}', '${sanitizedUpi}', '${sanitizedQr}')" class="inline-flex items-center gap-1 text-[9px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded border border-emerald-200 mt-1 w-fit transition cursor-pointer">
+                                    <i class="fa-solid fa-qrcode text-emerald-600"></i> QR Pay
+                                </button>
+                             ` : ''}
                              <div class="flex items-center gap-1 text-accent text-[10px] my-2">${stars}</div>
                              <p class="text-xs text-textGray font-medium">${p.benefit}</p>
                         </div>
-                        <div class="pr-8 text-right">
-                            <span class="font-heading font-extrabold text-2xl text-primary block mb-2">₹${p.price}</span>
-                            <button class="bg-primary text-white px-6 py-2 rounded-full font-bold text-xs" onclick="addToCart('${p.title.replace(/'/g, "\\'")}', ${p.price}, '${p.img}', ${p.id})">Add to Bag</button>
+                        <div class="pr-8 text-right space-y-2">
+                            <span class="font-heading font-extrabold text-2xl text-primary block">₹${p.price}</span>
+                            <div class="flex items-center gap-2 justify-end">
+                                <button class="bg-gray-100 text-gray-700 px-3 py-2 rounded-xl font-bold text-xs hover:bg-gray-200" onclick="addToCart('${sanitizedTitle}', ${p.price}, '${sanitizedImg}', '${p.id}')">Add</button>
+                                <button class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-black text-xs hover:bg-emerald-700 flex items-center gap-1 shadow-md" onclick="openQuickBuyModal('${p.id}', '${sanitizedTitle}', ${p.price}, '${sanitizedImg}', '${sanitizedMillet}', '${sanitizedAge}', '${sanitizedFarmer}', '${sanitizedUpi}', '${sanitizedQr}')">
+                                    <i class="fa-solid fa-bolt text-amber-300 text-xs"></i> Buy Now
+                                </button>
+                            </div>
                         </div>
                     `;
                 }
@@ -263,7 +739,7 @@
             });
 
             // Update Info
-            const infoEl = document.querySelector('.text-textGray');
+            const infoEl = document.getElementById('display-info');
             if (infoEl) infoEl.innerText = `Displaying ${filtered.length ? start + 1 : 0}-${Math.min(end, filtered.length)} of ${filtered.length} Harvest Items`;
 
             renderPagination(totalPages);
@@ -307,8 +783,19 @@
                 this.classList.remove('bg-primaryLight', 'text-primary');
                 this.classList.add('bg-primary', 'text-white', 'shadow-md', 'transform', 'scale-105');
                 
-                currentFilter = this.getAttribute('data-filter');
+                const filterKey = this.getAttribute('data-filter');
+                currentFilter = filterKey;
                 currentPage = 1;
+
+                // Sync age pills if matching
+                document.querySelectorAll('.age-pill').forEach(pill => {
+                    if (pill.getAttribute('onclick') && pill.getAttribute('onclick').includes(`'${filterKey}'`)) {
+                        pill.className = 'age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-primary text-white shadow-md scale-105';
+                    } else {
+                        pill.className = 'age-pill px-4 py-2 rounded-xl text-xs font-black transition-all bg-gray-100 text-gray-700 hover:bg-gray-200';
+                    }
+                });
+
                 renderProducts();
             });
         });

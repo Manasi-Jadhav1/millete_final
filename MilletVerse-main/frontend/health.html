@@ -82,8 +82,22 @@
             <button class="bg-white text-gray-400 hover:text-primary hover:bg-primaryLight border border-gray-100 font-black px-10 py-4 rounded-2xl flex items-center gap-3 transition shadow-sm" onclick="showGoal('kids')"><i class="fa-solid fa-child"></i> Growth Support</button>
         </div>
 
+        <!-- Static Goal Descriptions -->
+        <div id="goal-info-weightloss" class="goal-info hidden mb-10 text-center bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-heading font-black text-primary mb-3">Millets for Weight Control</h2>
+            <p class="text-gray-500 max-w-3xl mx-auto font-bold text-sm leading-relaxed">High in dietary fiber and complex carbohydrates, millets like Foxtail and Pearl keep you full longer, reducing cravings and helping manage healthy weight without starving. They improve metabolism and aid in natural, sustained weight loss.</p>
+        </div>
+        <div id="goal-info-diabetes" class="goal-info hidden mb-10 text-center bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-heading font-black text-primary mb-3">Millets for Sugar Control</h2>
+            <p class="text-gray-500 max-w-3xl mx-auto font-bold text-sm leading-relaxed">With a low Glycemic Index (GI), Barnyard and Little Millet prevent sudden blood sugar spikes, making them a perfect daily staple for diabetes management. They release energy slowly into the bloodstream, maintaining steady sugar levels.</p>
+        </div>
+        <div id="goal-info-kids" class="goal-info hidden mb-10 text-center bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-heading font-black text-primary mb-3">Millets for Growth Support</h2>
+            <p class="text-gray-500 max-w-3xl mx-auto font-bold text-sm leading-relaxed">Packed with calcium, iron, and essential amino acids, Ragi (Finger Millet) is nature's superfood for growing children. It supports strong bones, healthy brain development, and provides dense, natural nutrition for active kids.</p>
+        </div>
+
         <!-- Dynamic Goal Content (Populated by JS) -->
-        <div id="recommendations-container" class="fade-in-section mt-12">
+        <div id="recommendations-container" class="fade-in-section mt-6">
             <div id="recommendations-loading" class="text-center py-20 hidden">
                 <i class="fa-solid fa-seedling animate-bounce text-primary text-5xl mb-4"></i>
                 <p class="font-black text-gray-400 uppercase tracking-widest">Nurturing your personalized plan...</p>
@@ -172,6 +186,11 @@
             });
             event.currentTarget.classList.remove('bg-white', 'text-gray-400');
             event.currentTarget.classList.add('bg-primary', 'text-white', 'shadow-xl');
+
+            // Toggle static info blocks
+            document.querySelectorAll('.goal-info').forEach(el => el.classList.add('hidden'));
+            const infoEl = document.getElementById(`goal-info-${goalId}`);
+            if(infoEl) infoEl.classList.remove('hidden');
 
             // Load dynamic recommendations
             const goalMap = {

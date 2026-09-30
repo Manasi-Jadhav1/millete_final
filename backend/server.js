@@ -14,7 +14,8 @@ import learningRoutes from './routes/learningRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import chatRoutes from './routes/chatRoutes.js';
+import chatRoutes    from './routes/chatRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -35,7 +36,12 @@ app.use(cors({
 }));
 
 // Parse JSON request bodies
-app.use(express.json());
+// Capture raw body for Razorpay webhook HMAC verification
+app.use(express.json({
+  verify: (req, _res, buf) => {
+    req.rawBody = buf.toString();
+  }
+}));
 
 // Parse URL-encoded request bodies
 app.use(express.urlencoded({ extended: true }));
@@ -87,6 +93,9 @@ app.use('/api/admin', adminRoutes);
 
 // AI Chat Assistant
 app.use('/api/chat', chatRoutes);
+
+// Payment & Commission Splitting
+app.use('/api/payments', paymentRoutes);
 
 // 404 Handler - Route not found
 app.use((req, res, next) => {

@@ -129,6 +129,7 @@
     </div>
 
     <script src="auth.js"></script>
+    <script src="script.js"></script>
     <script>
         async function handleLogin(e) {
             e.preventDefault();
@@ -140,6 +141,18 @@
                 const errBox = document.getElementById('login-error');
                 document.getElementById('login-error-msg').textContent = result.message;
                 errBox.classList.remove('hidden');
+                return;
+            }
+
+            // Redirect admin straight to admin dashboard
+            if (result.user && result.user.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+                return;
+            }
+
+            // Redirect farmers/sellers straight to farmer dashboard
+            if (result.user && ['farmer', 'startup', 'seller'].includes(result.user.role)) {
+                window.location.href = 'farmer-dashboard.html';
                 return;
             }
 

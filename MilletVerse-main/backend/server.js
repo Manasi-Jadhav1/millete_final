@@ -116,9 +116,9 @@ const startServer = async () => {
   try {
     // Test database connection
     const isDbConnected = await testConnection();
+    const dbStatus = isDbConnected ? 'Connected' : 'Offline (Standalone AI Mode)';
     if (!isDbConnected) {
-      console.error('❌ Cannot start server: Database connection failed.');
-      process.exit(1);
+      console.warn('⚠️ Database connection offline. Starting server in Standalone AI & API Mode...');
     }
     
     // Start Express server
@@ -130,13 +130,12 @@ const startServer = async () => {
 ║  Server running on port: ${PORT}                        
 ║  Environment: ${process.env.NODE_ENV || 'development'}                          
 ║  API Base URL: http://localhost:${PORT}/api             
-║  Database: Connected                                    
+║  Database: ${dbStatus}                                    
 ╚════════════════════════════════════════════════════════╝
       `);
     });
   } catch (error) {
     console.error('Failed to start server:', error.message);
-    process.exit(1);
   }
 };
 

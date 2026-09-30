@@ -1,0 +1,116 @@
+{
+  "domain_id": "02_nutrition",
+  "domain_name": "Nutrition & Dietary Science",
+  "version": "1.0.0",
+  "description": "Nutritional profiles of millets, macro and micronutrient metrics, ingredient guidelines, and dietary facts.",
+  "nutritional_highlights": {
+    "fiber": {
+      "metric_range": "6g - 12g per 100g",
+      "significance": "Millets possess significantly higher dietary fiber compared to polished white rice (0.2g) and refined wheat flour / maida (0.3g). Insoluble fiber adds digestive bulk and aids healthy bowel motility, while soluble fiber acts as a prebiotic fostering beneficial gut microbiota.",
+      "standout_millet": "Barnyard Millet (up to 10.1% - 12g fiber) and Kodo Millet (9.8g)."
+    },
+    "protein": {
+      "metric_range": "7g - 13g per 100g",
+      "significance": "Plant-based protein rich in essential amino acids (methionine, tryptophan, isoleucine, and leucine), crucial for tissue repair, cellular growth, and muscle recovery.",
+      "standout_millet": "Proso Millet (12.5g) and Foxtail Millet (11.2g - 12.3g)."
+    },
+    "calcium": {
+      "metric_range": "10mg - 344mg per 100g",
+      "significance": "Vital for bone density mineralization, teeth structure, blood clotting mechanisms, and nerve neurotransmission.",
+      "standout_millet": "Finger Millet / Ragi (344 mg per 100g) — approximately 34 times higher than polished white rice (10 mg) and 10 times higher than wheat (30 mg)."
+    },
+    "iron": {
+      "metric_range": "2.8mg - 8.0mg per 100g",
+      "significance": "Essential cofactor in hemoglobin synthesis and oxygen transport through red blood cells. Helps prevent iron-deficiency fatigue and anemia.",
+      "standout_millet": "Pearl Millet / Bajra (8.0 mg per 100g) and Little Millet (9.3 mg per 100g)."
+    },
+    "magnesium": {
+      "metric_range": "80mg - 140mg per 100g",
+      "significance": "Supports over 300 biochemical reactions in the body, including cellular energy synthesis, vascular tone regulation, and insulin sensitivity."
+    }
+  },
+  "comparative_nutritional_metrics_per_100g": [
+    {
+      "grain": "Finger Millet (Ragi)",
+      "energy_kcal": 328,
+      "protein_g": 7.3,
+      "carbs_g": 72.0,
+      "fiber_g": 11.5,
+      "calcium_mg": 344.0,
+      "iron_mg": 3.9,
+      "glycemic_index": "Low (approx 54)"
+    },
+    {
+      "grain": "Pearl Millet (Bajra)",
+      "energy_kcal": 361,
+      "protein_g": 11.6,
+      "carbs_g": 67.5,
+      "fiber_g": 8.0,
+      "calcium_mg": 42.0,
+      "iron_mg": 8.0,
+      "glycemic_index": "Medium-Low (approx 55)"
+    },
+    {
+      "grain": "Sorghum (Jowar)",
+      "energy_kcal": 349,
+      "protein_g": 10.4,
+      "carbs_g": 72.6,
+      "fiber_g": 9.7,
+      "calcium_mg": 25.0,
+      "iron_mg": 4.1,
+      "glycemic_index": "Low (approx 52)"
+    },
+    {
+      "grain": "Foxtail Millet",
+      "energy_kcal": 351,
+      "protein_g": 12.3,
+      "carbs_g": 60.9,
+      "fiber_g": 8.0,
+      "calcium_mg": 31.0,
+      "iron_mg": 2.8,
+      "glycemic_index": "Low (approx 50)"
+    },
+    {
+      "grain": "Barnyard Millet",
+      "energy_kcal": 307,
+      "protein_g": 6.2,
+      "carbs_g": 65.5,
+      "fiber_g": 10.1,
+      "calcium_mg": 22.0,
+      "iron_mg": 5.0,
+      "glycemic_index": "Low (approx 48)"
+    },
+    {
+      "grain": "Polished White Rice",
+      "energy_kcal": 345,
+      "protein_g": 6.8,
+      "carbs_g": 78.2,
+      "fiber_g": 0.2,
+      "calcium_mg": 10.0,
+      "iron_mg": 0.7,
+      "glycemic_index": "High (70 - 75)"
+    },
+    {
+      "grain": "Refined Wheat Flour (Maida)",
+      "energy_kcal": 364,
+      "protein_g": 10.3,
+      "carbs_g": 76.3,
+      "fiber_g": 0.3,
+      "calcium_mg": 20.0,
+      "iron_mg": 1.2,
+      "glycemic_index": "High (72 - 80)"
+    }
+  ],
+  "ingredient_purity_principles": [
+    "No refined wheat (Maida) or fillers in pure MilletVerse products.",
+    "Unrefined sweeteners preferred (organic jaggery, date paste, or raw honey) over high-fructose corn syrup or refined white sugar.",
+    "Cold-pressed oils or grass-fed cow ghee used in lieu of hydrogenated palm fats or trans-fat laden vegetable shortenings.",
+    "Zero artificial chemical preservatives, synthetic food colors, or emulsifying agents."
+  ],
+  "general_healthy_eating_guidance": [
+    "Gradual Transition: Introduce millets gradually into your diet if you are new to whole grains, starting with 2-3 meals a week to allow gut microbes to adapt to the rich dietary fiber.",
+    "Adequate Hydration: Drink plenty of water throughout the day, as soluble and insoluble fiber requires adequate liquid to aid optimal digestion.",
+    "Balanced Plate: Pair millet dishes with wholesome legumes (dal, lentils, sprouts) and colorful vegetables for complete amino acid profiling and balanced nutrition.",
+    "Soaking Benefit: Soaking whole millet grains for 4 to 8 hours prior to cooking enhances mineral bioavailability and softens grain texture."
+  ]
+}

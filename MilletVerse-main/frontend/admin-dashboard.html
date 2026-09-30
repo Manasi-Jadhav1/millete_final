@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" style="scroll-behavior:smooth;">
 <head>
     <meta charset="UTF-8">
@@ -80,7 +80,6 @@
             <button class="sidebar-btn"        id="btn-orders"     onclick="loadSection('orders')">     <i class="fa-solid fa-box-open w-4 text-center"></i> All Orders</button>
             <button class="sidebar-btn"        id="btn-products"   onclick="loadSection('products')">   <i class="fa-solid fa-seedling w-4 text-center"></i> All Products</button>
             <button class="sidebar-btn"        id="btn-analytics"  onclick="loadSection('analytics')">  <i class="fa-solid fa-chart-line w-4 text-center"></i> Analytics</button>
-            <button class="sidebar-btn"        id="btn-payments"   onclick="loadSection('payments')">   <i class="fa-solid fa-indian-rupee-sign w-4 text-center"></i> Payments &amp; Commission</button>
             <div class="flex-1"></div>
             <div class="admin-card p-4 mt-4">
                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Quick Links</p>
@@ -168,7 +167,6 @@
         if (section === 'orders')     await renderOrders('');
         if (section === 'products')   await renderProducts();
         if (section === 'analytics')  await renderAnalytics();
-        if (section === 'payments')   await renderPayments();
     }
 
     // ═══════════════════════════════════════════════════
@@ -1031,6 +1029,5 @@
         </div>`;
     }
     </script>
-    <script src="admin-payments.js"></script>
 </body>
 </html>

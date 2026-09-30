@@ -1,0 +1,55 @@
+{
+  "domain_id": "06_seller_baker_support",
+  "domain_name": "Seller & Home Baker Support",
+  "version": "1.0.0",
+  "description": "Onboarding processes, product listing guidelines, inventory management, and seller dashboard documentation.",
+  "overview": "MilletVerse provides dedicated onboarding for artisanal food makers, cottage home bakers, micro-enterprises, and established health food brands specializing in millet biscuits, snacks, and baked goods.",
+  "seller_registration_steps": [
+    {
+      "step": 1,
+      "name": "Account Creation",
+      "details": "Navigate to the Register page on MilletVerse, choose 'Seller' as the user role, and provide your business name, official email, phone number, and physical commercial/kitchen address."
+    },
+    {
+      "step": 2,
+      "name": "Documentation & Compliance",
+      "details": "Upload mandatory regulatory documents: FSSAI (Food Safety and Standards Authority of India) registration or home-baker license, GSTIN (if turnover requires), and bank account details for sales settlements."
+    },
+    {
+      "step": 3,
+      "name": "Admin Approval",
+      "details": "MilletVerse administrators verify food safety compliance and recipe purity. Once approved (status 'is_approved' = true), the seller dashboard is instantly unlocked."
+    }
+  ],
+  "product_listing_guidelines": {
+    "mandatory_product_fields": [
+      "Product Name: Descriptive title (e.g., 'Ragi Chocolate Chip Biscuits')",
+      "Description: Product story, texture, taste, and crafting method",
+      "Millet Category: Choose from 'ragi', 'jowar', 'bajra', 'foxtail', 'mixed', or 'other'",
+      "Complete Ingredient List: Full transparency with all ingredients (flours, sweeteners, fats, spices)",
+      "Nutritional Facts Panel: Per 100g metrics for energy (calories), protein, carbohydrates, dietary fiber, fats, and standout micronutrients (calcium/iron)",
+      "Price (INR): Retail selling price inclusive of applicable taxes",
+      "Inventory / Stock Quantity: Initial packaged stock ready for dispatch",
+      "Product Image URL: High-resolution clear photograph of the product and packaging"
+    ],
+    "purity_standards": "All products must adhere to MilletVerse's clean-label policy: zero maida, no hydrogenated trans-fats, and no artificial chemical preservatives."
+  },
+  "seller_dashboard_features": [
+    {
+      "feature": "Catalog & Product Management",
+      "description": "Add new products, edit pricing, update stock counts, toggle product availability (active/inactive), and manage product descriptions."
+    },
+    {
+      "feature": "Order Fulfillment & Tracking",
+      "description": "View incoming customer orders, change order status ('processing', 'shipped'), print packing slips, and enter courier tracking numbers."
+    },
+    {
+      "feature": "Customer Reviews & Ratings",
+      "description": "Monitor genuine buyer ratings and feedback to refine product quality and recipes."
+    },
+    {
+      "feature": "Revenue & Sales Analytics",
+      "description": "Track total orders, top-selling items, revenue analytics, and scheduled payout settlement dates."
+    }
+  ]
+}

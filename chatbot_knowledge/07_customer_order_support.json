@@ -1,0 +1,49 @@
+{
+  "domain_id": "07_customer_order_support",
+  "domain_name": "Customer Journey & Order Support",
+  "version": "1.0.0",
+  "description": "Purchasing workflows, cart handling, checkout procedures, payment gateways, and dynamic order tracking protocols.",
+  "runtime_data_directive": {
+    "important_rule": "The chatbot must NEVER guess, fabricate, or assume an order's status, delivery tracking date, or refund status. Live order details MUST be retrieved directly from the MySQL database using the authenticated user's ID or specific order ID.",
+    "database_table": "orders",
+    "order_statuses": ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"],
+    "payment_statuses": ["pending", "paid", "failed", "refunded"]
+  },
+  "purchasing_workflow": [
+    {
+      "step": 1,
+      "name": "Product Discovery & Search",
+      "details": "Browse the MilletVerse Marketplace or search using filters such as millet type (ragi, bajra, foxtail), price range, or health goals (weight loss, diabetic-friendly, fitness)."
+    },
+    {
+      "step": 2,
+      "name": "Adding to Cart",
+      "details": "Select the desired quantity on the product page and click 'Add to Cart'. You can review your cart items, modify quantities, or remove items at any time."
+    },
+    {
+      "step": 3,
+      "name": "Checkout & Address Selection",
+      "details": "Proceed to Checkout, verify or input your complete delivery shipping address and mobile contact number."
+    },
+    {
+      "step": 4,
+      "name": "Payment Gateway",
+      "details": "Select your preferred payment method: UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards (Visa, MasterCard, RuPay), Net Banking, or Cash on Delivery (where supported)."
+    },
+    {
+      "step": 5,
+      "name": "Order Confirmation & Tracking",
+      "details": "Upon successful payment, an instant order confirmation with unique Order ID is generated, and tracking updates are sent via email and visible on the user dashboard."
+    }
+  ],
+  "shipping_and_delivery_policies": {
+    "standard_delivery_time": "3 to 5 business days across all major Indian cities and pincodes.",
+    "shipping_fees": "FREE Shipping on all orders valued at ₹499 or above. A flat nominal shipping charge of ₹40 applies for orders below ₹499.",
+    "packaging_standard": "Eco-friendly, moisture-barrier food grade packaging to preserve biscuit crispness and freshness during transit."
+  },
+  "returns_cancellations_and_refunds": {
+    "cancellation_window": "Orders can be freely cancelled from the user dashboard as long as the order status remains 'pending' or 'confirmed' prior to dispatch.",
+    "return_policy": "7-day easy replacement or return policy for unopened items, damaged deliveries, or wrong items received.",
+    "refund_timeline": "Once a refund is approved or an order cancelled before shipment, funds are reversed to the original payment source within 5 to 7 working days."
+  }
+}

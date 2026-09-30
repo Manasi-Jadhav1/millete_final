@@ -112,6 +112,11 @@ export const getMyOrders = async (req, res) => {
  */
 export const createOrder = async (req, res) => {
   try {
+    // Block producer accounts (farmer, startup, seller) from buying products
+    if (['seller', 'farmer', 'startup'].includes(req.user.role)) {
+      return errorResponse(res, HTTP_STATUS.FORBIDDEN, 'Producer accounts (Farmer & Startup) cannot purchase products.');
+    }
+
     const { product_id, quantity, delivery_address } = req.body;
 
     // Validate required fields
@@ -169,6 +174,11 @@ export const createOrder = async (req, res) => {
  */
 export const checkout = async (req, res) => {
   try {
+    // Block producer accounts (farmer, startup, seller) from checking out
+    if (['seller', 'farmer', 'startup'].includes(req.user.role)) {
+      return errorResponse(res, HTTP_STATUS.FORBIDDEN, 'Producer accounts (Farmer & Startup) cannot purchase products.');
+    }
+
     // Get cart items
     const cartItems = await Cart.getCartItems(req.user.id);
 

@@ -1,0 +1,109 @@
+{
+  "domain_id": "01_millet_education",
+  "domain_name": "Millet Education",
+  "version": "1.0.0",
+  "description": "Comprehensive educational knowledge about millets, varieties, botanical traits, cultural heritage, and dietary inclusion.",
+  "topics": [
+    {
+      "topic_id": "what_are_millets",
+      "title": "What are Millets?",
+      "content": "Millets are a diverse group of small-seeded annual grasses traditionally grown as cereal crops and grains across Asia and Africa for over 5,000 years. Often referred to as 'Nutri-Cereals' or 'Miracle Grains', millets are climate-resilient, drought-tolerant, and require significantly less water compared to conventional crops like rice and wheat. They naturally thrive in poor, arid soils with minimal synthetic fertilizers or chemical pesticides, making them environmentally sustainable. Nutritionally, millets are powerhouse whole grains rich in dietary fiber, plant protein, essential minerals (such as calcium and iron), vitamins, and protective antioxidants while being naturally 100% gluten-free with a low glycemic index."
+    },
+    {
+      "topic_id": "millet_varieties",
+      "title": "Types of Millets and Their Characteristics",
+      "varieties": [
+        {
+          "name": "Ragi (Finger Millet / Eleusine coracana)",
+          "local_names": ["Ragi", "Nachni", "Mandua", "Kezhvaragu"],
+          "key_properties": "The undisputed calcium powerhouse among grains, delivering approximately 344 mg of calcium per 100g (over 30 times higher than rice and nearly 3 times higher than milk per equivalent dry weight). It is also rich in polyphenols and dietary fiber.",
+          "best_for": "Bone and teeth health in growing children, osteoporosis prevention in adults, gentle weaning food for babies, and low-glycemic meal planning.",
+          "common_culinary_uses": "Ragi malt, porridge, ragi roti/bhakri, ragi dosa, cookies, and artisanal baked biscuits."
+        },
+        {
+          "name": "Jowar (Sorghum / Sorghum bicolor)",
+          "local_names": ["Jowar", "Cholam", "Jonna", "Great Millet"],
+          "key_properties": "A hearty gluten-free grain rich in dietary fiber, plant protein, copper, and potent antioxidants like anthocyanins and phenolic acids. It supports healthy blood pressure regulation due to its potassium content.",
+          "best_for": "Heart health, cholesterol management, sustained satiety, and diabetic-friendly daily staple substitution.",
+          "common_culinary_uses": "Traditional Jowar bhakri/rotis, porridge, popped sorghum snacks, jowar banana bread, and savory crisp crackers."
+        },
+        {
+          "name": "Bajra (Pearl Millet / Pennisetum glaucum)",
+          "local_names": ["Bajra", "Kambu", "Sajjalu", "Bajri"],
+          "key_properties": "An iron-rich energy powerhouse containing up to 8 mg of iron per 100g, along with abundant magnesium, zinc, and phosphorus. It provides sustained warmth and energy release.",
+          "best_for": "Combating iron-deficiency anemia, boosting endurance, winter nutrition, and stabilizing insulin sensitivity.",
+          "common_culinary_uses": "Bajra rotis with ghee, bajra khichdi, mathri, savory jeera crackers, and spiced multigrain biscuits."
+        },
+        {
+          "name": "Foxtail Millet (Setaria italica)",
+          "local_names": ["Foxtail", "Kangni", "Thinai", "Korra", "Navane"],
+          "key_properties": "Packed with complex carbohydrates, vitamin B1 (thiamine), and nerve-supporting minerals. It exhibits an exceptionally low glycemic index and helps regulate blood glucose levels.",
+          "best_for": "Blood sugar balance, nerve function, cognitive stamina, and smooth rice-replacement dishes.",
+          "common_culinary_uses": "Foxtail millet vegetable khichdi, pongal, herbal low-GI cookies, upma, and pulao."
+        },
+        {
+          "name": "Barnyard Millet (Echinochloa esculenta)",
+          "local_names": ["Barnyard", "Sanwa", "Samvat", "Kuthiraivally", "Oodalu"],
+          "key_properties": "Has the lowest caloric density and carbohydrate content among all millets, combined with exceptionally high dietary fiber (up to 10.1%). Highly digestible and gentle on the stomach.",
+          "best_for": "Weight management, fasting diets (vrat/upvas foods), glycemic stability, and gentle digestion.",
+          "common_culinary_uses": "Upma, porridge, slim savory crackers, light fasting khichdi, and idli batters."
+        },
+        {
+          "name": "Little Millet (Panicum sumatrense)",
+          "local_names": ["Little Millet", "Samai", "Kutki", "Sama"],
+          "key_properties": "Tiny golden grains loaded with B-complex vitamins (niacin, riboflavin), essential fats, and bioavailable phosphorus. Very fast cooking.",
+          "best_for": "Metabolic health, gentle stomach recovery, kid-friendly quick meals, and wholesome rice substitutes.",
+          "common_culinary_uses": "Samai payasam/kheer, curd rice substitute, vegetable upma, and dosas."
+        },
+        {
+          "name": "Kodo Millet (Paspalum scrobiculatum)",
+          "local_names": ["Kodo", "Kodon", "Varagu", "Arikelu"],
+          "key_properties": "Exceptionally high in dietary fiber and lecithin, an essential lipid compound that supports the central nervous system.",
+          "best_for": "Cardiovascular conditioning, sustained gut motility, and nervous system nourishment.",
+          "common_culinary_uses": "Kodo pulao, spiced idli, kodo khichdi, and multigrain flour blends."
+        },
+        {
+          "name": "Proso Millet (Panicum miliaceum)",
+          "local_names": ["Proso", "Barri", "Chenna", "Variga", "Broomcorn Millet"],
+          "key_properties": "Contains one of the highest protein concentrations among millets (approx 12.5%) and rich amounts of lecithin and minerals.",
+          "best_for": "Muscle recovery, nervous system support, and athletic energy snacks.",
+          "common_culinary_uses": "Energy balls, porridge, multigrain bread blends, and puffed grain bars."
+        }
+      ]
+    },
+    {
+      "topic_id": "general_benefits",
+      "title": "General Benefits of Millet-Based Foods",
+      "points": [
+        "Naturally Gluten-Free: 100% safe for celiac disease, gluten intolerance, and gut-sensitive individuals without synthetic additives.",
+        "Low Glycemic Index (GI): Absorbed slowly in the gastrointestinal tract, preventing spikes in blood glucose levels.",
+        "High Satiety & Weight Support: High dietary fiber and complex carbs slow down digestion, keeping you full longer and reducing unhealthy snacking.",
+        "Heart & Cholesterol Support: Rich in soluble and insoluble fiber and polyphenols that help maintain healthy lipid profiles.",
+        "Bone Density & Strength: High calcium levels (especially in finger millet / Ragi) support bone mineralization and tooth enamel.",
+        "Sustainable Agriculture: Cultivated with up to 70% less water than rice or sugarcane, improving farm resilience against climate shocks."
+      ]
+    },
+    {
+      "topic_id": "daily_meal_inclusion",
+      "title": "How to Include Millets in Daily Meals",
+      "guidance": [
+        {
+          "meal": "Breakfast",
+          "ideas": "Start with a warm cup of Ragi malt sweetened with jaggery, fluffy Foxtail millet idlis, or a hearty bowl of Barnyard millet vegetable upma."
+        },
+        {
+          "meal": "Lunch",
+          "ideas": "Replace refined wheat chapati with Jowar or Bajra bhakri/roti, or substitute polished white rice with steamed Foxtail or Little millet alongside dal and vegetables."
+        },
+        {
+          "meal": "Evening Snack",
+          "ideas": "Pair evening tea or coffee with baked MilletVerse Ragi Chocolate Delight biscuits, Bajra Jeera crackers, or roasted millet flakes chivda."
+        },
+        {
+          "meal": "Dinner",
+          "ideas": "Choose light, easily digestible dishes such as warm Bajra-moong dal khichdi, Barnyard millet porridge, or vegetable millet soup."
+        }
+      ]
+    }
+  ]
+}

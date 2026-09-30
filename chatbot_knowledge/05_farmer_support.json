@@ -1,0 +1,49 @@
+{
+  "domain_id": "05_farmer_support",
+  "domain_name": "Farmer Support & Raw Material Trading",
+  "version": "1.0.0",
+  "description": "Guidelines, onboarding workflows, listing procedures, and direct trade benefits for millet cultivators and farmers.",
+  "overview": "MilletVerse is committed to empowering grain farmers by establishing a direct bridge between agricultural producers, home bakers, food manufacturers, and conscious consumers, removing exploitative middlemen and ensuring fair farmgate compensation.",
+  "farmer_listing_workflow": {
+    "step_1_registration": {
+      "title": "Farmer / Producer Registration",
+      "action": "Sign up on MilletVerse through the Farmer Portal or Seller Registration selecting 'Agricultural Producer / Farmer' role. Provide basic details including name, farm location, contact number, and Aadhaar/Kisan identification."
+    },
+    "step_2_raw_material_details": {
+      "title": "Raw Material Listing Details",
+      "action": "Submit listing details for the harvested millet raw material:",
+      "required_fields": [
+        "Millet Grain Type: (e.g., Ragi / Finger Millet, Bajra / Pearl Millet, Jowar / Sorghum, Foxtail, etc.)",
+        "Form: Whole grain, unhulled, hulled, unpolished, or de-stoned grain",
+        "Quantity Available: Total stock in kilograms (kg) or quintals (100 kg units)",
+        "Minimum Order Quantity (MOQ): Minimum batch size for buyers (e.g., 50 kg for home bakers or 500 kg for commercial processors)",
+        "Harvest Date & Season: Kharif or Rabi harvest month and year",
+        "Farming Methodology: Certified Organic, Natural / ZBNF (Zero Budget Natural Farming), or Conventional",
+        "Base Price per Quintal / Kilogram: Transparent farmgate asking price in INR (₹)"
+      ]
+    },
+    "step_3_quality_verification": {
+      "title": "Quality Verification & Moisture Check",
+      "action": "MilletVerse partner agronomists or certified aggregation centers conduct quick moisture tests (target < 12% moisture for safe grain storage) and foreign matter grading before certification badge is awarded."
+    },
+    "step_4_live_on_marketplace": {
+      "title": "Live Listing & Buyer Matching",
+      "action": "The raw material listing goes live on the MilletVerse B2B/B2C sourcing exchange, where home bakers, bakeries, and consumers can place bulk or wholesale orders directly."
+    }
+  },
+  "logistics_and_payment_terms": {
+    "transport_support": "MilletVerse coordinates partnered rural freight logistics to pick up bulk grain consignments directly from farmgate or village aggregation hubs.",
+    "direct_payout": "Payments are directly deposited into the farmer's registered bank account via secure NEFT/RTGS/UPI upon delivery confirmation and inspection.",
+    "zero_hidden_commission": "Clear, transparent low platform convenience fee without predatory broker deductions."
+  },
+  "frequently_asked_farmer_questions": [
+    {
+      "question": "Can individual smallholder farmers list smaller harvests?",
+      "answer": "Yes. Farmers can list quantities as low as 25kg or pool their yield with local Farmer Producer Organizations (FPOs) on MilletVerse."
+    },
+    {
+      "question": "Does MilletVerse buy directly or connect with buyers?",
+      "answer": "MilletVerse provides both direct platform sourcing for our marketplace sellers and an open listing exchange for registered food enterprises, bakers, and consumers."
+    }
+  ]
+}

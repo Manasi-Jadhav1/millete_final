@@ -1,0 +1,120 @@
+{
+  "domain_id": "04_marketplace",
+  "domain_name": "Marketplace Catalog & Product Information",
+  "version": "1.0.0",
+  "description": "Standard product specifications, seller ecosystem, catalog details, and dynamic database retrieval directives.",
+  "runtime_data_directive": {
+    "important_rule": "Static knowledge only provides descriptive profiles, ingredients, and baseline reference data. Current live product prices, actual stock levels, active discounts, and in-stock flags MUST be retrieved from the active MySQL database at runtime using product queries. Never fabricate or hallucinate real-time stock quantities or changing prices.",
+    "database_table": "products",
+    "required_db_fields": ["id", "name", "price", "stock_quantity", "is_available", "rating", "millet_type"]
+  },
+  "catalog_products": [
+    {
+      "id": 1,
+      "name": "Ragi Chocolate Biscuits (250g)",
+      "millet_type": "ragi",
+      "reference_price": 149.00,
+      "unit": "250g pack",
+      "seller_id": 2,
+      "seller_name": "Green Valley Foods (Bangalore)",
+      "description": "Delicious chocolate-flavored artisanal biscuits crafted with pure organic ragi flour and rich raw cacao. 100% free of maida (refined wheat) and synthetic chemical preservatives.",
+      "ingredients": "Organic Ragi flour, raw cocoa powder, certified organic jaggery, cold-pressed coconut oil, natural vanilla extract, baking soda.",
+      "nutrition_info": "Per 100g: Energy 420 kcal, Protein 8g, Total Carbohydrates 65g, Fat 12g, Dietary Fiber 10g, Calcium 150mg.",
+      "key_highlights": "Rich in natural calcium for bone strength, wholesome indulgence for children and adults alike.",
+      "ideal_for": "Children, tea-time snacks, bone health, guilt-free sweet cravings."
+    },
+    {
+      "id": 2,
+      "name": "Jowar Oats Cookies (200g)",
+      "millet_type": "jowar",
+      "reference_price": 129.00,
+      "unit": "200g pack",
+      "seller_id": 2,
+      "seller_name": "Green Valley Foods (Bangalore)",
+      "description": "Hearty, fiber-dense cookies uniting whole grain jowar with rolled oats, delicately sweetened with organic raw honey and almond butter.",
+      "ingredients": "Sorghum (Jowar) flour, rolled oats, raw wildflower honey, natural almond butter, ground Ceylon cinnamon, unrefined sea salt.",
+      "nutrition_info": "Per 100g: Energy 380 kcal, Protein 10g, Total Carbohydrates 58g, Fat 11g, Dietary Fiber 8g, Iron 3mg.",
+      "key_highlights": "Cardiovascular wellness, high satiety, rich in soluble oat beta-glucan and insoluble sorghum fiber.",
+      "ideal_for": "Breakfast companion, office snack, cholesterol conscious consumers."
+    },
+    {
+      "id": 3,
+      "name": "Bajra Jeera Crackers (150g)",
+      "millet_type": "bajra",
+      "reference_price": 99.00,
+      "unit": "150g pack",
+      "seller_id": 3,
+      "seller_name": "Healthy Bites (Mumbai)",
+      "description": "Crispy savory baked crackers infused with roasted cumin seeds and fresh black pepper. Low glycemic index, making it ideal for blood sugar management.",
+      "ingredients": "Organic Pearl Millet (Bajra) flour, roasted cumin seeds (jeera), coarse black pepper, rock salt, virgin olive oil.",
+      "nutrition_info": "Per 100g: Energy 350 kcal, Protein 9g, Total Carbohydrates 52g, Fat 10g, Dietary Fiber 12g, Magnesium 80mg.",
+      "key_highlights": "Naturally low glycemic impact, excellent mineral profile with iron and magnesium.",
+      "ideal_for": "Diabetics, savory snack lovers, low-sugar diet enthusiasts."
+    },
+    {
+      "id": 4,
+      "name": "Foxtail Millet Khakhra (300g)",
+      "millet_type": "foxtail",
+      "reference_price": 119.00,
+      "unit": "300g pack",
+      "seller_id": 3,
+      "seller_name": "Healthy Bites (Mumbai)",
+      "description": "Traditional crispy roasted thin bread crisps reinvented with nutritious foxtail millet flour and roasted sesame seeds.",
+      "ingredients": "Foxtail millet flour, whole grain flour, white sesame seeds, organic turmeric, cold-pressed groundnut oil, sea salt.",
+      "nutrition_info": "Per 100g: Energy 400 kcal, Protein 11g, Total Carbohydrates 68g, Fat 8g, Dietary Fiber 9g, Thiamine 0.4mg.",
+      "key_highlights": "Slow-release sustained energy, Vitamin B1 thiamine for brain stamina and focus.",
+      "ideal_for": "Travel snack, afternoon light bites, low GI grain diet."
+    },
+    {
+      "id": 5,
+      "name": "Mixed Millet Assortment Box (500g)",
+      "millet_type": "mixed",
+      "reference_price": 299.00,
+      "unit": "500g gift box",
+      "seller_id": 4,
+      "seller_name": "Millet Magic (Delhi)",
+      "description": "Curated premium gift box containing five distinct varieties of handcrafted millet biscuits and cookies. Perfect for exploring diverse flavors.",
+      "ingredients": "Selected blend of Ragi, Jowar, Bajra, Foxtail, and Barnyard flours, organic jaggery, mixed nuts (almonds, cashews), sunflower seeds, cow ghee.",
+      "nutrition_info": "Per 100g: Energy 390 kcal, Protein 10g, Total Carbohydrates 60g, Fat 11g, Dietary Fiber 10g, Mixed Micronutrients.",
+      "key_highlights": "Comprehensive multi-millet nutrient spectrum, ideal for gifting or household variety.",
+      "ideal_for": "Gifting, families, beginners exploring millets."
+    },
+    {
+      "id": 6,
+      "name": "Ragi Muesli Biscuits (250g)",
+      "millet_type": "ragi",
+      "reference_price": 179.00,
+      "unit": "250g pack",
+      "seller_id": 4,
+      "seller_name": "Millet Magic (Delhi)",
+      "description": "Nutrient-packed artisanal biscuits loaded with finger millet, crushed California walnuts, roasted almonds, golden raisins, and Medjool dates.",
+      "ingredients": "Ragi flour, whole rolled oats, almonds, walnuts, golden raisins, organic date syrup, pure desi ghee.",
+      "nutrition_info": "Per 100g: Energy 450 kcal, Protein 12g, Total Carbohydrates 55g, Fat 18g, Dietary Fiber 8g, Calcium 140mg.",
+      "key_highlights": "High protein and healthy fats for workout fuel and athletic recovery.",
+      "ideal_for": "Fitness enthusiasts, athletes, high-energy post-workout snack."
+    }
+  ],
+  "registered_sellers": [
+    {
+      "seller_id": 2,
+      "business_name": "Green Valley Foods",
+      "city": "Bangalore",
+      "specialty": "Organic Ragi and Jowar artisanal baked biscuits and cookies",
+      "status": "Verified & Active"
+    },
+    {
+      "seller_id": 3,
+      "business_name": "Healthy Bites",
+      "city": "Mumbai",
+      "specialty": "Savory baked crackers, khakhras, and diabetic-friendly snacks",
+      "status": "Verified & Active"
+    },
+    {
+      "seller_id": 4,
+      "business_name": "Millet Magic",
+      "city": "Delhi",
+      "specialty": "Multi-millet premium gift boxes, fitness muesli bakes, and seed cookies",
+      "status": "Verified & Active"
+    }
+  ]
+}

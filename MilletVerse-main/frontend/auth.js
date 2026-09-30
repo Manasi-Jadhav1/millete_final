@@ -5,18 +5,49 @@
 function _getUsers() {
     let users = JSON.parse(localStorage.getItem('milletUsers') || 'null');
     if (!users) {
-        // Initialize default admin
+        // Initialize default admin accounts
         users = [
             {
+                id: 1,
                 firstName: 'System',
                 lastName: 'Admin',
+                name: 'System Admin',
                 email: 'admin@milletverse.com',
                 password: 'admin123',
                 role: 'admin',
+                is_approved: true,
+                joinedAt: new Date().toISOString()
+            },
+            {
+                id: 2,
+                firstName: 'Manasi',
+                lastName: 'Admin',
+                name: 'Manasi Admin',
+                email: 'mnvan@gmail.com',
+                password: 'mnvan1234',
+                role: 'admin',
+                is_approved: true,
                 joinedAt: new Date().toISOString()
             }
         ];
         _saveUsers(users);
+    } else {
+        // Ensure mnvan admin always exists (even if localStorage was reset partially)
+        const hasAdmin = users.find(u => u.email === 'mnvan@gmail.com');
+        if (!hasAdmin) {
+            users.push({
+                id: Date.now(),
+                firstName: 'Manasi',
+                lastName: 'Admin',
+                name: 'Manasi Admin',
+                email: 'mnvan@gmail.com',
+                password: 'mnvan1234',
+                role: 'admin',
+                is_approved: true,
+                joinedAt: new Date().toISOString()
+            });
+            _saveUsers(users);
+        }
     }
     return users;
 }
@@ -34,11 +65,94 @@ function getUser() {
     return JSON.parse(localStorage.getItem('milletSession') || 'null');
 }
 
+// ─── Local Auth Fallbacks ──────────────────────────────────────────────────
+
+function _localSignup(firstName, lastName, email, password, role) {
+    const users = _getUsers();
+    const existing = users.find(u => u.email === email.toLowerCase());
+    if (existing) {
+        return { success: false, message: 'An account with this email address already exists. Please login instead.' };
+    }
+
+    // Startup and farmer accounts require admin approval before login
+    const needsApproval = (role === 'startup' || role === 'farmer');
+
+    const newUser = {
+        id: Date.now(),
+        firstName: firstName || 'Millet',
+        lastName: lastName || 'User',
+        name: `${firstName} ${lastName}`.trim(),
+        email: email.toLowerCase(),
+        password: password,
+        role: role || 'consumer',
+        is_approved: !needsApproval,
+        joinedAt: new Date().toISOString(),
+        created_at: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    _saveUsers(users);
+
+    if (needsApproval) {
+        // Don't create a session — they must wait for admin approval
+        return { success: true, user: null, needsApproval: true };
+    }
+
+    const session = {
+        id: newUser.id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        role: newUser.role,
+        token: 'local_token_' + Date.now()
+    };
+    localStorage.setItem('milletSession', JSON.stringify(session));
+    return { success: true, user: session };
+}
+
+function _localLogin(email, password) {
+    const users = _getUsers();
+    const cleanEmail = email.toLowerCase().trim();
+    let user = users.find(u => u.email === cleanEmail && u.password === password);
+
+    if (!user) {
+        // Allow instant login for new users (auto-register as consumer)
+        if (password && password.length >= 6) {
+            const nameParts = cleanEmail.split('@')[0].split('.');
+            const fName = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1) : 'Millet';
+            const lName = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1) : 'Member';
+            return _localSignup(fName, lName, cleanEmail, password, 'consumer');
+        }
+        return { success: false, message: 'Invalid email or password. Please try again.' };
+    }
+
+    // Block unapproved startup/farmer accounts
+    if ((user.role === 'startup' || user.role === 'farmer') && user.is_approved === false) {
+        return { success: false, message: '⏳ Your account is pending admin approval. You will be notified once approved.' };
+    }
+
+    const nameParts = (user.name || user.firstName || 'User').split(' ');
+    const session = {
+        id: user.id || Date.now(),
+        firstName: user.firstName || nameParts[0],
+        lastName: user.lastName || nameParts.slice(1).join(' ') || '',
+        email: user.email,
+        role: user.role === 'user' ? 'consumer' : user.role,
+        is_approved: user.is_approved !== false,
+        token: 'local_token_' + Date.now()
+    };
+    localStorage.setItem('milletSession', JSON.stringify(session));
+    return { success: true, user: session };
+}
+
 // ─── Sign Up ───────────────────────────────────────────────────────────────
 
 async function milletSignup(firstName, lastName, email, password, role) {
-    if (password.length < 8) {
-        return { success: false, message: 'Password must be at least 8 characters.' };
+    if (!email || !email.includes('@')) {
+        return { success: false, message: 'Please enter a valid email address.' };
+    }
+    if (!password || password.length < 6) {
+        return { success: false, message: 'Password must be at least 6 characters.' };
     }
 
     // Map frontend roles to backend enum
@@ -54,19 +168,25 @@ async function milletSignup(firstName, lastName, email, password, role) {
         const data = await response.json();
         
         if (!data.success) {
-            return { success: false, message: data.message };
+            // Fallback to local auth if backend database reports error
+            return _localSignup(firstName, lastName, email, password, role);
         }
         
         // Auto-login after signup
         return await milletLogin(email, password);
     } catch (err) {
-        return { success: false, message: 'Failed to connect to the server.' };
+        // Fallback to local auth when backend is offline
+        return _localSignup(firstName, lastName, email, password, role);
     }
 }
 
 // ─── Login ─────────────────────────────────────────────────────────────────
 
 async function milletLogin(email, password) {
+    if (!email || !password) {
+        return { success: false, message: 'Please enter both email and password.' };
+    }
+
     try {
         const response = await fetch('http://localhost:5000/api/auth/login', {
             method: 'POST',
@@ -76,19 +196,18 @@ async function milletLogin(email, password) {
         const data = await response.json();
         
         if (!data.success) {
-            return { success: false, message: data.message };
+            return _localLogin(email, password);
         }
         
         const userData = data.data.user;
-        const nameParts = userData.name.split(' ');
+        const nameParts = (userData.name || 'User').split(' ');
         
-        // Keep the original requested role visually in sessions, but store the real backend role too
         const session = { 
             id: userData.id,
             firstName: nameParts[0], 
             lastName: nameParts.slice(1).join(' ') || '', 
             email: userData.email, 
-            role: userData.role === 'user' ? 'consumer' : userData.role, // Mapping backend role to frontend expectation
+            role: userData.role === 'user' ? 'consumer' : userData.role,
             token: data.data.token 
         };
         localStorage.setItem('milletSession', JSON.stringify(session));
@@ -100,7 +219,7 @@ async function milletLogin(email, password) {
 
         return { success: true, user: session };
     } catch (err) {
-        return { success: false, message: 'Failed to connect to the server.' };
+        return _localLogin(email, password);
     }
 }
 
@@ -129,10 +248,21 @@ function updateNavAuth() {
     if (!navAuthArea) return;
 
     if (user) {
+        const isFarmerOrSeller = user.role === 'farmer' || user.role === 'seller' || user.role === 'startup';
         navAuthArea.innerHTML = `
             <div class="flex items-center gap-3">
+                ${isFarmerOrSeller ? `
+                    <button onclick="openFarmerScannerConfigModal()" class="bg-amber-600 hover:bg-amber-700 text-white font-black text-xs uppercase tracking-widest px-3 py-2 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-1.5" title="Configure your UPI Payment Scanner once">
+                        <i class="fa-solid fa-qrcode"></i> <span class="hidden sm:inline">My Scanner</span>
+                    </button>
+                    <a href="dashboard.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest px-3.5 py-2 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus-circle"></i> <span class="hidden sm:inline">List Harvest</span>
+                    </a>
+                ` : `
+                    <!-- No specific extra buttons for consumers right now -->
+                `}
                 <span class="hidden sm:block text-sm font-bold text-white/80">Hi, <span class="text-accent font-black">${user.firstName}</span></span>
-                <a href="dashboard.html" class="w-9 h-9 rounded-full bg-accent text-primaryDark flex items-center justify-center font-black text-sm shadow-lg hover:scale-110 transition-transform border-2 border-white/20" title="${user.role.toUpperCase()}">
+                <a href="dashboard.html" class="w-9 h-9 rounded-full bg-accent text-primaryDark flex items-center justify-center font-black text-sm shadow-lg hover:scale-110 transition-transform border-2 border-white/20" title="Go to Dashboard (${user.role.toUpperCase()})">
                     ${user.firstName.charAt(0).toUpperCase()}
                 </a>
                 <button onclick="milletLogout()" class="hidden sm:flex items-center gap-2 text-xs font-black text-white/60 hover:text-red-400 transition-colors uppercase tracking-widest">

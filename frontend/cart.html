@@ -102,6 +102,37 @@
     <script>
         requireAuth('cart.html');
         document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('milletSession'));
+            if (user && ['farmer', 'startup', 'seller'].includes(user.role)) {
+                const roleLabel = user.role === 'startup' ? 'Startup Seller' : (user.role === 'farmer' ? 'Farmer / Producer' : 'Seller');
+                const banner = document.createElement('div');
+                banner.className = 'w-full mb-8 bg-amber-100 border-2 border-amber-400 p-6 rounded-3xl flex items-center justify-between gap-4 text-amber-950 shadow-sm';
+                banner.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center shrink-0 text-xl shadow-md">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-heading font-black text-lg">Purchases Restricted: ${roleLabel} Account</h4>
+                            <p class="text-xs font-semibold text-amber-800 mt-1">Farmer & Startup accounts are registered as producer/seller accounts and cannot place orders or purchase items. Please log in with a Consumer account to checkout.</p>
+                        </div>
+                    </div>
+                    <a href="farmer-dashboard.html" class="bg-amber-900 text-white text-[11px] font-black uppercase tracking-wider px-5 py-3 rounded-2xl hover:bg-black transition shrink-0">
+                        Go to Producer Dashboard
+                    </a>
+                `;
+                const mainEl = document.querySelector('main');
+                if (mainEl) mainEl.parentNode.insertBefore(banner, mainEl);
+
+                // Disable checkout button
+                const btn = document.querySelector('button[onclick="handleCheckout()"]');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    btn.innerText = 'PRODUCERS CANNOT CHECKOUT';
+                }
+            }
+
             renderCart();
             updateCartCount();
         });
@@ -228,6 +259,10 @@
         async function handleCheckout() {
             const user = JSON.parse(localStorage.getItem('milletSession'));
             if (!user || !user.token) { window.location.href = 'login.html'; return; }
+            if (['farmer', 'startup', 'seller'].includes(user.role)) {
+                showToast('Producer accounts cannot place orders. Please use a Consumer account.', 'error');
+                return;
+            }
             try {
                 const response = await fetch('http://localhost:5000/api/orders/checkout', {
                     method: 'POST',

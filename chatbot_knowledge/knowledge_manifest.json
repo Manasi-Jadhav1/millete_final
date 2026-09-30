@@ -1,0 +1,72 @@
+{
+  "project_name": "MilletVerse AI Chatbot Knowledge Base",
+  "version": "1.0.0",
+  "created_at": "2026-09-27",
+  "step": "Step 1: Knowledge-Base Structure and Training Dataset",
+  "knowledge_base_directory": "chatbot_knowledge",
+  "domains": [
+    {
+      "id": "01_millet_education",
+      "file": "01_millet_education.json",
+      "name": "Millet Education",
+      "topics_count": 4,
+      "key_entities": ["ragi", "jowar", "bajra", "foxtail", "barnyard", "little_millet", "kodo", "proso"]
+    },
+    {
+      "id": "02_nutrition",
+      "file": "02_nutrition.json",
+      "name": "Nutrition & Dietary Science",
+      "topics_count": 4,
+      "key_entities": ["dietary_fiber", "plant_protein", "calcium", "iron", "low_glycemic_index", "clean_ingredients"]
+    },
+    {
+      "id": "03_recipes",
+      "file": "03_recipes.json",
+      "name": "Millet Recipes & Culinary Guidance",
+      "recipes_count": 5,
+      "key_entities": ["ragi_cookies", "jowar_banana_bread", "bajra_mathri", "ragi_malt", "foxtail_khichdi"]
+    },
+    {
+      "id": "04_marketplace",
+      "file": "04_marketplace.json",
+      "name": "Marketplace Catalog & Product Information",
+      "products_count": 6,
+      "runtime_retrieval_required": true,
+      "database_tables": ["products", "users"]
+    },
+    {
+      "id": "05_farmer_support",
+      "file": "05_farmer_support.json",
+      "name": "Farmer Support & Raw Material Trading",
+      "workflow_steps_count": 4,
+      "key_entities": ["farmer_registration", "raw_material_listing", "quality_check", "direct_payout"]
+    },
+    {
+      "id": "06_seller_baker_support",
+      "file": "06_seller_baker_support.json",
+      "name": "Seller & Home Baker Support",
+      "steps_count": 3,
+      "key_entities": ["seller_registration", "fssai_compliance", "product_listing", "seller_dashboard"]
+    },
+    {
+      "id": "07_customer_order_support",
+      "file": "07_customer_order_support.json",
+      "name": "Customer Journey & Order Support",
+      "workflow_steps_count": 5,
+      "runtime_retrieval_required": true,
+      "database_tables": ["orders", "cart"]
+    },
+    {
+      "id": "08_personalized_guidance_and_safety",
+      "file": "08_personalized_guidance_and_safety.json",
+      "name": "Personalized Guidance & Medical Safety Guardrails",
+      "guardrails_count": 5,
+      "key_entities": ["age_matrix", "health_goals", "no_diagnosis_rule", "no_prescription_rule", "exact_fallback_rule"]
+    }
+  ],
+  "dataset_files": {
+    "qa_master_dataset": "dataset/milletverse_qa_dataset.json",
+    "fine_tuning_jsonl": "dataset/milletverse_fine_tuning.jsonl",
+    "dataset_validator": "dataset/validate_dataset.js"
+  }
+}
